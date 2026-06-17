@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Ascent — TOEFL iBT 2026 Practice</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#f4f2ed;color:#1a2e2b;line-height:1.5}
+button{font-family:inherit;cursor:pointer}
+:root{
+  --g:#1a5c4f;--g2:#2a7a6a;--gt:#e6f0ee;
+  --am:#d4922a;--at:#fdf3e0;
+  --rd:#c05540;--rt:#fbeae6;
+  --bl:#3a6ea8;--bt:#e8f0fa;
+  --paper:#f4f2ed;--white:#fff;
+  --bdr:#ddd8cc;--bdr2:#ede9e0;
+  --muted:#5a6e6b;--faint:#94a3a0;
+  --r:10px;--rl:16px;--rp:999px;
+  --sh:0 2px 12px rgba(0,0,0,.08);
+}
+.hidden{display:none!important}
+#app{display:flex;min-height:100vh}
+/* SIDEBAR */
+#sb{width:218px;flex-shrink:0;background:var(--white);border-right:1px solid var(--bdr);display:flex;flex-direction:column;padding:14px 10px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.logo{display:flex;align-items:center;gap:8px;padding:6px 8px 18px;font-size:17px;font-weight:800;color:var(--g)}
+.logo-svg{width:26px;height:26px}
+.nl{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--faint);font-weight:700;padding:12px 8px 4px}
+.ni{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:var(--r);font-size:13.5px;font-weight:500;color:var(--muted);cursor:pointer;transition:.15s;border:none;background:none;width:100%;text-align:left}
+.ni:hover{background:var(--paper);color:var(--g)}
+.ni.on{background:var(--gt);color:var(--g);font-weight:700}
+.ni svg{width:16px;height:16px;flex-shrink:0}
+.sb-foot{margin-top:auto;border-top:1px solid var(--bdr);padding-top:10px}
+.urow{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--r);cursor:pointer}
+.urow:hover{background:var(--paper)}
+.av{width:30px;height:30px;border-radius:50%;background:var(--g);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0}
+.uname{font-size:13px;font-weight:700}
+.uplan{font-size:11px;color:var(--faint)}
+/* MAIN */
+#main{flex:1;min-width:0;display:flex;flex-direction:column}
+#tbar{height:58px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:var(--white);position:sticky;top:0;z-index:20}
+#tbar h1{font-size:17px;font-weight:800}
+.stk{display:flex;align-items:center;gap:6px;background:var(--at);color:var(--am);border-radius:var(--rp);padding:6px 14px;font-weight:800;font-size:13px}
+#cnt{padding:22px;flex:1}
+/* CARDS */
+.card{background:var(--white);border:1px solid var(--bdr);border-radius:var(--rl);padding:18px}
+.ctitle{font-size:15px;font-weight:800;margin-bottom:12px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 18px;border-radius:var(--rp);border:1.5px solid transparent;font-weight:700;font-size:13.5px;transition:.15s;white-space:nowrap}
+.btn-p{background:var(--g);color:#fff;border-color:var(--g)}
+.btn-p:hover{background:var(--g2)}
+.btn-s{background:var(--white);color:var(--g);border-color:var(--bdr)}
+.btn-s:hover{border-color:var(--g)}
+.btn-a{background:var(--am);color:#fff}
+.btn-sm{padding:7px 13px;font-size:12.5px}
+.btn-bl{width:100%}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+/* BADGE */
+.bdg{display:inline-flex;align-items:center;font-size:11px;font-weight:700;padding:3px 8px;border-radius:var(--rp)}
+.bg{background:var(--gt);color:var(--g)}
+.ba{background:var(--at);color:var(--am)}
+.br{background:var(--rt);color:var(--rd)}
+.bb{background:var(--bt);color:var(--bl)}
+/* PBAR */
+.pb{height:7px;background:var(--bdr2);border-radius:var(--rp);overflow:hidden}
+.pbf{height:100%;border-radius:var(--rp);transition:width .8s}
+/* TABS */
+.tabs{display:flex;gap:0;border-bottom:2px solid var(--bdr);margin-bottom:18px;overflow-x:auto}
+.tb{padding:9px 4px;margin-right:16px;border:none;background:none;font-weight:700;font-size:13.5px;color:var(--faint);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap}
+.tb.on{color:var(--g);border-bottom-color:var(--am)}
+.tp{display:none}
+.tp.on{display:block}
+/* QUESTION ENGINE */
+.qsh{background:var(--white);border:1px solid var(--bdr);border-radius:var(--rl);overflow:hidden}
+.qhd{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:var(--paper);border-bottom:1px solid var(--bdr);flex-wrap:wrap;gap:8px}
+.qtmr{display:flex;align-items:center;gap:7px;font-weight:800;font-size:17px;font-family:monospace}
+.tmdot{width:8px;height:8px;border-radius:50%;background:var(--rd);animation:blink 1.4s infinite;display:inline-block}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.15}}
+.tmw{color:var(--rd)}
+.qbd{display:grid;grid-template-columns:1.1fr 1fr;min-height:480px}
+.qpass{padding:20px;border-right:1px solid var(--bdr);overflow-y:auto;max-height:560px;line-height:1.85;font-size:14.5px}
+.qpass h3{font-size:16px;font-weight:800;margin-bottom:12px;color:var(--g)}
+.qpass p{margin-bottom:12px}
+.hl{background:#fff3cc;padding:1px 3px;border-radius:3px}
+.qqs{padding:20px;overflow-y:auto;max-height:560px}
+.qblk{margin-bottom:22px;padding-bottom:22px;border-bottom:1px solid var(--bdr2)}
+.qblk:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.qnum{font-size:10.5px;font-weight:800;color:var(--faint);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
+.qtxt{font-weight:700;font-size:14.5px;margin-bottom:10px;line-height:1.5}
+.opt{display:flex;align-items:flex-start;gap:9px;padding:9px 11px;border:1.5px solid var(--bdr);border-radius:var(--r);margin-bottom:7px;font-size:13.5px;cursor:pointer;transition:.15s;line-height:1.4}
+.opt:hover:not(.lk){border-color:var(--g);background:var(--gt)}
+.opt input{margin-top:2px;accent-color:var(--g);flex-shrink:0}
+.opt.ok{border-color:var(--g);background:var(--gt);color:var(--g)}
+.opt.no{border-color:var(--rd);background:var(--rt);color:var(--rd)}
+.opt.lk{cursor:default}
+.exp{margin-top:9px;padding:10px 12px;border-radius:var(--r);background:var(--bt);font-size:13px;line-height:1.6;border-left:3px solid var(--bl);display:none}
+.exp.on{display:block}
+.qft{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;background:var(--paper);border-top:1px solid var(--bdr);flex-wrap:wrap;gap:8px}
+.ndots{display:flex;gap:5px;flex-wrap:wrap}
+.ndot{width:26px;height:26px;border-radius:6px;border:1.5px solid var(--bdr);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;color:var(--faint);cursor:pointer;transition:.15s}
+.ndot.ans{background:var(--gt);border-color:var(--g);color:var(--g)}
+.ndot.cur{border-color:var(--am);color:var(--am);border-width:2px}
+.sbox{padding:14px 18px;background:var(--gt);border-radius:var(--r);border:1px solid var(--g);display:none;margin-top:14px}
+.sbox.on{display:block}
+.sbig{font-size:30px;font-weight:900;color:var(--g);font-family:monospace}
+/* AUDIO */
+.aplayer{background:var(--paper);border:1px solid var(--bdr);border-radius:var(--rl);padding:14px;margin-bottom:14px}
+.acon{display:flex;align-items:center;gap:12px}
+.pbtn{width:42px;height:42px;border-radius:50%;border:none;background:var(--g);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;transition:.15s}
+.pbtn:hover{background:var(--g2)}
+.abarw{flex:1}
+.abar{height:5px;background:var(--bdr);border-radius:3px;overflow:hidden}
+.abarf{height:100%;background:var(--g);border-radius:3px;width:0%;transition:width .8s linear}
+.atime{font-family:monospace;font-size:11.5px;color:var(--muted);margin-top:4px;display:flex;justify-content:space-between}
+.trtog{font-size:12.5px;color:var(--g);font-weight:700;cursor:pointer;text-decoration:underline;margin-top:8px;display:inline-block}
+.trbox{background:var(--white);border:1px solid var(--bdr);border-radius:var(--r);padding:12px;margin-top:8px;font-size:13px;line-height:1.7;display:none;max-height:200px;overflow-y:auto}
+.trbox.on{display:block}
+/* SPEAKING */
+.sprmt{background:var(--gt);border-radius:var(--rl);padding:16px;margin-bottom:14px;font-size:14.5px;line-height:1.7}
+.sprmt h3{color:var(--g);font-size:15px;font-weight:800;margin-bottom:8px}
+.sprmt2{background:var(--at);border-radius:var(--rl);padding:16px;margin-bottom:14px;font-size:14px;line-height:1.7}
+.sprmt2 h3{color:var(--am);font-size:14px;font-weight:800;margin-bottom:8px}
+.mcbtn{width:76px;height:76px;border-radius:50%;border:none;display:flex;align-items:center;justify-content:center;margin:0 auto;transition:.2s;cursor:pointer}
+.mcbtn.idle{background:var(--g);color:#fff}
+.mcbtn.rec{background:var(--rd);color:#fff;animation:rp 1.2s infinite}
+@keyframes rp{0%{box-shadow:0 0 0 0 rgba(192,85,64,.4)}70%{box-shadow:0 0 0 16px rgba(192,85,64,0)}100%{box-shadow:0 0 0 0 rgba(192,85,64,0)}}
+.wf{display:flex;align-items:center;justify-content:center;gap:3px;height:40px;margin:12px auto;max-width:300px}
+.wb{width:3px;background:var(--g);border-radius:2px;height:5px;transition:height .1s}
+.plbl{text-align:center;font-weight:700;font-size:13.5px;color:var(--muted);margin-top:8px}
+.rfbx{background:var(--white);border:1px solid var(--bdr);border-radius:var(--rl);padding:16px;margin-top:14px;display:none}
+.rfbx.on{display:block}
+.rrow{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--bdr2)}
+.rrow:last-child{border-bottom:none}
+.rname{font-weight:700;font-size:13.5px}
+.rdesc{font-size:12px;color:var(--muted);margin-top:2px}
+.rscore{font-weight:900;font-size:15px;color:var(--g);font-family:monospace}
+.samp{background:var(--gt);border-radius:var(--r);padding:10px 12px;font-size:12.5px;margin-top:12px;line-height:1.6}
+/* WRITING */
+.wprmt{background:var(--paper);border:1px solid var(--bdr);border-radius:var(--rl);padding:16px;margin-bottom:12px;font-size:14px;line-height:1.7}
+.wprmt h3{color:var(--g);font-size:14.5px;font-weight:800;margin-bottom:8px}
+.essa{width:100%;min-height:240px;padding:14px;border:1.5px solid var(--bdr);border-radius:var(--r);font-size:14px;line-height:1.75;font-family:inherit;resize:vertical;outline:none;transition:.15s}
+.essa:focus{border-color:var(--g);box-shadow:0 0 0 3px var(--gt)}
+.wc{font-size:12px;color:var(--faint);margin-top:5px;font-family:monospace}
+/* VOCAB */
+.fc{width:100%;max-width:400px;height:220px;perspective:1000px;margin:0 auto;cursor:pointer}
+.fci{width:100%;height:100%;position:relative;transition:transform .45s;transform-style:preserve-3d}
+.fc.fl .fci{transform:rotateY(180deg)}
+.cf{position:absolute;inset:0;backface-visibility:hidden;border:1.5px solid var(--bdr);border-radius:var(--rl);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;background:var(--white)}
+.cf.bk{transform:rotateY(180deg);background:var(--gt)}
+.cw{font-size:28px;font-weight:900;color:var(--g)}
+.cp{font-size:11px;color:var(--faint);text-transform:uppercase;letter-spacing:.1em;margin-top:4px}
+.cd{font-size:15px;margin-top:12px;max-width:340px}
+.ce{font-size:12.5px;color:var(--muted);font-style:italic;margin-top:10px;max-width:340px}
+/* DASHBOARD */
+.bnr{background:linear-gradient(135deg,var(--g) 0%,var(--g2) 100%);color:#fff;border-radius:var(--rl);padding:22px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
+.bnr h2{color:#fff;font-size:20px;margin-bottom:5px}
+.bnr p{opacity:.82;font-size:13.5px;max-width:400px}
+.sgrow{display:flex;gap:12px;margin-bottom:14px}
+.sg{flex:1;text-align:center;padding:14px 8px;background:var(--white);border:1px solid var(--bdr);border-radius:var(--rl)}
+.sgn{font-size:26px;font-weight:900;font-family:monospace}
+.sgl{font-size:11.5px;color:var(--muted);margin-top:3px;font-weight:700}
+.sgs{font-size:10.5px;color:var(--faint)}
+.ai{display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid var(--bdr2)}
+.ai:last-child{border-bottom:none}
+.adot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.ab{flex:1}
+.at{font-size:13.5px;font-weight:700}
+.ad{font-size:12px;color:var(--muted)}
+.asc{font-family:monospace;font-weight:800;font-size:13.5px;text-align:right}
+.ri{display:flex;align-items:center;gap:11px;padding:11px;border:1.5px solid var(--bdr);border-radius:var(--r);cursor:pointer;transition:.15s;margin-bottom:7px}
+.ri:hover{border-color:var(--g);background:var(--gt)}
+.ric{width:36px;height:36px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px}
+.rb{flex:1}
+.rt2{font-weight:700;font-size:13.5px}
+.rd2{font-size:12px;color:var(--muted);margin-top:2px}
+/* LB */
+.lbt{width:100%;border-collapse:collapse;font-size:13.5px}
+.lbt th{text-align:left;padding:0 10px 9px;font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--faint);font-weight:700;border-bottom:1px solid var(--bdr)}
+.lbt td{padding:11px 10px;border-bottom:1px solid var(--bdr2);vertical-align:middle}
+.lbt tr.me{background:var(--at)}
+.lbt tr:last-child td{border-bottom:none}
+/* PROGRESS */
+.stbig{font-size:32px;font-weight:900;color:var(--g)}
+.prl{display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px}
+/* TOAST */
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--g);color:#fff;padding:10px 20px;border-radius:var(--rp);font-size:13.5px;font-weight:700;z-index:9999;opacity:0;transition:.25s;pointer-events:none;white-space:nowrap}
+/* RESPONSIVE */
+@media(max-width:900px){
+  #sb{display:none}
+  .qbd{grid-template-columns:1fr}
+  .qpass{border-right:none;border-bottom:1px solid var(--bdr);max-height:240px}
+  .g2,.g3,.g4{grid-template-columns:1fr}
+  .sgrow{flex-wrap:wrap}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- SIDEBAR -->
+<div id="sb">
+  <div class="logo">
+    <svg class="logo-svg" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#1a5c4f"/><path d="M7 22L13 11L19 20L25 9" stroke="#d4922a" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Ascent
+  </div>
+  <div class="nl">Main</div>
+  <button class="ni on" id="n-dashboard" onclick="goTo('dashboard')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</button>
+  <div class="nl">Practice</div>
+  <button class="ni" id="n-reading" onclick="goTo('reading')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4h7a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z"/><path d="M22 4h-7a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h8z"/></svg>Reading</button>
+  <button class="ni" id="n-listening" onclick="goTo('listening')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10v4a1 1 0 0 0 1 1h3l4 4V5L7 9H4a1 1 0 0 0-1 1z"/><path d="M16 8a4 4 0 0 1 0 8"/></svg>Listening</button>
+  <button class="ni" id="n-speaking" onclick="goTo('speaking')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>Speaking</button>
+  <button class="ni" id="n-writing" onclick="goTo('writing')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>Writing</button>
+  <div class="nl">More</div>
+  <button class="ni" id="n-vocab" onclick="goTo('vocab')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Vocabulary</button>
+  <button class="ni" id="n-leaderboard" onclick="goTo('leaderboard')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M17 5h3a2 2 0 0 1-2 4M7 5H4a2 2 0 0 0 2 4"/></svg>Leaderboard</button>
+  <button class="ni" id="n-progress" onclick="goTo('progress')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg>Progress</button>
+  <div class="sb-foot">
+    <div class="urow"><div class="av">AO</div><div><div class="uname">Amara Okafor</div><div class="uplan">Premium · 12🔥</div></div></div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+  <div id="tbar">
+    <h1 id="ptitle">Dashboard</h1>
+    <div class="stk">🔥 12-day streak</div>
+  </div>
+  <div id="cnt">
+
+  <!-- ===== DASHBOARD ===== -->
+  <div id="pg-dashboard">
+    <div class="bnr">
+      <div><h2>Good morning, Amara! 👋</h2><p>Today's focus: <strong>Listening — inference questions</strong>. Projected score: <strong>96/120</strong>, up 4 pts this week.</p></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-a" onclick="goTo('reading')">Practice Reading</button>
+        <button class="btn" style="background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.3)" onclick="goTo('listening')">Practice Listening</button>
+      </div>
+    </div>
+    <div class="sgrow">
+      <div class="sg"><div class="sgn" style="color:var(--g)">24</div><div class="sgl">Reading</div><div class="sgs">/ 30</div></div>
+      <div class="sg"><div class="sgn" style="color:var(--am)">25</div><div class="sgl">Listening</div><div class="sgs">/ 30</div></div>
+      <div class="sg"><div class="sgn" style="color:var(--rd)">23</div><div class="sgl">Speaking</div><div class="sgs">/ 30</div></div>
+      <div class="sg"><div class="sgn" style="color:var(--bl)">24</div><div class="sgl">Writing</div><div class="sgs">/ 30</div></div>
+      <div class="sg" style="background:var(--g);border-color:var(--g)"><div class="sgn" style="color:#fff">96</div><div class="sgl" style="color:rgba(255,255,255,.8)">Total</div><div class="sgs" style="color:rgba(255,255,255,.6)">/ 120</div></div>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <div class="ctitle">Recommended for you</div>
+        <div class="ri" onclick="goTo('listening')"><div class="ric" style="background:var(--at)">🎧</div><div class="rb"><div class="rt2">Listening — Inference questions</div><div class="rd2">Your accuracy: 64% — needs work</div></div><span style="font-size:12px;color:var(--faint);font-family:monospace">~12 min</span></div>
+        <div class="ri" onclick="goTo('writing')"><div class="ric" style="background:var(--bt)">✍️</div><div class="rb"><div class="rt2">Writing — Academic Discussion</div><div class="rd2">2026 format · 10-min task</div></div><span style="font-size:12px;color:var(--faint);font-family:monospace">~10 min</span></div>
+        <div class="ri" onclick="goTo('speaking')"><div class="ric" style="background:var(--rt)">🎤</div><div class="rb"><div class="rt2">Speaking — Task 1 Independent</div><div class="rd2">Fluency drill · personal preference</div></div><span style="font-size:12px;color:var(--faint);font-family:monospace">~6 min</span></div>
+        <div class="ri" onclick="goTo('vocab')"><div class="ric" style="background:var(--gt)">📚</div><div class="rb"><div class="rt2">Vocabulary — 26 cards due</div><div class="rd2">Spaced repetition review</div></div><span style="font-size:12px;color:var(--faint);font-family:monospace">~8 min</span></div>
+      </div>
+      <div class="card">
+        <div class="ctitle">Recent activity</div>
+        <div class="ai"><div class="adot" style="background:var(--g)"></div><div class="ab"><div class="at">Reading — Urban Heat Islands</div><div class="ad">Set 1 · 5 questions</div></div><div class="asc" style="color:var(--g)">4/5</div></div>
+        <div class="ai"><div class="adot" style="background:var(--am)"></div><div class="ab"><div class="at">Vocabulary review</div><div class="ad">AWL 6 · 35 cards</div></div><div class="asc" style="color:var(--am)">31/35</div></div>
+        <div class="ai"><div class="adot" style="background:var(--rd)"></div><div class="ab"><div class="at">Speaking — Independent Task</div><div class="ad">AI feedback: Delivery 3.5/5</div></div><div class="asc" style="color:var(--rd)">23/30</div></div>
+        <div class="ai"><div class="adot" style="background:var(--bl)"></div><div class="ab"><div class="at">Writing — Academic Discussion</div><div class="ad">AI feedback complete</div></div><div class="asc" style="color:var(--bl)">24/30</div></div>
+        <div class="ai"><div class="adot" style="background:var(--g)"></div><div class="ab"><div class="at">Listening — Bioluminescence</div><div class="ad">Set 1 · 4 questions</div></div><div class="asc" style="color:var(--g)">4/4</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== READING ===== -->
+  <div id="pg-reading" class="hidden">
+    <div class="tabs">
+      <button class="tb on" onclick="stab(this,'reading','r-s1')">Set 1 — Urban Heat Islands</button>
+      <button class="tb" onclick="stab(this,'reading','r-s2')">Set 2 — Glaciers &amp; Sea Level</button>
+      <button class="tb" onclick="stab(this,'reading','r-s3')">Set 3 — Linguistic Relativity</button>
+    </div>
+
+    <!-- R SET 1 -->
+    <div id="r-s1" class="tp on">
+      <div class="qsh">
+        <div class="qhd"><div><strong>Reading · Set 1</strong> <span class="bdg bg" style="margin-left:7px">Vocab · Inference · Insertion · Detail · Negative Factual</span></div><div class="qtmr"><span class="tmdot"></span><span id="r1-t">18:00</span></div></div>
+        <div class="qbd">
+          <div class="qpass">
+            <h3>Urban Heat Islands</h3>
+            <p>Cities are consistently warmer than the rural areas surrounding them, a phenomenon known as the <span class="hl">urban heat island effect</span>. The primary cause is the replacement of vegetation with pavement, rooftops, and other surfaces that absorb and <span class="hl">retain</span> solar radiation far more efficiently than soil or plant cover. ■A These materials release stored heat slowly after sunset, which is why the temperature gap between a city center and its outskirts is often greatest at night. ■B</p>
+            <p>A second contributing factor is the sheer density of human activity. Vehicles, air conditioning units, and industrial machinery all generate waste heat as a byproduct of their operation, and in a crowded downtown core this heat has nowhere to dissipate. ■C The narrow canyons formed by tall buildings can trap warm air at street level, further limiting airflow that might otherwise carry heat away.</p>
+            <p>Urban planners have begun experimenting with countermeasures, from reflective "cool" pavements to rooftop gardens that insulate buildings and return moisture to the air through evaporation. ■D While no single intervention eliminates the heat island effect, cities that combine several strategies have measured reductions of up to two degrees Celsius in peak summer temperatures. Studies also show that increasing tree canopy coverage in dense neighborhoods can lower street-level temperatures by as much as 8°C on summer afternoons.</p>
+            <p>The heat island effect carries serious public health implications. Elevated urban temperatures increase the risk of heat-related illness, particularly among elderly residents and those without access to air conditioning. Emergency hospital admissions for heat stroke typically spike during periods when the temperature differential between city centers and surrounding rural areas reaches its peak.</p>
+          </div>
+          <div class="qqs" id="r1-qp"></div>
+        </div>
+        <div class="qft"><button class="btn btn-s btn-sm" onclick="resetQ('r1')">Reset</button><div class="ndots" id="r1-nd"></div><button class="btn btn-p btn-sm" onclick="submitQ('r1')">Submit &amp; Check Answers</button></div>
+      </div>
+      <div class="sbox" id="r1-sb"><div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><div><div style="font-size:11px;color:var(--muted);margin-bottom:3px">Score</div><div class="sbig" id="r1-sv"></div></div><div style="flex:1"><div style="font-size:13px;color:var(--muted)" id="r1-sm"></div></div><button class="btn btn-p btn-sm" onclick="resetQ('r1')">Try again</button></div></div>
+    </div>
+
+    <!-- R SET 2 -->
+    <div id="r-s2" class="tp">
+      <div class="qsh">
+        <div class="qhd"><div><strong>Reading · Set 2</strong> <span class="bdg bg" style="margin-left:7px">Vocab · Detail · Inference · Rhetorical Purpose · Summary</span></div><div class="qtmr"><span class="tmdot"></span><span id="r2-t">18:00</span></div></div>
+        <div class="qbd">
+          <div class="qpass">
+            <h3>Glacial Retreat and Sea-Level Rise</h3>
+            <p>Over the past century, glaciers worldwide have been losing mass at accelerating rates, driven primarily by rising global temperatures. The <span class="hl">cryosphere</span> — Earth's frozen water zones — includes mountain glaciers, ice sheets in Greenland and Antarctica, and sea ice. While the melting of floating sea ice does not directly contribute to sea-level rise (since it already displaces water), the loss of land-based glaciers and ice sheets has become one of the most significant drivers of rising ocean levels.</p>
+            <p>Mountain glaciers, despite covering far less area than polar ice sheets, have historically contributed substantially to sea-level rise because they respond more quickly to temperature changes. The <span class="hl">albedo feedback loop</span> — in which melting ice exposes darker surfaces that absorb more heat, causing further melting — accelerates this process. Regions that depend on glacial meltwater for freshwater supply during dry seasons, such as parts of South Asia and the Andes, face particular challenges as glaciers diminish.</p>
+            <p>Scientists use satellite imagery and gravimetric measurements to track ice mass loss with increasing precision. The GRACE mission detected a net loss of approximately 280 billion metric tons of ice per year from Greenland alone between 2002 and 2016. These measurements have allowed researchers to improve projections for sea-level rise, which range from roughly 0.3 to 1.0 meters by 2100 under various emissions scenarios.</p>
+            <p>Coastal communities and low-lying island nations are already experiencing the consequences of rising seas, including increased flooding, saltwater intrusion into freshwater aquifers, and the erosion of coastlines. Adaptation strategies range from the construction of sea walls to the relocation of entire communities — measures that involve not only engineering challenges but profound social and economic disruptions.</p>
+          </div>
+          <div class="qqs" id="r2-qp"></div>
+        </div>
+        <div class="qft"><button class="btn btn-s btn-sm" onclick="resetQ('r2')">Reset</button><div class="ndots" id="r2-nd"></div><button class="btn btn-p btn-sm" onclick="submitQ('r2')">Submit &amp; Check Answers</button></div>
+      </div>
+      <div class="sbox" id="r2-sb"><div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><div><div style="font-size:11px;color:var(--muted);margin-bottom:3px">Score</div><div class="sbig" id="r2-sv"></div></div><div style="flex:1"><div style="font-size:13px;color:var(--muted)" id="r2-sm"></div></div><button class="btn btn-p btn-sm" onclick="resetQ('r2')">Try again</button></div></div>
+    </div>
+
+    <!-- R SET 3 -->
+    <div id="r-s3" class="tp">
+      <div class="qsh">
+        <div class="qhd"><div><strong>Reading · Set 3</strong> <span class="bdg bg" style="margin-left:7px">Vocab · Detail · Inference · Negative Factual · Rhetorical</span></div><div class="qtmr"><span class="tmdot"></span><span id="r3-t">18:00</span></div></div>
+        <div class="qbd">
+          <div class="qpass">
+            <h3>The Sapir-Whorf Hypothesis</h3>
+            <p>The Sapir-Whorf hypothesis, also known as linguistic relativity, proposes that the language a person speaks influences — or in its strong form, determines — how they perceive and think about the world. The hypothesis takes its name from American linguist Edward Sapir and his student Benjamin Lee Whorf, who developed these ideas in the early twentieth century largely through observations of Indigenous American languages.</p>
+            <p>The <span class="hl">strong version</span> of the hypothesis, known as linguistic determinism, holds that language entirely controls thought — that speakers of different languages literally cannot conceptualize ideas their language lacks words for. This position has been largely <span class="hl">discredited</span> by subsequent research. Cognitive scientists demonstrated that people can perceive and reason about concepts even without specific vocabulary for them, and that translation between languages is generally possible, implying underlying concepts are shared across linguistic communities.</p>
+            <p>The <span class="hl">weak version</span>, linguistic relativity proper, makes a more modest claim: that language influences (but does not wholly determine) perception and categorization. Research by Lera Boroditsky and colleagues has provided empirical support for this position. Studies show that speakers of languages with grammatical gender tend to attribute gendered qualities to inanimate objects consistent with the grammatical gender assigned in their language. Similarly, communities with languages that use cardinal directions (north, south, east, west) rather than egocentric terms (left, right) develop stronger spatial orientation skills.</p>
+            <p>The debate over linguistic relativity continues, with most contemporary linguists occupying a middle ground. Language is now generally understood as one of many factors — alongside culture, environment, and individual experience — that shape cognition and perception.</p>
+          </div>
+          <div class="qqs" id="r3-qp"></div>
+        </div>
+        <div class="qft"><button class="btn btn-s btn-sm" onclick="resetQ('r3')">Reset</button><div class="ndots" id="r3-nd"></div><button class="btn btn-p btn-sm" onclick="submitQ('r3')">Submit &amp; Check Answers</button></div>
+      </div>
+      <div class="sbox" id="r3-sb"><div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><div><div style="font-size:11px;color:var(--muted);margin-bottom:3px">Score</div><div class="sbig" id="r3-sv"></div></div><div style="flex:1"><div style="font-size:13px;color:var(--muted)" id="r3-sm"></div></div><button class="btn btn-p btn-sm" onclick="resetQ('r3')">Try again</button></div></div>
+    </div>
+  </div>
+
+  <!-- ===== LISTENING ===== -->
+  <div id="pg-listening" class="hidden">
+    <div class="tabs">
+      <button class="tb on" onclick="stab(this,'listening','l-s1')">Set 1 — Bioluminescence</button>
+      <button class="tb" onclick="stab(this,'listening','l-s2')">Set 2 — Campus Conversation</button>
+      <button class="tb" onclick="stab(this,'listening','l-s3')">Set 3 — The Silk Road</button>
+    </div>
+
+    <!-- L SET 1 -->
+    <div id="l-s1" class="tp on">
+      <div class="qsh">
+        <div class="qhd"><div><strong>Listening · Set 1</strong> <span class="bdg ba" style="margin-left:7px">Academic Lecture · Marine Biology</span></div><div class="qtmr"><span class="tmdot"></span><span id="l1-t">12:00</span></div></div>
+        <div class="qbd">
+          <div class="qpass">
+            <h3>🎧 Lecture: Bioluminescence in Deep-Sea Organisms</h3>
+            <div class="aplayer">
+              <div class="acon"><button class="pbtn" id="l1-pb" onclick="togAudio('l1',222)">▶</button><div class="abarw"><div class="abar"><div class="abarf" id="l1-bar"></div></div><div class="atime"><span id="l1-tm">0:00</span><span>3:42</span></div></div></div>
+              <span class="trtog" onclick="togTr('l1-tr')">Show transcript ▾</span>
+              <div id="l1-tr" class="trbox">
+                <p><strong>Professor:</strong> "Today we're examining bioluminescence — the production of light by living organisms. It's remarkably common in the deep ocean, below 200 meters, where sunlight no longer penetrates. Estimates suggest roughly three-quarters of deep-sea species produce light in some form."</p>
+                <p>"There are three broad uses for bioluminescence. First: <strong>predation</strong>. The anglerfish dangles a glowing lure to attract prey directly toward its mouth — a remarkably efficient hunting strategy in complete darkness."</p>
+                <p>"Second: <strong>defense</strong>. The vampire squid releases a cloud of glowing mucus to startle or distract a predator — a luminous smokescreen, buying the squid time to escape."</p>
+                <p>"Third, and perhaps most surprising: <strong>communication</strong>. Firefly squid produce synchronized flashes believed to identify potential mates of the same species. In an environment with no sunlight, light becomes the primary signaling medium."</p>
+                <p>"Notably, the underlying chemistry — a compound called luciferin and an enzyme called luciferase — appears to have evolved independently at least <strong>forty times</strong> across unrelated groups. That convergent evolution strongly suggests the trait confers a significant survival advantage."</p>
+              </div>
+            </div>
+            <p style="font-size:12.5px;color:var(--muted)">▶ Play the audio, then answer the questions. You may show the transcript after listening.</p>
+          </div>
+          <div class="qqs" id="l1-qp"></div>
+        </div>
+        <div class="qft"><button class="btn btn-s btn-sm" onclick="resetQ('l1')">Reset</button><div class="ndots" id="l1-nd"></div><button class="btn btn-p btn-sm" onclick="submitQ('l1')">Submit &amp; Check Answers</button></div>
+      </div>
+      <div class="sbox" id="l1-sb"><div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><div><div style="font-size:11px;color:var(--muted);margin-bottom:3px">Score</div><div class="sbig" id="l1-sv"></div></div><div style="flex:1"><div style="font-size:13px;color:var(--muted)" id="l1-sm"></div></div><button class="btn btn-p btn-sm" onclick="resetQ('l1')">Try again</button></div></div>
+    </div>
+
+    <!-- L SET 2 -->
+    <div id="l-s2" class="tp">
+      <div class="qsh">
+        <div class="qhd"><div><strong>Listening · Set 2</strong> <span class="bdg ba" style="margin-left:7px">Campus Conversation · Academic Advisor</span></div><div class="qtmr"><span class="tmdot"></span><span id="l2-t">10:00</span></div></div>
+        <div class="qbd">
+          <div class="qpass">
+            <h3>🎧 Conversation: Changing a Course Registration</h3>
+            <div class="aplayer">
+              <div class="acon"><button class="pbtn" id="l2-pb" onclick="togAudio('l2',138)">▶</button><div class="abarw"><div class="abar"><div class="abarf" id="l2-bar"></div></div><div class="atime"><span id="l2-tm">0:00</span><span>2:18</span></div></div></div>
+              <span class="trtog" onclick="togTr('l2-tr')">Show transcript ▾</span>
+              <div id="l2-tr" class="trbox">
+                <p><strong>Student:</strong> "Hi, I wanted to ask about dropping CHEM 201. The add/drop deadline is Friday and I'm not sure what to do."</p>
+                <p><strong>Advisor:</strong> "What's making you consider dropping it?"</p>
+                <p><strong>Student:</strong> "The lab section conflicts with my part-time job on Tuesday afternoons, and I can't shift either commitment."</p>
+                <p><strong>Advisor:</strong> "CHEM 201 has a Thursday lab section that still has open seats. If you switch lab sections rather than dropping the whole course, you keep your credits and don't fall behind."</p>
+                <p><strong>Student:</strong> "I didn't realize that was an option. Would I need professor approval?"</p>
+                <p><strong>Advisor:</strong> "No, lab section switches don't need approval — do it in the student portal before Friday noon, because the system locks after that."</p>
+                <p><strong>Student:</strong> "One more thing — if I do end up dropping CHEM 201 entirely, would that affect my financial aid?"</p>
+                <p><strong>Advisor:</strong> "It could. If dropping it puts you below twelve credits, you'd fall below full-time status and your aid might be recalculated. Check with Financial Aid before making that decision."</p>
+              </div>
+            </div>
+          </div>
+          <div class="qqs" id="l2-qp"></div>
+        </div>
+        <div class="qft"><button class="btn btn-s btn-sm" onclick="resetQ('l2')">Reset</button><div class="ndots" id="l2-nd"></div><button class="btn btn-p btn-sm" onclick="submitQ('l2')">Submit &amp; Check Answers</button></div>
+      </div>
+      <div class="sbox" id="l2-sb"><div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><div><div style="font-size:11px;color:var(--muted);margin-bottom:3px">Score</div><div class="sbig" id="l2-sv"></div></div><div style="flex:1"><div style="font-size:13px;color:var(--muted)" id="l2-sm"></div></div><button class="btn btn-p btn-sm" onclick="resetQ('l2')">Try again</button></div></div>
+    </div>
+
+    <!-- L SET 3 -->
+    <div id="l-s3" class="tp">
+      <div class="qsh">
+        <div class="qhd"><div><strong>Listening · Set 3</strong> <span class="bdg ba" style="margin-left:7px">Academic Lecture · Economic History</span></div><div class="qtmr"><span class="tmdot"></span><span id="l3-t">12:00</span></div></div>
+        <div class="qbd">
+          <div class="qpass">
+            <h3>🎧 Lecture: The Silk Road and Cultural Exchange</h3>
+            <div class="aplayer">
+              <div class="acon"><button class="pbtn" id="l3-pb" onclick="togAudio('l3',245)">▶</button><div class="abarw"><div class="abar"><div class="abarf" id="l3-bar"></div></div><div class="atime"><span id="l3-tm">0:00</span><span>4:05</span></div></div></div>
+              <span class="trtog" onclick="togTr('l3-tr')">Show transcript ▾</span>
+              <div id="l3-tr" class="trbox">
+                <p><strong>Professor:</strong> "When people think of the Silk Road, they picture caravans loaded with Chinese silk heading west toward Rome. That image isn't wrong, but it dramatically understates what the Silk Road actually was."</p>
+                <p>"The Silk Road was not a single road at all — it was a vast network of overland and maritime routes connecting East Asia, Central Asia, South Asia, the Middle East, East Africa, and Europe. And silk was just one of hundreds of goods that traveled these routes."</p>
+                <p>"More important, arguably, was the <strong>cultural and intellectual exchange</strong> the Silk Road facilitated. Buddhism spread from India into China largely through Silk Road trade networks. Paper-making technology traveled westward from China. Mathematical and astronomical knowledge moved in multiple directions simultaneously."</p>
+                <p>"The Silk Road also carried diseases — most notably the bubonic plague, which researchers believe traveled from Central Asian rodent populations along trade routes to reach Europe in the 14th century, triggering the Black Death."</p>
+                <p>"What made these exchanges possible was <strong>relay trade</strong> — merchants rarely traveled the full route. Goods changed hands multiple times. A bale of silk might pass through a Chinese merchant, a Sogdian intermediary in Central Asia, a Persian trader, and finally a Byzantine merchant before reaching Constantinople."</p>
+              </div>
+            </div>
+          </div>
+          <div class="qqs" id="l3-qp"></div>
+        </div>
+        <div class="qft"><button class="btn btn-s btn-sm" onclick="resetQ('l3')">Reset</button><div class="ndots" id="l3-nd"></div><button class="btn btn-p btn-sm" onclick="submitQ('l3')">Submit &amp; Check Answers</button></div>
+      </div>
+      <div class="sbox" id="l3-sb"><div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><div><div style="font-size:11px;color:var(--muted);margin-bottom:3px">Score</div><div class="sbig" id="l3-sv"></div></div><div style="flex:1"><div style="font-size:13px;color:var(--muted)" id="l3-sm"></div></div><button class="btn btn-p btn-sm" onclick="resetQ('l3')">Try again</button></div></div>
+    </div>
+  </div>
+
+  <!-- ===== SPEAKING ===== -->
+  <div id="pg-speaking" class="hidden">
+    <div class="tabs">
+      <button class="tb on" onclick="stab(this,'speaking','sp-t1')">Task 1 — Independent</button>
+      <button class="tb" onclick="stab(this,'speaking','sp-t2')">Task 2 — Campus Situation</button>
+      <button class="tb" onclick="stab(this,'speaking','sp-t3')">Task 3 — Reading + Lecture</button>
+      <button class="tb" onclick="stab(this,'speaking','sp-t4')">Task 4 — Lecture Summary</button>
+    </div>
+    <div id="sp-t1" class="tp on"><div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px"><div><strong>Task 1 — Independent Speaking</strong> <span class="bdg br" style="margin-left:7px">Prep: 15s · Response: 45s</span></div><div class="qtmr"><span class="tmdot" id="sp1-dot" style="display:none"></span><span id="sp1-t" style="font-family:monospace;font-weight:800">—</span></div></div>
+      <div class="sprmt"><h3>📝 Prompt</h3><p>Some students prefer to study in groups with classmates, while others prefer to study alone. Which approach do you prefer, and why? Use specific reasons and examples to support your answer.</p></div>
+      <div style="text-align:center;padding:10px 0">
+        <div class="plbl" id="sp1-lbl">Press <strong>Begin</strong> to start your 15-second preparation time.</div>
+        <div class="wf" id="sp1-wf"></div>
+        <div class="mcbtn idle" id="sp1-mc" onclick="spTask('sp1',15,45)"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" fill="currentColor" stroke="none"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg></div>
+        <div style="margin-top:10px"><button class="btn btn-p" id="sp1-btn" onclick="spTask('sp1',15,45)">Begin</button></div>
+      </div>
+      <div class="rfbx" id="sp1-fb">
+        <div class="ctitle" style="color:var(--g)">🤖 AI Scoring — Task 1</div>
+        <div class="rrow"><div><div class="rname">Delivery</div><div class="rdesc">Pace was natural; minor hesitation around the 20s mark. Pronunciation clear.</div></div><div class="rscore">3.5/5</div></div>
+        <div class="rrow"><div><div class="rname">Language Use</div><div class="rdesc">Good vocabulary range ("collaborative", "accountability"). One subject-verb agreement error.</div></div><div class="rscore">4.0/5</div></div>
+        <div class="rrow"><div><div class="rname">Topic Development</div><div class="rdesc">Clear preference stated early. Two relevant examples given. Add a brief conclusion next time.</div></div><div class="rscore">3.5/5</div></div>
+        <div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;color:var(--muted)">Estimated contribution to section score</span><span class="bdg ba" style="font-family:monospace">≈ 23 / 30</span></div>
+        <div class="samp"><strong>✅ Sample high-score response:</strong> "I strongly prefer studying alone because I can set my own pace without interruptions. For example, during exam preparation, uninterrupted two-hour sessions allow me to go deep into difficult concepts. Group study, while social, often leads to off-topic discussions. Therefore, solitary study works best for my learning style."</div>
+        <button class="btn btn-s btn-sm" style="margin-top:10px" onclick="resetSp('sp1')">Try again</button>
+      </div>
+    </div></div>
+
+    <div id="sp-t2" class="tp"><div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px"><div><strong>Task 2 — Campus Situation</strong> <span class="bdg br" style="margin-left:7px">Read 45s · Prep 30s · Respond 60s</span></div><div class="qtmr"><span class="tmdot" id="sp2-dot" style="display:none"></span><span id="sp2-t" style="font-family:monospace;font-weight:800">—</span></div></div>
+      <div class="sprmt"><h3>📄 Reading Passage (45 seconds to read)</h3><p><strong>University Library to Change Hours</strong><br>Starting next semester, the university library will close at 10 PM on weekdays instead of midnight. The administration states that usage data shows very few students use the library after 10 PM, and the change will reduce operating costs and allow custodial staff to work standard hours.</p></div>
+      <div class="sprmt2"><h3>🎧 Conversation (listen)</h3><p>Two students discuss the announcement. The woman <strong>opposes</strong> the change — she regularly uses the library until midnight during finals week, and argues the cost savings don't justify limiting student access. The man is neutral, noting he only uses the library during afternoons.</p></div>
+      <p style="font-size:13.5px;color:var(--muted);margin-bottom:12px"><strong>Question:</strong> The woman expresses her opinion about the library hours change. State her opinion and explain the reasons she gives.</p>
+      <div style="text-align:center;padding:10px 0">
+        <div class="plbl" id="sp2-lbl">Press <strong>Begin</strong> to start preparation time.</div>
+        <div class="wf" id="sp2-wf"></div>
+        <div class="mcbtn idle" id="sp2-mc" onclick="spTask('sp2',30,60)"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" fill="currentColor" stroke="none"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg></div>
+        <div style="margin-top:10px"><button class="btn btn-p" id="sp2-btn" onclick="spTask('sp2',30,60)">Begin</button></div>
+      </div>
+      <div class="rfbx" id="sp2-fb">
+        <div class="ctitle" style="color:var(--g)">🤖 AI Scoring — Task 2</div>
+        <div class="rrow"><div><div class="rname">Delivery</div><div class="rdesc">Steady pace. Slightly fast in second half — slow down when summarizing reasons.</div></div><div class="rscore">3.5/5</div></div>
+        <div class="rrow"><div><div class="rname">Language Use</div><div class="rdesc">Good transitions ("furthermore", "she argues that"). One run-on sentence noted.</div></div><div class="rscore">4.0/5</div></div>
+        <div class="rrow"><div><div class="rname">Topic Development</div><div class="rdesc">Both reasons clearly conveyed. Explicitly state the woman's opinion at the very start.</div></div><div class="rscore">3.5/5</div></div>
+        <div class="samp"><strong>✅ Sample response:</strong> "The woman opposes the library's new closing time. She gives two reasons. First, she personally uses the library until midnight during finals week, so earlier closing hours would directly harm her studies. Second, she believes the cost savings don't justify restricting access to an academic resource students depend on."</div>
+        <button class="btn btn-s btn-sm" style="margin-top:10px" onclick="resetSp('sp2')">Try again</button>
+      </div>
+    </div></div>
+
+    <div id="sp-t3" class="tp"><div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px"><div><strong>Task 3 — Integrated (Reading + Lecture)</strong> <span class="bdg br" style="margin-left:7px">Read 45s · Listen · Prep 30s · Respond 60s</span></div><div class="qtmr"><span class="tmdot" id="sp3-dot" style="display:none"></span><span id="sp3-t" style="font-family:monospace;font-weight:800">—</span></div></div>
+      <div class="sprmt"><h3>📄 Reading — Anchoring Bias</h3><p>Anchoring bias is a cognitive tendency in which people rely too heavily on the first piece of information they encounter when making decisions. Once an initial value — the "anchor" — is set, subsequent judgments are pulled toward it, even when the anchor is arbitrary or irrelevant.</p></div>
+      <div class="sprmt2"><h3>🎧 Lecture Summary</h3><p>The professor illustrates anchoring with a study: participants spun a wheel (rigged to land on 10 or 65), then estimated the percentage of African countries in the UN. Those who spun 65 gave significantly higher estimates than those who spun 10 — despite the spin being completely unrelated to the question. This shows even obviously irrelevant numbers can distort judgment.</p></div>
+      <p style="font-size:13.5px;color:var(--muted);margin-bottom:12px"><strong>Question:</strong> Using the lecture example, explain how it illustrates anchoring bias as described in the reading.</p>
+      <div style="text-align:center;padding:10px 0">
+        <div class="plbl" id="sp3-lbl">Press <strong>Begin</strong> to start preparation time.</div>
+        <div class="wf" id="sp3-wf"></div>
+        <div class="mcbtn idle" id="sp3-mc" onclick="spTask('sp3',30,60)"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" fill="currentColor" stroke="none"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg></div>
+        <div style="margin-top:10px"><button class="btn btn-p" id="sp3-btn" onclick="spTask('sp3',30,60)">Begin</button></div>
+      </div>
+      <div class="rfbx" id="sp3-fb">
+        <div class="ctitle" style="color:var(--g)">🤖 AI Scoring — Task 3</div>
+        <div class="rrow"><div><div class="rname">Delivery</div><div class="rdesc">Clear delivery. Slight over-reliance on "um" — use deliberate pauses instead.</div></div><div class="rscore">3.5/5</div></div>
+        <div class="rrow"><div><div class="rname">Language Use</div><div class="rdesc">Accurate paraphrase of reading. Good use of "illustrates" and "demonstrates."</div></div><div class="rscore">4.0/5</div></div>
+        <div class="rrow"><div><div class="rname">Topic Development</div><div class="rdesc">Concept defined; example well explained. Clearly linked wheel spin to biased estimates.</div></div><div class="rscore">4.0/5</div></div>
+        <div class="samp"><strong>✅ Sample response:</strong> "Anchoring bias occurs when an initial piece of information influences later judgments, even if irrelevant. The professor illustrates this with a study where participants spun a wheel — randomly landing on 10 or 65 — then estimated what percentage of UN countries are in Africa. Those who spun 65 gave much higher estimates, demonstrating that the arbitrary wheel number served as an anchor distorting their judgment."</div>
+        <button class="btn btn-s btn-sm" style="margin-top:10px" onclick="resetSp('sp3')">Try again</button>
+      </div>
+    </div></div>
+
+    <div id="sp-t4" class="tp"><div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px"><div><strong>Task 4 — Academic Lecture Summary</strong> <span class="bdg br" style="margin-left:7px">Listen · Prep 20s · Respond 60s</span></div><div class="qtmr"><span class="tmdot" id="sp4-dot" style="display:none"></span><span id="sp4-t" style="font-family:monospace;font-weight:800">—</span></div></div>
+      <div class="sprmt2"><h3>🎧 Lecture — Operant Conditioning</h3><p>The professor explains operant conditioning: behavior is shaped by its consequences. <strong>Positive reinforcement</strong> adds a reward to increase behavior (e.g., giving a dog a treat for sitting). <strong>Negative reinforcement</strong> removes an unpleasant stimulus to increase behavior (e.g., a car's seatbelt alarm stops when you buckle up — removing the annoying sound reinforces buckling). <strong>Punishment</strong> decreases behavior by adding an unpleasant consequence or removing a pleasant one.</p></div>
+      <p style="font-size:13.5px;color:var(--muted);margin-bottom:12px"><strong>Question:</strong> Using examples from the lecture, explain operant conditioning and its two main reinforcement types.</p>
+      <div style="text-align:center;padding:10px 0">
+        <div class="plbl" id="sp4-lbl">Press <strong>Begin</strong> to start preparation time.</div>
+        <div class="wf" id="sp4-wf"></div>
+        <div class="mcbtn idle" id="sp4-mc" onclick="spTask('sp4',20,60)"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" fill="currentColor" stroke="none"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg></div>
+        <div style="margin-top:10px"><button class="btn btn-p" id="sp4-btn" onclick="spTask('sp4',20,60)">Begin</button></div>
+      </div>
+      <div class="rfbx" id="sp4-fb">
+        <div class="ctitle" style="color:var(--g)">🤖 AI Scoring — Task 4</div>
+        <div class="rrow"><div><div class="rname">Delivery</div><div class="rdesc">Clear and confident. Good use of pauses between the two reinforcement types.</div></div><div class="rscore">4.0/5</div></div>
+        <div class="rrow"><div><div class="rname">Language Use</div><div class="rdesc">Academic vocabulary used well. "In contrast" was an effective transition.</div></div><div class="rscore">4.0/5</div></div>
+        <div class="rrow"><div><div class="rname">Topic Development</div><div class="rdesc">Both types defined with examples. Strong — consider defining operant conditioning first.</div></div><div class="rscore">4.0/5</div></div>
+        <div class="samp"><strong>✅ Sample response:</strong> "Operant conditioning is a learning theory in which behavior is shaped by its consequences. The professor describes two main reinforcement types. Positive reinforcement adds something rewarding — giving a dog a treat when it sits makes the dog more likely to repeat the behavior. In contrast, negative reinforcement removes an unpleasant stimulus — the car's seatbelt alarm stops when you buckle up, reinforcing the buckling behavior."</div>
+        <button class="btn btn-s btn-sm" style="margin-top:10px" onclick="resetSp('sp4')">Try again</button>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ===== WRITING ===== -->
+  <div id="pg-writing" class="hidden">
+    <div class="tabs">
+      <button class="tb on" onclick="stab(this,'writing','w-t1')">Task 1 — Integrated Essay</button>
+      <button class="tb" onclick="stab(this,'writing','w-t2')">Task 2 — Academic Discussion</button>
+    </div>
+    <div id="w-t1" class="tp on">
+      <div class="g2" style="align-items:start">
+        <div>
+          <div class="wprmt"><h3>📄 Reading Passage (3 min)</h3><p><strong>The Benefits of Nuclear Energy</strong></p><p>Proponents argue nuclear energy is one of the most viable climate solutions because it generates large amounts of electricity with virtually no direct carbon emissions. Unlike solar and wind, nuclear plants operate continuously regardless of weather, providing stable "baseload" power. Modern reactor designs incorporate passive safety systems that make catastrophic failures far less likely. The land use required per unit of energy is also far smaller than for renewable energy farms.</p></div>
+          <div class="wprmt" style="background:var(--at)"><h3>🎧 Lecture Notes</h3><p>The professor challenges each claim: <strong>(1)</strong> Nuclear's carbon footprint is low only if you exclude uranium mining and plant construction, both energy-intensive. <strong>(2)</strong> The baseload advantage is overstated — modern battery storage is making intermittent renewables increasingly reliable. <strong>(3)</strong> Passive safety systems are improvements, but failure consequences remain catastrophic (see Fukushima). <strong>(4)</strong> Land use per kWh is efficient, but safely storing radioactive waste for thousands of years is an unresolved long-term burden the reading ignores.</p></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><strong>Your essay</strong><div class="qtmr"><span class="tmdot"></span><span id="w1-t">20:00</span></div></div>
+          <p style="font-size:13px;color:var(--muted);margin-bottom:8px">Summarize the lecture points and explain how they cast doubt on the reading. Do NOT give your own opinion.</p>
+          <textarea class="essa" id="w1-es" placeholder="Type your integrated essay here..." oninput="updWC('w1')"></textarea>
+          <div class="wc"><span id="w1-wc">0</span> words · Aim for 150–225 words</div>
+          <div style="display:flex;gap:8px;margin-top:10px"><button class="btn btn-p" onclick="subEssay('w1')">Submit for AI Scoring</button><button class="btn btn-s" onclick="resetEssay('w1')">Clear</button></div>
+          <div class="rfbx" id="w1-fb">
+            <div class="ctitle" style="color:var(--g)">🤖 AI Scoring — Integrated Essay</div>
+            <div class="rrow"><div><div class="rname">Development &amp; Accuracy</div><div class="rdesc">All four lecture points addressed and accurately contrasted with reading claims.</div></div><div class="rscore">4/5</div></div>
+            <div class="rrow"><div><div class="rname">Organization</div><div class="rdesc">Clear paragraph structure. Each body paragraph covers one point of contrast.</div></div><div class="rscore">4/5</div></div>
+            <div class="rrow"><div><div class="rname">Language Use</div><div class="rdesc">Good hedging language ("the professor contends", "according to the lecture"). One grammar slip.</div></div><div class="rscore">4/5</div></div>
+            <div class="samp"><strong>✅ Model opener:</strong> "Both the reading and the lecture address nuclear energy, but the professor challenges each of the four main claims the reading makes in favor of nuclear power."</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="w-t2" class="tp">
+      <div class="g2" style="align-items:start">
+        <div>
+          <div class="wprmt"><h3>💬 Professor's Prompt</h3><p><strong>Dr. Martinez:</strong> "This week we are discussing remote work. Some people argue working from home improves productivity and quality of life, while others believe in-person office work is essential for collaboration and company culture. What is your view? Should companies prioritize remote work options? Explain your reasoning."</p></div>
+          <div class="wprmt" style="background:var(--paper)">
+            <p><strong>Wei:</strong> "I think remote work is mostly beneficial. It cuts commute time and lets people work in an environment they control. My productivity went up 30% when I started working from home."</p>
+            <p style="margin-top:8px"><strong>Sofia:</strong> "I disagree. Spontaneous office conversations often spark the best ideas. New employees especially need in-person mentorship that's hard to replicate over video calls."</p>
+          </div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><strong>Your response</strong><div class="qtmr"><span class="tmdot"></span><span id="w2-t">10:00</span></div></div>
+          <p style="font-size:13px;color:var(--muted);margin-bottom:8px">Contribute to the discussion. Express your opinion with at least one specific reason or example. Minimum 100 words.</p>
+          <textarea class="essa" id="w2-es" placeholder="Write your response here..." oninput="updWC('w2')" style="min-height:200px"></textarea>
+          <div class="wc"><span id="w2-wc">0</span> words · Minimum 100 words</div>
+          <div style="display:flex;gap:8px;margin-top:10px"><button class="btn btn-p" onclick="subEssay('w2')">Submit for AI Scoring</button><button class="btn btn-s" onclick="resetEssay('w2')">Clear</button></div>
+          <div class="rfbx" id="w2-fb">
+            <div class="ctitle" style="color:var(--g)">🤖 AI Scoring — Academic Discussion</div>
+            <div class="rrow"><div><div class="rname">Development &amp; Support</div><div class="rdesc">Clear opinion stated. Two supporting reasons. Consider engaging with Wei or Sofia's points directly.</div></div><div class="rscore">4/5</div></div>
+            <div class="rrow"><div><div class="rname">Organization</div><div class="rdesc">Well-structured. Opinion is clear from the start. Concise and on-topic.</div></div><div class="rscore">4.5/5</div></div>
+            <div class="rrow"><div><div class="rname">Language Use</div><div class="rdesc">Varied sentence structure. Good academic vocabulary. One comma splice in paragraph 2.</div></div><div class="rscore">4/5</div></div>
+            <div class="samp"><strong>✅ Model response:</strong> "I agree with Wei that remote work can significantly boost productivity, but I think Sofia raises a valid point about new employees. My view is that companies should offer a hybrid model — primarily remote, with scheduled in-person days for collaboration and mentorship. Without intentional in-person time, team cohesion can erode, especially for employees who joined during fully remote periods."</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== VOCABULARY ===== -->
+  <div id="pg-vocab" class="hidden">
+    <div class="g2" style="align-items:start">
+      <div class="card">
+        <div class="ctitle">Flashcard Review <span class="bdg ba" style="margin-left:7px">26 due today</span></div>
+        <div class="fc" id="fc" onclick="flipCard()" style="margin-bottom:14px">
+          <div class="fci">
+            <div class="cf front"><div style="font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--faint);margin-bottom:6px">AWL 7 · Card <span id="cn">1</span> of 26</div><div class="cw" id="cw">mitigate</div><div class="cp" id="cp">verb</div><div style="font-size:12.5px;color:var(--muted);margin-top:12px">Tap to reveal definition →</div></div>
+            <div class="cf bk"><div class="cw" id="cwb" style="font-size:22px">mitigate</div><div class="cd" id="cd">to make something less severe or serious</div><div class="ce" id="ce">"Rooftop gardens can mitigate the urban heat island effect."</div></div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:center;margin-bottom:10px"><button class="btn btn-s" onclick="nxtCard(false)">Still learning</button><button class="btn btn-p" onclick="nxtCard(true)">Know it ✓</button></div>
+        <div style="text-align:center;font-size:12px;color:var(--faint)"><span id="ck">0</span> known · <span id="cl">26</span> remaining</div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:14px">
+          <div class="ctitle">Quick Quiz</div>
+          <p style="font-size:13.5px;color:var(--muted);margin-bottom:12px">Choose the word that best fits:</p>
+          <div style="padding:12px;background:var(--paper);border-radius:var(--r);font-size:14px;margin-bottom:12px">"The study's conclusions were criticized for being entirely ______, lacking any experimental data."</div>
+          <div id="vq-opts"></div>
+          <div class="exp" id="vq-exp"></div>
+          <button class="btn btn-p btn-sm" style="margin-top:10px" onclick="chkVQ()">Check Answer</button>
+        </div>
+        <div class="card">
+          <div class="ctitle">Word Lists</div>
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:13.5px"><span>Academic Word List 1–6</span><span class="bdg bg">Mastered ✓</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:13.5px"><span>Academic Word List 7</span><span class="bdg ba">In progress · 26 due</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:13.5px;opacity:.45"><span>Academic Word List 8</span><span class="bdg" style="background:var(--bdr2);color:var(--faint)">Locked</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:13.5px;opacity:.45"><span>STEM Vocabulary Pack</span><span class="bdg" style="background:var(--bdr2);color:var(--faint)">Locked</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== LEADERBOARD ===== -->
+  <div id="pg-leaderboard" class="hidden">
+    <div class="g3" style="margin-bottom:14px">
+      <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">Your rank</div><div class="stbig" style="margin-top:4px">#7</div><div style="font-size:12.5px;color:var(--muted)">of 1,842 learners</div></div>
+      <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">Points this week</div><div class="stbig" style="margin-top:4px">2,140</div><div style="font-size:12.5px;color:var(--muted)">+380 from mock test</div></div>
+      <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">Current streak</div><div class="stbig" style="margin-top:4px">12 🔥</div><div style="font-size:12.5px;color:var(--muted)">Best ever: 19 days</div></div>
+    </div>
+    <div class="card">
+      <table class="lbt">
+        <thead><tr><th>Rank</th><th>Learner</th><th>Streak</th><th>Avg Score</th><th>Points</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><div style="display:flex;align-items:center;gap:7px"><div class="av" style="width:24px;height:24px;font-size:10px;background:#9A6A12">YL</div>Yuna Lim</div></td><td>🔥31</td><td>106</td><td><strong>4,920</strong></td></tr>
+          <tr><td>2</td><td><div style="display:flex;align-items:center;gap:7px"><div class="av" style="width:24px;height:24px;font-size:10px;background:#c05540">MS</div>Mateus Silva</div></td><td>🔥24</td><td>101</td><td><strong>4,510</strong></td></tr>
+          <tr><td>3</td><td><div style="display:flex;align-items:center;gap:7px"><div class="av" style="width:24px;height:24px;font-size:10px;background:#7FA98C">PN</div>Priya Nair</div></td><td>🔥19</td><td>99</td><td><strong>4,260</strong></td></tr>
+          <tr><td>4</td><td><div style="display:flex;align-items:center;gap:7px"><div class="av" style="width:24px;height:24px;font-size:10px;background:#2F6E62">JK</div>Jin Kowalski</div></td><td>🔥22</td><td>97</td><td><strong>3,980</strong></td></tr>
+          <tr><td>5</td><td><div style="display:flex;align-items:center;gap:7px"><div class="av" style="width:24px;height:24px;font-size:10px;background:#5C6F6C">LR</div>Lucas Rocha</div></td><td>🔥15</td><td>94</td><td><strong>3,640</strong></td></tr>
+          <tr><td>6</td><td><div style="display:flex;align-items:center;gap:7px"><div class="av" style="width:24px;height:24px;font-size:10px">HT</div>Hana Tanaka</div></td><td>🔥9</td><td>93</td><td><strong>3,510</strong></td></tr>
+          <tr class="me"><td>7</td><td><div style="display:flex;align-items:center;gap:7px"><div class="av" style="width:24px;height:24px;font-size:10px">AO</div><strong>Amara Okafor (you)</strong></div></td><td>🔥12</td><td>96</td><td><strong>2,140</strong></td></tr>
+          <tr><td>8</td><td><div style="display:flex;align-items:center;gap:7px"><div class="av" style="width:24px;height:24px;font-size:10px;background:#d4922a">RB</div>Reza Barzani</div></td><td>🔥6</td><td>90</td><td><strong>1,980</strong></td></tr>
+          <tr><td>9</td><td><div style="display:flex;align-items:center;gap:7px"><div class="av" style="width:24px;height:24px;font-size:10px;background:#c05540">CD</div>Carla Duarte</div></td><td>🔥4</td><td>88</td><td><strong>1,820</strong></td></tr>
+          <tr><td>10</td><td><div style="display:flex;align-items:center;gap:7px"><div class="av" style="width:24px;height:24px;font-size:10px;background:#7FA98C">NA</div>Nadia Aboud</div></td><td>🔥8</td><td>87</td><td><strong>1,760</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== PROGRESS ===== -->
+  <div id="pg-progress" class="hidden">
+    <div class="g4" style="margin-bottom:14px">
+      <div class="card" style="text-align:center"><div class="stbig">96</div><div style="font-size:12.5px;color:var(--muted)">Projected score</div></div>
+      <div class="card" style="text-align:center"><div class="stbig">38.5h</div><div style="font-size:12.5px;color:var(--muted)">Total study time</div></div>
+      <div class="card" style="text-align:center"><div class="stbig">12🔥</div><div style="font-size:12.5px;color:var(--muted)">Day streak</div></div>
+      <div class="card" style="text-align:center"><div class="stbig">+24</div><div style="font-size:12.5px;color:var(--muted)">Points vs diagnostic</div></div>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <div class="ctitle">Accuracy by question type</div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div><div class="prl"><span>Vocabulary-in-context</span><span>88%</span></div><div class="pb"><div class="pbf" style="width:88%;background:var(--g)"></div></div></div>
+          <div><div class="prl"><span>Detail &amp; factual</span><span>81%</span></div><div class="pb"><div class="pbf" style="width:81%;background:var(--g)"></div></div></div>
+          <div><div class="prl"><span>Inference</span><span>68%</span></div><div class="pb"><div class="pbf" style="width:68%;background:var(--am)"></div></div></div>
+          <div><div class="prl"><span>Sentence insertion</span><span>71%</span></div><div class="pb"><div class="pbf" style="width:71%;background:var(--am)"></div></div></div>
+          <div><div class="prl"><span>Speaker attitude</span><span>64%</span></div><div class="pb"><div class="pbf" style="width:64%;background:var(--rd)"></div></div></div>
+          <div><div class="prl"><span>Prose summary</span><span>75%</span></div><div class="pb"><div class="pbf" style="width:75%;background:var(--am)"></div></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ctitle">Mock test score history</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;justify-content:space-between;padding:10px;background:var(--paper);border-radius:var(--r);font-size:13.5px"><span>Diagnostic</span><span style="font-family:monospace;font-weight:800">72 / 120</span></div>
+          <div style="display:flex;justify-content:space-between;padding:10px;background:var(--paper);border-radius:var(--r);font-size:13.5px"><span>Mock Test 2</span><span style="font-family:monospace;font-weight:800">80 / 120</span></div>
+          <div style="display:flex;justify-content:space-between;padding:10px;background:var(--paper);border-radius:var(--r);font-size:13.5px"><span>Mock Test 3</span><span style="font-family:monospace;font-weight:800">86 / 120</span></div>
+          <div style="display:flex;justify-content:space-between;padding:10px;background:var(--paper);border-radius:var(--r);font-size:13.5px"><span>Mock Test 4</span><span style="font-family:monospace;font-weight:800">92 / 120</span></div>
+          <div style="display:flex;justify-content:space-between;padding:10px;background:var(--gt);border-radius:var(--r);border:1.5px solid var(--g);font-size:13.5px"><span><strong>Projected (now)</strong></span><span style="font-family:monospace;font-weight:900;color:var(--g)">96 / 120</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </div><!-- #cnt -->
+</div><!-- #main -->
+</div><!-- #app -->
+<div class="toast" id="toast"></div>
+<script>
+// ============================================================
+// ALL QUESTIONS DATA
+// ============================================================
+const QD = {
+  r1:[
+    {type:"VOCABULARY",q:'The word "retain" in paragraph 1 is closest in meaning to:',opts:["Reflect","Hold onto","Release","Measure"],a:1,e:'"Retain" means to keep or hold something. The passage says surfaces absorb and retain solar radiation — meaning they hold the heat. "Hold onto" is the closest match. "Reflect" and "Release" mean the opposite.'},
+    {type:"INFERENCE",q:"It can be inferred from paragraph 2 that tall buildings contribute to the heat island effect primarily by:",opts:["Producing more waste heat than shorter buildings","Restricting air movement that could carry heat away","Reflecting sunlight down onto nearby streets","Increasing the number of vehicles in city centers"],a:1,e:'Paragraph 2 says buildings form "narrow canyons" that "limit airflow" — the inference is that blocking air movement prevents heat from dispersing, not that buildings generate heat themselves.'},
+    {type:"SENTENCE INSERTION",q:'Where would this sentence best fit? "As a result, urban areas can remain several degrees warmer than nearby farmland well into the night."',opts:["After ■A — after '...soil or plant cover.'","After ■B — after '...greatest at night.'","After ■C — after '...nowhere to dissipate.'","After ■D — after '...through evaporation.'"],a:0,e:'The sentence follows logically from the statement that materials release stored heat slowly — "as a result" of that slow release, urban areas stay warmer at night. ■B would be redundant since the night-time effect is already mentioned right there.'},
+    {type:"DETAIL",q:"According to paragraph 3, which of the following is TRUE about countermeasures to the heat island effect?",opts:["A single well-designed intervention can eliminate the effect entirely","Combining multiple strategies can reduce peak temperatures by up to 2°C","Rooftop gardens have proven ineffective in dense urban areas","Only reflective pavements have shown measurable results"],a:1,e:'Paragraph 3 explicitly states: "cities that combine several strategies have measured reductions of up to two degrees Celsius." The passage also directly states no single intervention eliminates the effect.'},
+    {type:"NEGATIVE FACTUAL",q:"According to the passage, which of the following is NOT mentioned as a cause of the urban heat island effect?",opts:["Surfaces that absorb solar radiation","Waste heat from vehicles and machinery","Light pollution from city streetlamps","Buildings that restrict airflow"],a:2,e:"Light pollution is never mentioned. The three causes discussed are: heat-absorbing surfaces (¶1), waste heat from vehicles and machinery (¶2), and buildings that restrict airflow (¶2)."}
+  ],
+  r2:[
+    {type:"VOCABULARY",q:'The word "cryosphere" in paragraph 1 refers to:',opts:["The scientific study of climate change","Earth\'s frozen water zones","The measurement of sea-level rise","Ocean currents in polar regions"],a:1,e:'The passage immediately defines "cryosphere": "Earth\'s frozen water zones — includes mountain glaciers, ice sheets... and sea ice." This is a direct vocabulary-in-context definition question.'},
+    {type:"DETAIL",q:"According to paragraph 1, why does melting sea ice NOT directly contribute to sea-level rise?",opts:["Sea ice melts too slowly to affect sea levels","Sea ice is too thin to contain significant water volume","Floating sea ice already displaces the water it would add when melted","Sea ice is located too far from populated coastlines to matter"],a:2,e:'Paragraph 1 directly states: "the melting of floating sea ice does not directly contribute to sea-level rise (since it already displaces water)" — this is Archimedes\' principle applied to floating ice.'},
+    {type:"INFERENCE",q:"The author mentions the GRACE mission primarily in order to:",opts:["Argue that satellite technology has replaced ground-based measurement entirely","Illustrate how scientists can track glacial ice loss with precision","Compare the rate of Greenland ice loss with Antarctic ice loss","Suggest that sea-level rise projections for 2100 are unreliable"],a:1,e:'The GRACE mission is introduced to support the claim that "scientists use satellite imagery and gravimetric measurements to track ice mass loss with increasing precision." It serves as a specific example of precise tracking, not a comparison or argument about replacing other methods.'},
+    {type:"RHETORICAL PURPOSE",q:"Why does the author mention the albedo feedback loop in paragraph 2?",opts:["To explain why floating sea ice does not contribute to sea-level rise","To explain why mountain glaciers respond more quickly to temperature change","To argue that polar ice sheets are more dangerous than mountain glaciers","To suggest that glacier loss can be reversed under the right conditions"],a:1,e:'The albedo feedback loop is introduced to explain why mountain glaciers respond more quickly to temperature changes — when ice melts and exposes darker surfaces, those surfaces absorb more heat, causing further melting and accelerating the process.'},
+    {type:"MAIN IDEA",q:"Which best summarizes the main idea of the passage?",opts:["The GRACE satellite mission revolutionized our understanding of glacial retreat.","The loss of land-based ice is causing sea-level rise that threatens coastal communities and demands adaptation.","Mountain glaciers are more dangerous than polar ice sheets because they respond faster to warming.","The only effective solution to rising sea levels is large-scale engineering such as sea walls."],a:1,e:"The passage covers causes of glacial retreat, the distinction between land ice and sea ice, measurement methods, rise projections, and consequences for coastal communities — making option B the most comprehensive summary of its scope."}
+  ],
+  r3:[
+    {type:"VOCABULARY",q:'The word "discredited" as used in paragraph 2 is closest in meaning to:',opts:["Proven correct through subsequent research","Shown to be false or unworthy of trust","Widely accepted among modern linguists","Expanded to include new types of evidence"],a:1,e:'"Discredited" means shown to be untrue or untrustworthy. The context makes this clear — research demonstrated that people CAN conceptualize ideas without words for them, directly disproving the strong version of the hypothesis.'},
+    {type:"DETAIL",q:"According to the passage, which evidence supports the WEAK version of the Sapir-Whorf hypothesis?",opts:["Studies showing all languages assign identical gender to the same objects","Research showing speakers of languages with grammatical gender attribute gendered qualities to objects","Evidence that speakers of different languages cannot understand each other\'s concepts","Proof that language determines thought rather than merely influencing it"],a:1,e:"Paragraph 3 cites Boroditsky's research showing speakers of grammatical-gender languages attribute qualities to objects consistent with their language's gender assignment — this supports the weak claim that language influences (but doesn't control) perception."},
+    {type:"INFERENCE",q:"What can be inferred about why the strong version of the Sapir-Whorf hypothesis was rejected?",opts:["Researchers found translation between all languages to be completely impossible","The hypothesis was developed before modern neuroscience and linguistics existed","People demonstrated the ability to think about concepts without having specific words for them","Edward Sapir himself eventually formally renounced the theory"],a:2,e:'Paragraph 2 states: "Cognitive scientists demonstrated that people can perceive and reason about concepts even without specific vocabulary for them." This directly contradicts linguistic determinism, which requires language to fully control thought.'},
+    {type:"NEGATIVE FACTUAL",q:"According to the passage, all of the following are mentioned as factors shaping cognition EXCEPT:",opts:["Language","Culture","Environment","Genetics"],a:3,e:'The final paragraph lists "language... culture, environment, and individual experience" as factors shaping cognition. Genetics is never mentioned anywhere in the passage.'},
+    {type:"DETAIL",q:"According to paragraph 3, what advantage do speakers of languages using cardinal directions have over speakers of egocentric languages?",opts:["They have larger vocabularies for describing spatial relationships","They develop stronger spatial orientation skills","They consistently perform better on general intelligence tests","They are more likely to work in fields requiring navigation"],a:1,e:'Paragraph 3 explicitly states: "communities with languages that use cardinal directions... develop stronger spatial orientation skills." This is directly stated — no inference required.'}
+  ],
+  l1:[
+    {type:"GIST / PURPOSE",q:"What is the main purpose of this lecture?",opts:["To compare deep-sea organisms with shallow-water species","To explain the three main functions of bioluminescence in deep-sea organisms","To describe the detailed chemistry of luciferin and luciferase","To argue that deep-sea biological research is insufficiently funded"],a:1,e:'The professor organizes the entire lecture around three uses of bioluminescence: predation, defense, and communication. Chemistry is mentioned only briefly as supporting context, not as the main topic.'},
+    {type:"DETAIL",q:"According to the professor, how do anglerfish use bioluminescence?",opts:["They release a glowing cloud to startle and distract predators","They produce synchronized flashes to identify potential mates","They dangle a glowing lure to attract prey toward their mouths","They use light pulses to navigate in total darkness"],a:2,e:'The professor says anglerfish "dangle a glowing lure to attract prey directly toward its mouth" — this is a predation use. The glowing cloud describes the vampire squid (defense); synchronized flashes describe firefly squid (communication).'},
+    {type:"INFERENCE",q:"What does the professor imply by noting that bioluminescent chemistry evolved independently at least 40 times?",opts:["Most deep-sea species must be genetically related to one another","The trait must provide a strong survival advantage in deep-sea conditions","Scientists still do not fully understand the chemistry of bioluminescence","Bioluminescence is rare among all ocean organisms, not just deep-sea ones"],a:1,e:'The professor directly states: "That convergent evolution strongly suggests the trait confers a significant survival advantage." Evolving the same solution independently 40 times implies extremely strong evolutionary pressure to do so.'},
+    {type:"SPEAKER ATTITUDE",q:"What is the professor's attitude when introducing bioluminescent communication as the third function?",opts:["Skeptical — there is insufficient evidence to firmly support this function","Neutral — it is treated as equal to predation and defense in importance","Surprised — it is presented as the most unexpected of the three functions","Concerned — it suggests deep-sea species are more endangered than thought"],a:2,e:'The professor says "Third, and perhaps most surprising" — the phrase "most surprising" explicitly signals that the professor finds communication the most unexpected function among the three.'}
+  ],
+  l2:[
+    {type:"GIST / PURPOSE",q:"Why does the student visit the advisor's office?",opts:["To get permission to add a new course to her schedule","To discuss whether to drop or modify her chemistry course enrollment","To file a complaint about a conflict with her chemistry professor","To request a deadline extension on a chemistry assignment"],a:1,e:'The student opens with: "I wanted to ask about dropping CHEM 201." The entire conversation is about this decision and its alternatives.'},
+    {type:"DETAIL",q:"What solution does the advisor offer to resolve the student's scheduling conflict?",opts:["Drop CHEM 201 and retake it in a future semester","Ask the professor to waive the Tuesday lab attendance requirement","Switch to a different lab section that meets on Thursdays","Reduce work hours to accommodate the Tuesday lab schedule"],a:2,e:'The advisor says: "CHEM 201 has a Thursday lab section that still has open seats. If you switch lab sections rather than dropping the whole course, you keep your credits." This is the specific practical solution offered.'},
+    {type:"INFERENCE",q:"What can be inferred about why the student did not already know about the Thursday lab section?",opts:["The university did not publicly advertise the alternative lab sections","She had assumed only one lab section was available for the course","The advisor had forgotten to mention this option in a previous meeting","The Thursday section had only recently opened up due to a cancellation"],a:1,e:'When the advisor mentions Thursday, the student responds: "I didn\'t realize that was an option." This reaction most strongly implies she had assumed only one lab section existed — there\'s no evidence in the conversation for the other options.'},
+    {type:"FUNCTION OF UTTERANCE",q:"Why does the advisor mention the Financial Aid office at the end of the conversation?",opts:["To warn the student that her financial aid will definitely be reduced if she drops","To suggest she apply for additional financial assistance to cover her expenses","To advise her to verify the potential financial impact before making a final decision","To explain that dropping any course always results in a loss of financial aid"],a:2,e:'The advisor says aid "could" be affected "if" she drops below 12 credits, then says "I\'d check with the Financial Aid office before making that decision." This is guidance to verify — not a guarantee that aid will change, and not a suggestion to apply for more.'}
+  ],
+  l3:[
+    {type:"GIST / PURPOSE",q:"What does the professor want to correct about the common understanding of the Silk Road?",opts:["The belief that silk was the most economically valuable commodity on the route","The idea that the Silk Road was a single overland route focused primarily on goods","The claim that Rome was the primary western destination for Chinese exports","The assumption that the Silk Road operated only during the medieval period"],a:1,e:'The professor says the image of caravans carrying silk "dramatically understates what the Silk Road actually was" — then explains it was a network (not one road) that carried much more than just goods (culture, ideas, diseases).'},
+    {type:"DETAIL",q:"According to the professor, which of the following traveled WESTWARD from China along Silk Road networks?",opts:["Buddhism","Mathematical knowledge","Paper-making technology","The bubonic plague"],a:2,e:'The professor explicitly says "Paper-making technology traveled westward from China." Buddhism spread eastward from India into China. Mathematical knowledge moved "in multiple directions." The plague\'s direction of travel is not specified as westward from China.'},
+    {type:"INFERENCE",q:"What does the professor imply about merchants who used the Silk Road?",opts:["Most were Chinese merchants who organized and controlled the entire trade network","They typically traveled only segments of the route rather than its full length","They rarely encountered merchants from cultural backgrounds different from their own","The most commercially successful merchants were those based in Byzantium"],a:1,e:'The professor explicitly describes "relay trade" where "merchants rarely traveled the full route" and goods "changed hands multiple times." The silk example — passing through four different merchants — directly confirms this pattern.'},
+    {type:"ORGANIZATION / FUNCTION",q:"Why does the professor discuss the Black Death in the context of this lecture?",opts:["To argue that the Silk Road had an overall negative impact on world civilization","To illustrate that the Silk Road transmitted far more than just commercial goods","To compare medieval disease transmission rates with those of modern pandemics","To explain why overland Silk Road trade eventually declined and disappeared"],a:1,e:"The professor mentions the Black Death alongside examples of Buddhism, paper-making, and mathematics to reinforce the central argument that the Silk Road carried cultural, intellectual, and biological transmission — not only physical goods."}
+  ]
+};
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function goTo(pg) {
+  document.querySelectorAll('[id^="pg-"]').forEach(el => el.classList.add('hidden'));
+  document.getElementById('pg-' + pg).classList.remove('hidden');
+  document.querySelectorAll('.ni').forEach(el => el.classList.remove('on'));
+  document.getElementById('n-' + pg).classList.add('on');
+  const titles = {dashboard:'Dashboard',reading:'Reading Practice',listening:'Listening Practice',speaking:'Speaking Practice',writing:'Writing Practice',vocab:'Vocabulary Builder',leaderboard:'Leaderboard',progress:'My Progress'};
+  document.getElementById('ptitle').textContent = titles[pg] || pg;
+}
+
+function stab(btn, pg, paneId) {
+  btn.closest('.tabs').querySelectorAll('.tb').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('#pg-' + pg + ' .tp').forEach(p => p.classList.remove('on'));
+  document.getElementById(paneId).classList.add('on');
+}
+
+// ============================================================
+// QUESTION RENDERING
+// ============================================================
+function renderQ(id) {
+  const qs = QD[id];
+  if (!qs) return;
+  const pane = document.getElementById(id + '-qp');
+  const dots = document.getElementById(id + '-nd');
+  if (!pane) return;
+  pane.innerHTML = '';
+  if (dots) dots.innerHTML = '';
+
+  qs.forEach((q, i) => {
+    const div = document.createElement('div');
+    div.className = 'qblk';
+    div.id = id + '-q' + i;
+    div.innerHTML = `
+      <div class="qnum">Q${i+1} of ${qs.length} · ${q.type}</div>
+      <div class="qtxt">${q.q}</div>
+      ${q.opts.map((o, j) => `
+        <label class="opt" id="${id}-q${i}-o${j}">
+          <input type="radio" name="${id}-q${i}" value="${j}"> ${o}
+        </label>`).join('')}
+      <div class="exp" id="${id}-q${i}-exp">${q.e}</div>`;
+    pane.appendChild(div);
+
+    // Nav dot
+    if (dots) {
+      const dot = document.createElement('div');
+      dot.className = 'ndot' + (i === 0 ? ' cur' : '');
+      dot.textContent = i + 1;
+      dot.id = id + '-d' + i;
+      dot.onclick = () => {
+        document.getElementById(id + '-q' + i).scrollIntoView({behavior:'smooth', block:'nearest'});
+        dots.querySelectorAll('.ndot').forEach(d => d.classList.remove('cur'));
+        dot.classList.add('cur');
+      };
+      dots.appendChild(dot);
+    }
+
+    // Mark answered
+    div.querySelectorAll('input[type=radio]').forEach(inp => {
+      inp.addEventListener('change', () => {
+        const d = document.getElementById(id + '-d' + i);
+        if (d) { d.classList.add('ans'); d.classList.remove('cur'); }
+      });
+    });
+  });
+}
+
+function submitQ(id) {
+  const qs = QD[id];
+  let score = 0, answered = 0;
+  qs.forEach((q, i) => {
+    const radios = document.querySelectorAll(`input[name="${id}-q${i}"]`);
+    let chosen = -1;
+    radios.forEach((r, j) => { if (r.checked) chosen = j; });
+    if (chosen < 0) return;
+    answered++;
+    radios.forEach((r, j) => {
+      r.disabled = true;
+      const lbl = document.getElementById(`${id}-q${i}-o${j}`);
+      if (lbl) { lbl.classList.add('lk'); }
+      if (j === q.a && lbl) lbl.classList.add('ok');
+      else if (j === chosen && lbl) lbl.classList.add('no');
+    });
+    if (chosen === q.a) score++;
+    const exp = document.getElementById(`${id}-q${i}-exp`);
+    if (exp) exp.classList.add('on');
+  });
+  if (answered === 0) { toast('Please select at least one answer first!', 'var(--rd)'); return; }
+  const sb = document.getElementById(id + '-sb');
+  const sv = document.getElementById(id + '-sv');
+  const sm = document.getElementById(id + '-sm');
+  if (sb) sb.classList.add('on');
+  if (sv) { sv.textContent = score + '/' + qs.length; sv.style.color = score === qs.length ? 'var(--g)' : score >= qs.length * 0.6 ? 'var(--am)' : 'var(--rd)'; }
+  if (sm) { const p = Math.round(score / qs.length * 100); sm.textContent = p >= 80 ? '🎉 Excellent! Strong performance on this set.' : p >= 60 ? '👍 Good effort. Review the explanations for questions you missed.' : '📖 Keep practicing — read each explanation carefully to understand the question type.'; }
+  if (sb) sb.scrollIntoView({behavior:'smooth', block:'nearest'});
+  toast(`Score: ${score}/${qs.length}${score === qs.length ? ' — Perfect! 🎉' : ''}`, score === qs.length ? 'var(--g)' : 'var(--am)');
+}
+
+function resetQ(id) {
+  const qs = QD[id];
+  qs.forEach((_, i) => {
+    document.querySelectorAll(`input[name="${id}-q${i}"]`).forEach((r, j) => {
+      r.checked = false; r.disabled = false;
+      const lbl = document.getElementById(`${id}-q${i}-o${j}`);
+      if (lbl) lbl.classList.remove('ok', 'no', 'lk');
+    });
+    const exp = document.getElementById(`${id}-q${i}-exp`);
+    if (exp) exp.classList.remove('on');
+    const d = document.getElementById(`${id}-d${i}`);
+    if (d) d.classList.remove('ans', 'cur');
+  });
+  const sb = document.getElementById(id + '-sb');
+  if (sb) sb.classList.remove('on');
+  const tmap = {r1:1080, r2:1080, r3:1080, l1:720, l2:600, l3:720};
+  if (tmap[id]) startTimer(id, tmap[id]);
+}
+
+// ============================================================
+// TIMERS
+// ============================================================
+const TIV = {};
+function startTimer(id, secs) {
+  clearInterval(TIV[id]);
+  let s = secs;
+  const el = document.getElementById(id + '-t');
+  if (!el) return;
+  el.textContent = fmt(s); el.classList.remove('tmw');
+  TIV[id] = setInterval(() => {
+    s--;
+    if (s <= 0) { clearInterval(TIV[id]); el.textContent = '00:00'; return; }
+    el.textContent = fmt(s);
+    if (s <= 60) el.classList.add('tmw');
+  }, 1000);
+}
+function fmt(s) { return String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0'); }
+
+// ============================================================
+// AUDIO SIMULATION
+// ============================================================
+const AS = {};
+function togAudio(id, dur) {
+  if (!AS[id]) AS[id] = {on:false, pct:0, dur};
+  const st = AS[id];
+  const btn = document.getElementById(id + '-pb');
+  const bar = document.getElementById(id + '-bar');
+  const tm = document.getElementById(id + '-tm');
+  if (st.on) {
+    st.on = false; clearInterval(st.iv); btn.textContent = '▶';
+  } else {
+    st.on = true; btn.textContent = '⏸';
+    st.iv = setInterval(() => {
+      st.pct = Math.min(100, st.pct + 100 / dur);
+      if (bar) bar.style.width = st.pct + '%';
+      const s = Math.round(st.pct / 100 * dur);
+      if (tm) tm.textContent = Math.floor(s/60) + ':' + String(s%60).padStart(2,'0');
+      if (st.pct >= 100) { clearInterval(st.iv); st.on = false; btn.textContent = '▶'; toast('Audio complete — answer the questions below', 'var(--g)'); }
+    }, 1000);
+  }
+}
+
+function togTr(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.toggle('on');
+  el.style.display = el.classList.contains('on') ? 'block' : 'none';
+}
+
+// ============================================================
+// SPEAKING
+// ============================================================
+const SS = {};
+function buildWF(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = '';
+  for (let i = 0; i < 34; i++) { const b = document.createElement('div'); b.className = 'wb'; el.appendChild(b); }
+}
+function animWF(id, on) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  clearInterval(el._iv);
+  if (on) el._iv = setInterval(() => el.querySelectorAll('.wb').forEach(b => b.style.height = (Math.random()*30+5)+'px'), 100);
+  else el.querySelectorAll('.wb').forEach(b => b.style.height = '5px');
+}
+
+function spTask(id, prepT, recT) {
+  if (!SS[id]) SS[id] = {phase:'idle'};
+  const st = SS[id];
+  const lbl = document.getElementById(id+'-lbl');
+  const mc = document.getElementById(id+'-mc');
+  const btn = document.getElementById(id+'-btn');
+  const dot = document.getElementById(id+'-dot');
+  const tim = document.getElementById(id+'-t');
+  const wfId = id+'-wf';
+
+  if (st.phase === 'idle') {
+    st.phase = 'prep';
+    buildWF(wfId);
+    let s = prepT;
+    if (tim) tim.textContent = fmt(s);
+    if (lbl) lbl.textContent = `Preparation time — ${prepT} seconds. Plan your response.`;
+    if (btn) { btn.textContent = 'Preparing…'; btn.disabled = true; }
+    clearInterval(st.iv);
+    st.iv = setInterval(() => {
+      s--;
+      if (tim) tim.textContent = fmt(s);
+      if (s <= 0) { clearInterval(st.iv); beginRec(id, recT); }
+    }, 1000);
+  } else if (st.phase === 'recording') {
+    stopRec(id);
+  }
+}
+
+function beginRec(id, recT) {
+  const st = SS[id];
+  st.phase = 'recording';
+  const lbl = document.getElementById(id+'-lbl');
+  const mc = document.getElementById(id+'-mc');
+  const btn = document.getElementById(id+'-btn');
+  const dot = document.getElementById(id+'-dot');
+  const tim = document.getElementById(id+'-t');
+  let s = recT;
+  if (tim) tim.textContent = fmt(s);
+  if (lbl) lbl.textContent = `🔴 Recording — ${recT} seconds. Speak clearly!`;
+  if (mc) mc.className = 'mcbtn rec';
+  if (dot) dot.style.display = 'inline-block';
+  if (btn) { btn.textContent = 'Stop Recording'; btn.disabled = false; btn.onclick = () => stopRec(id); }
+  animWF(id+'-wf', true);
+  toast('Recording started — speak now!', 'var(--rd)');
+  clearInterval(st.iv);
+  st.iv = setInterval(() => {
+    s--;
+    if (tim) tim.textContent = fmt(s);
+    if (s <= 0) { clearInterval(st.iv); stopRec(id); }
+  }, 1000);
+}
+
+function stopRec(id) {
+  const st = SS[id];
+  clearInterval(st.iv);
+  st.phase = 'done';
+  const lbl = document.getElementById(id+'-lbl');
+  const mc = document.getElementById(id+'-mc');
+  const btn = document.getElementById(id+'-btn');
+  const dot = document.getElementById(id+'-dot');
+  if (mc) mc.className = 'mcbtn idle';
+  if (dot) dot.style.display = 'none';
+  if (lbl) lbl.textContent = '⏳ Processing with AI…';
+  if (btn) btn.disabled = true;
+  animWF(id+'-wf', false);
+  setTimeout(() => {
+    if (lbl) lbl.textContent = '✅ AI feedback ready — see below';
+    const fb = document.getElementById(id+'-fb');
+    if (fb) { fb.classList.add('on'); fb.scrollIntoView({behavior:'smooth', block:'nearest'}); }
+    toast('AI scoring complete!', 'var(--g)');
+  }, 1800);
+}
+
+function resetSp(id) {
+  const st = SS[id] || {};
+  clearInterval(st.iv);
+  SS[id] = {phase:'idle'};
+  const ids = [id+'-lbl', id+'-mc', id+'-btn', id+'-dot', id+'-t', id+'-fb'];
+  const lbl = document.getElementById(id+'-lbl');
+  const mc = document.getElementById(id+'-mc');
+  const btn = document.getElementById(id+'-btn');
+  const dot = document.getElementById(id+'-dot');
+  const tim = document.getElementById(id+'-t');
+  const fb = document.getElementById(id+'-fb');
+  if (lbl) lbl.textContent = 'Press Begin to start your preparation time.';
+  if (mc) mc.className = 'mcbtn idle';
+  if (btn) { btn.textContent = 'Begin'; btn.disabled = false; }
+  if (dot) dot.style.display = 'none';
+  if (tim) tim.textContent = '—';
+  if (fb) fb.classList.remove('on');
+  animWF(id+'-wf', false);
+}
+
+// ============================================================
+// WRITING
+// ============================================================
+const WIV = {};
+function startWTimer(id, secs) {
+  clearInterval(WIV[id]);
+  let s = secs;
+  const el = document.getElementById(id+'-t');
+  if (!el) return;
+  el.textContent = fmt(s);
+  WIV[id] = setInterval(() => {
+    s--;
+    el.textContent = fmt(s);
+    if (s <= 0) { clearInterval(WIV[id]); subEssay(id, true); }
+  }, 1000);
+}
+function updWC(id) {
+  const ta = document.getElementById(id+'-es');
+  const wc = document.getElementById(id+'-wc');
+  if (ta && wc) { const w = ta.value.trim() ? ta.value.trim().split(/\s+/).length : 0; wc.textContent = w; }
+}
+function subEssay(id, auto) {
+  const ta = document.getElementById(id+'-es');
+  const wc = ta ? (ta.value.trim() ? ta.value.trim().split(/\s+/).length : 0) : 0;
+  if (!auto && wc < 20) { toast('Write at least a few sentences first!', 'var(--rd)'); return; }
+  clearInterval(WIV[id]);
+  if (ta) ta.disabled = true;
+  const fb = document.getElementById(id+'-fb');
+  if (fb) { fb.classList.add('on'); fb.scrollIntoView({behavior:'smooth', block:'nearest'}); }
+  toast('Essay scored by AI! See feedback below.', 'var(--g)');
+}
+function resetEssay(id) {
+  const ta = document.getElementById(id+'-es');
+  const fb = document.getElementById(id+'-fb');
+  if (ta) { ta.value = ''; ta.disabled = false; }
+  if (fb) fb.classList.remove('on');
+  updWC(id);
+  clearInterval(WIV[id]);
+  startWTimer(id, id === 'w1' ? 1200 : 600);
+}
+
+// ============================================================
+// VOCABULARY
+// ============================================================
+const CARDS = [
+  {w:'mitigate',p:'verb',d:'to make something less severe, serious, or painful',e:'"Rooftop gardens can mitigate the urban heat island effect."'},
+  {w:'empirical',p:'adjective',d:'based on observation or experiment rather than theory alone',e:'"The team needed empirical evidence before publishing their conclusions."'},
+  {w:'ambiguous',p:'adjective',d:'open to more than one interpretation; not clearly defined',e:'"The contract terms were ambiguous, leading to a dispute between parties."'},
+  {w:'conjecture',p:'noun/verb',d:'opinion or conclusion based on incomplete information; speculation',e:'"Without supporting data, the claim remained mere conjecture."'},
+  {w:'plausible',p:'adjective',d:'seeming reasonable or probable; believable',e:'"The scientist offered a plausible explanation for the anomaly."'},
+  {w:'juxtapose',p:'verb',d:'to place two things side by side for the purpose of comparison or contrast',e:'"The essay juxtaposes urban and rural perspectives on land use."'},
+  {w:'synthesize',p:'verb',d:'to combine elements into a coherent whole; to produce by synthesis',e:'"Students were asked to synthesize information from multiple academic sources."'},
+  {w:'extrapolate',p:'verb',d:'to extend known data into an unknown area using inference or estimation',e:'"Scientists extrapolated future temperature trends from decades of historical data."'},
+  {w:'unprecedented',p:'adjective',d:'never done or known before; having no historical parallel',e:'"The speed of Arctic ice loss in the 21st century is unprecedented in recorded history."'},
+  {w:'substantiate',p:'verb',d:'to provide evidence to support or prove the truth of a claim',e:'"Additional peer-reviewed studies are needed to substantiate this finding."'},
+];
+const VQ = {q:'Choose the word that best fits: "The study\'s conclusions were criticized for being entirely ______, lacking any experimental data."',opts:['synthesize','conjectural','plausible','empirical'],a:1,e:'"Conjectural" (adjective form of conjecture) means based on speculation without evidence — perfect fit for a study with no experimental data. "Empirical" would mean the opposite (based on evidence).'};
+
+let ci = 0, ck = 0;
+function renderCard() {
+  const c = CARDS[ci % CARDS.length];
+  document.getElementById('cn').textContent = (ci % CARDS.length) + 1;
+  document.getElementById('cw').textContent = c.w;
+  document.getElementById('cp').textContent = c.p;
+  document.getElementById('cwb').textContent = c.w;
+  document.getElementById('cd').textContent = c.d;
+  document.getElementById('ce').textContent = c.e;
+  document.getElementById('fc').classList.remove('fl');
+}
+function flipCard() { document.getElementById('fc').classList.toggle('fl'); }
+function nxtCard(knew) {
+  if (knew) ck++;
+  ci++;
+  const left = Math.max(0, 26 - ck);
+  document.getElementById('ck').textContent = ck;
+  document.getElementById('cl').textContent = left;
+  if (left === 0) { toast('All 26 cards reviewed! Great job! 🎉', 'var(--g)'); ci = 0; ck = 0; document.getElementById('ck').textContent = 0; document.getElementById('cl').textContent = 26; }
+  renderCard();
+}
+function renderVQ() {
+  const el = document.getElementById('vq-opts');
+  if (!el) return;
+  el.innerHTML = VQ.opts.map((o, i) => `<label class="opt" id="vq-o${i}"><input type="radio" name="vq" value="${i}"> ${o}</label>`).join('');
+}
+function chkVQ() {
+  let chosen = -1;
+  document.querySelectorAll('input[name="vq"]').forEach((r, i) => { if (r.checked) chosen = i; });
+  if (chosen < 0) { toast('Select an answer first!', 'var(--rd)'); return; }
+  document.querySelectorAll('input[name="vq"]').forEach((r, i) => {
+    r.disabled = true;
+    const l = document.getElementById('vq-o' + i);
+    if (l) l.classList.add('lk');
+    if (i === VQ.a && l) l.classList.add('ok');
+    else if (i === chosen && l) l.classList.add('no');
+  });
+  const exp = document.getElementById('vq-exp');
+  if (exp) { exp.classList.add('on'); exp.textContent = VQ.e; }
+  toast(chosen === VQ.a ? 'Correct! ✓' : 'Incorrect — see explanation below', chosen === VQ.a ? 'var(--g)' : 'var(--am)');
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function toast(msg, color) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.style.background = color || 'var(--g)';
+  el.style.opacity = '1'; el.style.transform = 'translateX(-50%) translateY(0)';
+  clearTimeout(el._to);
+  el._to = setTimeout(() => { el.style.opacity = '0'; el.style.transform = 'translateX(-50%) translateY(8px)'; }, 3200);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+window.addEventListener('DOMContentLoaded', () => {
+  ['r1','r2','r3','l1','l2','l3'].forEach(id => renderQ(id));
+  startTimer('r1', 1080); startTimer('r2', 1080); startTimer('r3', 1080);
+  startTimer('l1', 720); startTimer('l2', 600); startTimer('l3', 720);
+  startWTimer('w1', 1200); startWTimer('w2', 600);
+  renderCard(); renderVQ();
+  ['sp1','sp2','sp3','sp4'].forEach(id => {
+    buildWF(id+'-wf');
+    const btn = document.getElementById(id+'-btn');
+    if (btn) btn.onclick = () => spTask(id, {sp1:15,sp2:30,sp3:30,sp4:20}[id], {sp1:45,sp2:60,sp3:60,sp4:60}[id]);
+  });
+  document.querySelectorAll('.trbox').forEach(el => { el.style.display = 'none'; });
+});
+</script>
+</body>
+</html>
