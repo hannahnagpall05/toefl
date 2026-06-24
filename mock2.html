@@ -1730,10 +1730,16 @@ function stripHtmlForSpeech(html){
 function pickVoice(){
   const voices = (window.speechSynthesis && speechSynthesis.getVoices()) || [];
   if (!voices.length) return null;
-  return voices.find(v => /en-US/i.test(v.lang) && /Google|Natural|Online/i.test(v.name))
-      || voices.find(v => /en-US/i.test(v.lang))
-      || voices.find(v => /^en/i.test(v.lang))
-      || voices[0];
+  const isUS = v => /en-US/i.test(v.lang);
+  let v = voices.find(v => isUS(v) && /Natural|Neural/i.test(v.name));
+  if (v) return v;
+  v = voices.find(v => isUS(v) && /Online|Aria|Guy|Jenny|Samantha|Ava|Andrew|Emma/i.test(v.name));
+  if (v) return v;
+  v = voices.find(v => isUS(v) && /Google/i.test(v.name));
+  if (v) return v;
+  v = voices.find(isUS);
+  if (v) return v;
+  return voices.find(v => /^en/i.test(v.lang)) || voices[0];
 }
 function createAudioPlayer(opts){
   // opts: { src, text, waveformId, playBtnId, fillId, curId, durId, errorId, onReady, onEnded, lockEls }
