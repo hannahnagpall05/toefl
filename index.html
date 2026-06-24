@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+\<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -133,6 +133,13 @@ a{color:inherit;text-decoration:none}
 .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
 
 /* ============================================================
+   QUIZ ANSWER OPTIONS (Reading / Listening / Vocabulary)
+============================================================ */
+.rOpt,.lOpt,.vqOpt{transition:border-color .15s,background .15s,color .15s}
+.rOpt:not(.locked):hover,.lOpt:not(.locked):hover,.vqOpt:not(.locked):hover{border-color:var(--violet);background:var(--bg3);color:var(--ink)}
+.rOpt:has(input:focus-visible),.lOpt:has(input:focus-visible),.vqOpt:has(input:focus-visible){border-color:var(--violet);box-shadow:0 0 0 3px var(--violet-glow)}
+
+/* ============================================================
    QUEST CARDS (module selection tiles)
 ============================================================ */
 .quest-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
@@ -172,13 +179,171 @@ a{color:inherit;text-decoration:none}
 ============================================================ */
 @media (max-width:980px){
   #charpanel{position:fixed;left:0;top:0;height:100vh;z-index:100;transform:translateX(-100%);transition:transform .25s;box-shadow:0 0 40px rgba(0,0,0,.5)}
-  #charpanel.open{transform:translateX(0)}
+  #charpanel.open{transform:translateX(0);background:#0a2040}
+  body:has(#charpanel.open)::before{content:'';position:fixed;inset:0;background:rgba(4,12,26,.55);z-index:99}
   .hamburger{display:flex}
   .grid2,.grid3,.grid4{grid-template-columns:1fr}
 }
 @media (max-width:600px){
   #content{padding:16px}
   #topbar{padding:0 16px}
+}
+</style>
+<style>
+:root{
+  --bg:#081a35;
+  --bg2:#0f2747;
+  --bg3:#173a63;
+  --violet:#2f6fb1;
+  --violet-dim:#14345b;
+  --violet-glow:rgba(47,111,177,.28);
+  --gold:#f0c040;
+  --gold-dim:#62480c;
+  --mint:#43b581;
+  --mint-dim:#123a2b;
+  --coral:#e06b5f;
+  --coral-dim:#4d221d;
+  --ink:#f5f9ff;
+  --ink-dim:#c7d8ea;
+  --ink-faint:#89a2bf;
+  --border:#28496d;
+  --border-light:#3d6797;
+  --shadow-glow:0 16px 40px rgba(4,18,38,.24);
+}
+body{
+  background:
+    radial-gradient(circle at 12% 10%,rgba(240,192,64,.16),transparent 18%),
+    radial-gradient(circle at 88% 18%,rgba(92,174,255,.18),transparent 16%),
+    linear-gradient(180deg,#07172f 0%,#0d2f58 220px,#edf4fb 220px,#f7fbff 100%);
+  color:#153553;
+}
+body::before,
+body::after{
+  content:"";
+  position:fixed;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:0;
+  filter:blur(10px);
+}
+body::before{
+  width:240px;height:240px;left:-90px;top:120px;
+  background:radial-gradient(circle,rgba(240,192,64,.24),transparent 68%);
+}
+body::after{
+  width:300px;height:300px;right:-100px;top:260px;
+  background:radial-gradient(circle,rgba(92,174,255,.20),transparent 68%);
+}
+#app,#main,#topbar,#content{position:relative;z-index:1}
+#charpanel{
+  background:linear-gradient(180deg,rgba(10,33,60,.96),rgba(14,39,71,.94));
+  border-right:1px solid rgba(255,255,255,.08);
+  box-shadow:18px 0 42px rgba(4,18,38,.18);
+}
+.cp-logo{color:#fff}
+.cp-avatar-wrap,.cp-foot{border-color:rgba(255,255,255,.08)}
+.cp-ring-bg{stroke:rgba(255,255,255,.08)}
+.cp-ring-fg{filter:drop-shadow(0 0 10px rgba(240,192,64,.18))}
+.cp-level-num{color:#ffe08a}
+.cp-level-lbl,.cp-title,.cp-xp-row,.cp-stat-row,.cp-section-label,.cp-nav-item,.cp-nav-item .badge-count{color:var(--ink-faint)}
+.cp-xp-bar,.cp-nav-item .mastery-dot{background:rgba(255,255,255,.08)}
+.cp-xp-fill{background:linear-gradient(90deg,#6db5ff,#f0c040)}
+.cp-streak{
+  background:linear-gradient(180deg,rgba(240,192,64,.14),rgba(240,192,64,.08));
+  border-color:rgba(240,192,64,.28);
+}
+.cp-nav-item{
+  border-radius:16px;
+  font-weight:700;
+}
+.cp-nav-item:hover{
+  background:rgba(255,255,255,.06);
+  color:#fff;
+}
+.cp-nav-item.active{
+  background:linear-gradient(180deg,rgba(47,111,177,.24),rgba(47,111,177,.14));
+  color:#9fd3ff;
+  box-shadow:inset 0 0 0 1px rgba(109,181,255,.18);
+}
+.cp-nav-item .mastery-dot.lit{background:#43b581;box-shadow:0 0 10px rgba(67,181,129,.35)}
+#topbar{
+  height:72px;
+  background:linear-gradient(180deg,rgba(8,26,53,.94),rgba(8,26,53,.82));
+  border-bottom:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(16px);
+}
+#topbar h1{color:#fff;font-size:20px}
+#topbar .sub{color:#a9c1da}
+.tb-right .badge,.hamburger{
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.10);
+  color:#fff;
+}
+#content{padding:26px}
+.card,
+.quest-card{
+  background:linear-gradient(180deg,rgba(255,255,255,.97),rgba(244,249,255,.97));
+  border:1px solid rgba(24,58,94,.10);
+  border-radius:24px;
+  box-shadow:0 20px 44px rgba(8,32,66,.10);
+}
+.card-head h3,.ctitle{color:#163a5d}
+.card[style*="-dim),var(--bg2)"] h2{color:#fff}
+tr[style*="background:var(--violet-dim)"] td{color:#fff}
+.btn{
+  transition:transform .2s ease,box-shadow .2s ease,filter .2s ease;
+}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{
+  background:linear-gradient(180deg,#3b7ec3,#1a3a5c);
+  box-shadow:0 14px 26px rgba(26,58,92,.20);
+}
+.btn-primary:hover{
+  background:linear-gradient(180deg,#4a8dd1,#21466e);
+}
+.btn-gold{
+  background:linear-gradient(180deg,#ffd96e,#f0c040);
+  box-shadow:0 14px 24px rgba(240,192,64,.20);
+}
+.btn-ghost{
+  background:linear-gradient(180deg,#fff,#eef5fc);
+  border-color:rgba(24,58,94,.12);
+  color:#163a5d;
+}
+.badge-violet{background:#eaf4ff;color:#1f5a92}
+.badge-gold{background:#fff2c8;color:#7b5a00}
+.badge-mint{background:#e9fbf3;color:#1f7d58}
+.badge-coral{background:#fff0ee;color:#b8473b}
+.quest-card{
+  overflow:hidden;
+  transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;
+}
+.quest-card:hover{
+  border-color:#2f6fb1;
+  box-shadow:0 22px 42px rgba(26,58,92,.14);
+}
+.quest-card .qc-icon{
+  background:linear-gradient(180deg,#eaf4ff,#d7ebff)!important;
+  color:#1f5a92!important;
+  box-shadow:0 10px 18px rgba(47,111,177,.12);
+}
+.xp-toast{
+  background:linear-gradient(180deg,rgba(8,26,53,.96),rgba(18,53,92,.96));
+  border-color:#f0c040;
+}
+#levelup-overlay{
+  background:rgba(6,20,40,.84);
+}
+.lu-title{color:#ffe08a}
+.lu-level-badge{
+  background:linear-gradient(135deg,#72b9ff,#ffd96e);
+  -webkit-background-clip:text;
+  background-clip:text;
+}
+@media (max-width:980px){
+  #charpanel{
+    background:linear-gradient(180deg,rgba(10,33,60,.98),rgba(14,39,71,.96));
+  }
 }
 </style>
 </head>
@@ -743,7 +908,7 @@ function openReadingQuest(id){
         <h3>📖 ${data.title}</h3>
         <span class="badge badge-violet">${data.qs.length} questions</span>
       </div>
-      <div style="background:var(--bg3);border-radius:var(--r-md);padding:18px;margin-bottom:18px;font-size:14.5px;line-height:1.8;max-height:300px;overflow-y:auto" id="rPassageBox">
+      <div style="background:var(--bg3);border-radius:var(--r-md);padding:18px;margin-bottom:18px;font-size:14.5px;line-height:1.8;max-height:300px;overflow-y:auto;color:var(--ink-dim)" id="rPassageBox">
         ${data.passage.replace(/<mark>/g,'<mark style="background:'+data.color+'44;color:var(--ink);padding:1px 3px;border-radius:3px">')}
       </div>
       <div id="rQList"></div>
@@ -773,6 +938,7 @@ function selectROpt(id, qi, val){
   readingAnswers[id+'_'+qi] = val;
   document.querySelectorAll(`label[id^="r-${id}-q${qi}-"]`).forEach((el,j)=>{
     el.style.background = j===val ? 'var(--bg3)' : 'transparent';
+    el.style.color = j===val ? 'var(--ink)' : '';
   });
 }
 
@@ -787,8 +953,8 @@ function submitReadingQuest(id){
     opts.forEach((el,j)=>{
       el.classList.add('locked');
       const radio = el.querySelector('input'); if(radio) radio.disabled=true;
-      if(j===q.a){ el.style.borderColor='var(--mint)'; el.style.background='var(--mint-dim)'; }
-      else if(j===chosen){ el.style.borderColor='var(--coral)'; el.style.background='var(--coral-dim)'; }
+      if(j===q.a){ el.style.borderColor='var(--mint)'; el.style.background='var(--mint-dim)'; el.style.color='var(--ink)'; }
+      else if(j===chosen){ el.style.borderColor='var(--coral)'; el.style.background='var(--coral-dim)'; el.style.color='var(--ink)'; }
     });
     if(chosen===q.a) score++;
     // Add explanation
@@ -890,7 +1056,8 @@ function openListeningQuest(id){
       <div style="background:var(--bg3);border-radius:var(--r-md);padding:20px;margin-bottom:18px;text-align:center">
         <div style="width:60px;height:60px;border-radius:50%;background:${data.color}22;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 12px">🎧</div>
         <div id="lWaveform" style="display:flex;align-items:center;justify-content:center;gap:3px;height:36px;margin-bottom:12px"></div>
-        <div style="background:var(--bg);border-radius:4px;height:6px;overflow:hidden;max-width:340px;margin:0 auto 8px"><div id="lAudioBar" style="height:100%;background:${data.color};width:0%;transition:width .5s linear"></div></div>
+        <div id="lAudioErr" style="display:none;background:#fdecea;border:1.5px solid #c0392b;color:#8b1a14;border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.6;margin:0 auto 10px;max-width:340px;text-align:left"></div>
+        <div style="background:var(--bg);border-radius:4px;height:6px;overflow:hidden;max-width:340px;margin:0 auto 8px"><div id="lAudioBar" style="height:100%;background:${data.color};width:0%;transition:width .15s linear"></div></div>
         <div style="font-family:var(--ff-mono);font-size:11px;color:var(--ink-faint);margin-bottom:14px"><span id="lAudioTime">0:00</span> / <span id="lAudioDur">0:${data.dur<10?'0':''}${data.dur}</span></div>
         <button class="btn btn-primary" id="lPlayBtn" onclick="playListeningQuest('${id}')">▶ Play Audio (once)</button>
         <div style="margin-top:10px"><span style="font-size:12px;color:var(--violet);cursor:pointer;text-decoration:underline" onclick="toggleLTranscript()">Show transcript</span></div>
@@ -929,25 +1096,114 @@ function animateLWaveform(on){
   else el.querySelectorAll('div').forEach(b=>b.style.height='5px');
 }
 
+function lFmtTime(s){
+  if (!isFinite(s) || s<0) s = 0;
+  s = Math.round(s);
+  return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
+}
+function lStripHtml(html){
+  if (!html) return '';
+  let s = String(html).replace(/<\/p>\s*<p>/gi, '. ').replace(/<[^>]+>/g, ' ');
+  const ta = document.createElement('textarea');
+  ta.innerHTML = s;
+  return ta.value.replace(/\s+/g, ' ').trim();
+}
+function lPickVoice(){
+  const voices = (window.speechSynthesis && speechSynthesis.getVoices()) || [];
+  if (!voices.length) return null;
+  return voices.find(v => /en-US/i.test(v.lang) && /Google|Natural|Online/i.test(v.name))
+      || voices.find(v => /en-US/i.test(v.lang))
+      || voices.find(v => /^en/i.test(v.lang))
+      || voices[0];
+}
+let lAudioState = {};
 function playListeningQuest(id){
   const data = LISTENING_DATA[id];
   const btn = document.getElementById('lPlayBtn');
-  btn.disabled = true; btn.textContent = '🔊 Playing...';
-  animateLWaveform(true);
-  let pct = 0;
-  const iv = setInterval(()=>{
-    pct += 100/(data.dur*0.4);
-    document.getElementById('lAudioBar').style.width = Math.min(100,pct)+'%';
-    const s = Math.round(pct/100*data.dur);
-    document.getElementById('lAudioTime').textContent = `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
-    if(pct>=100){
-      clearInterval(iv);
+  const st = lAudioState[id] || (lAudioState[id] = {elapsed:0, speaking:false, paused:false, tick:null});
+
+  if (!('speechSynthesis' in window)){
+    const errEl = document.getElementById('lAudioErr');
+    if (errEl){ errEl.style.display = 'block'; errEl.textContent = '⚠ Audio unavailable: your browser does not support text-to-speech playback.'; }
+    btn.disabled = true; btn.textContent = '⚠ Audio unavailable';
+    return;
+  }
+
+  // Pause
+  if (st.speaking && !st.paused){
+    try{ speechSynthesis.pause(); }catch(e){}
+    st.paused = true;
+    clearInterval(st.tick);
+    btn.textContent = '▶ Resume';
+    animateLWaveform(false);
+    return;
+  }
+  // Resume
+  if (st.speaking && st.paused){
+    try{ speechSynthesis.resume(); }catch(e){}
+    st.paused = false;
+    startLTicker(id);
+    btn.textContent = '⏸ Pause';
+    animateLWaveform(true);
+    return;
+  }
+
+  // Fresh start (only allowed once per quest)
+  try{
+    speechSynthesis.cancel();
+    const text = lStripHtml(data.transcript);
+    const u = new SpeechSynthesisUtterance(text);
+    try{
+      const voice = lPickVoice();
+      if (voice && voice.name && voice.lang) u.voice = voice;
+    }catch(voiceErr){ /* fall back to default voice */ }
+    u.rate = 1.0; u.pitch = 1.0;
+    st.elapsed = 0; st.speaking = true; st.paused = false;
+    document.getElementById('lAudioBar').style.width = '0%';
+    document.getElementById('lAudioTime').textContent = '0:00';
+    btn.textContent = '⏸ Pause';
+    animateLWaveform(true);
+    startLTicker(id);
+    u.onend = () => {
+      st.speaking = false; st.paused = false;
+      clearInterval(st.tick);
       animateLWaveform(false);
+      document.getElementById('lAudioBar').style.width = '100%';
+      document.getElementById('lAudioTime').textContent = `0:${data.dur<10?'0':''}${data.dur}`;
       btn.textContent = '✓ Played';
+      btn.disabled = true;
       document.getElementById('lQList').style.opacity = '1';
       document.getElementById('lQList').style.pointerEvents = 'auto';
       document.getElementById('lSubmitBtn').disabled = false;
-    }
+    };
+    u.onerror = (e) => {
+      st.speaking = false;
+      clearInterval(st.tick);
+      animateLWaveform(false);
+      if (e.error !== 'canceled' && e.error !== 'interrupted'){
+        const errEl = document.getElementById('lAudioErr');
+        if (errEl){ errEl.style.display = 'block'; errEl.textContent = '⚠ Speech playback failed in this browser. Tap play to try again.'; }
+        btn.disabled = false; btn.textContent = '↻ Retry Play Audio';
+      }
+    };
+    speechSynthesis.speak(u);
+  }catch(startErr){
+    const errEl = document.getElementById('lAudioErr');
+    if (errEl){ errEl.style.display = 'block'; errEl.textContent = '⚠ Speech playback failed to start in this browser. Tap play to try again.'; }
+    btn.disabled = false; btn.textContent = '↻ Retry Play Audio';
+  }
+}
+function startLTicker(id){
+  const data = LISTENING_DATA[id];
+  const st = lAudioState[id];
+  clearInterval(st.tick);
+  st.tick = setInterval(()=>{
+    if (st.paused) return;
+    st.elapsed += 0.2;
+    const pct = Math.min(100, (st.elapsed/data.dur)*100);
+    const barEl = document.getElementById('lAudioBar'); if (barEl) barEl.style.width = pct+'%';
+    const timeEl = document.getElementById('lAudioTime'); if (timeEl) timeEl.textContent = lFmtTime(st.elapsed);
+    if (st.elapsed >= data.dur) clearInterval(st.tick);
   }, 200);
 }
 
@@ -960,6 +1216,7 @@ function selectLOpt(id, qi, val){
   listeningAnswers[id+'_'+qi] = val;
   document.querySelectorAll(`label[id^="l-${id}-q${qi}-"]`).forEach((el,j)=>{
     el.style.background = j===val ? 'var(--bg3)' : 'transparent';
+    el.style.color = j===val ? 'var(--ink)' : '';
   });
 }
 
@@ -973,8 +1230,8 @@ function submitListeningQuest(id){
     answeredCount++;
     opts.forEach((el,j)=>{
       const radio = el.querySelector('input'); if(radio) radio.disabled=true;
-      if(j===q.a){ el.style.borderColor='var(--mint)'; el.style.background='var(--mint-dim)'; }
-      else if(j===chosen){ el.style.borderColor='var(--coral)'; el.style.background='var(--coral-dim)'; }
+      if(j===q.a){ el.style.borderColor='var(--mint)'; el.style.background='var(--mint-dim)'; el.style.color='var(--ink)'; }
+      else if(j===chosen){ el.style.borderColor='var(--coral)'; el.style.background='var(--coral-dim)'; el.style.color='var(--ink)'; }
     });
     if(chosen===q.a) score++;
     const lastOpt = opts[opts.length-1];
@@ -1161,10 +1418,10 @@ function openWritingQuest(id){
   zone.innerHTML = `
     <div class="card" style="border-color:${data.color}">
       <div class="card-head"><h3>✍️ ${data.title}</h3><span class="badge badge-violet">${data.type}</span></div>
-      <div style="background:var(--bg3);border-radius:var(--r-md);padding:16px 18px;margin-bottom:12px;font-size:13.5px;line-height:1.7">
+      <div style="background:var(--bg3);border-radius:var(--r-md);padding:16px 18px;margin-bottom:12px;font-size:13.5px;line-height:1.7;color:var(--ink-dim)">
         <strong style="color:${data.color}">📄 Reading/Prompt:</strong> ${data.reading}
       </div>
-      <div style="background:var(--bg3);border-radius:var(--r-md);padding:16px 18px;margin-bottom:16px;font-size:13.5px;line-height:1.7">
+      <div style="background:var(--bg3);border-radius:var(--r-md);padding:16px 18px;margin-bottom:16px;font-size:13.5px;line-height:1.7;color:var(--ink-dim)">
         <strong style="color:${data.color}">🎧 Lecture/Classmates:</strong> ${data.listening}
       </div>
       <p style="font-size:13px;color:var(--ink-faint);margin-bottom:10px">${data.instructions}</p>
@@ -1317,8 +1574,8 @@ function renderVQuiz(){
 function checkVQuiz(j){
   document.querySelectorAll('.vqOpt').forEach((el,i)=>{
     el.querySelector('input').disabled = true;
-    if(i===VOCAB_QUIZ.a){ el.style.borderColor='var(--mint)'; el.style.background='var(--mint-dim)'; }
-    else if(i===j){ el.style.borderColor='var(--coral)'; el.style.background='var(--coral-dim)'; }
+    if(i===VOCAB_QUIZ.a){ el.style.borderColor='var(--mint)'; el.style.background='var(--mint-dim)'; el.style.color='var(--ink)'; }
+    else if(i===j){ el.style.borderColor='var(--coral)'; el.style.background='var(--coral-dim)'; el.style.color='var(--ink)'; }
   });
   document.getElementById('vQuizExp').classList.remove('hidden');
   document.getElementById('vQuizExp').textContent = VOCAB_QUIZ.e;
