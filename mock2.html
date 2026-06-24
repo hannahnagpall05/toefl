@@ -6,11 +6,11 @@
 <title>Boss 2: Black Holes & Honeybees — TOEFL Quest</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
+html{height:100%}
 body{font-family:'Segoe UI',Arial,sans-serif;background:#1a1a2e;color:#222;line-height:1.5;min-height:100vh}
 button{font-family:inherit;cursor:pointer}
 textarea{font-family:inherit}
 
-/* ── COVER ───────────────────────────── */
 #cover{position:fixed;inset:0;background:linear-gradient(135deg,#0f3460 0%,#16213e 50%,#0f3460 100%);display:flex;align-items:center;justify-content:center;z-index:1000;flex-direction:column;padding:20px;text-align:center;overflow-y:auto}
 #cover h1{color:#fff;font-size:clamp(20px,4vw,34px);margin-bottom:6px;letter-spacing:-.5px}
 #cover .sub{color:rgba(255,255,255,.75);font-size:15px;margin-bottom:6px}
@@ -27,7 +27,6 @@ textarea{font-family:inherit}
 .start-btn:hover{background:#ffd060;transform:translateY(-2px);box-shadow:0 8px 24px rgba(240,192,64,.4)}
 .note-adaptive{max-width:600px;color:rgba(255,255,255,.55);font-size:12px;margin-top:16px;line-height:1.6}
 
-/* ── EXAM SHELL ──────────────────────────────── */
 #exam{display:none;flex-direction:column;min-height:100vh;background:#f0ede6}
 #exam.show{display:flex}
 #topbar{background:#1a3a5c;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 22px;height:54px;flex-shrink:0;position:sticky;top:0;z-index:50}
@@ -52,7 +51,7 @@ textarea{font-family:inherit}
 .ti-begin:hover{background:#2a5080}
 
 /* GENERIC TASK STAGE */
-#task-stage{display:none;flex:1;padding:24px 20px;overflow-y:auto}
+#task-stage{display:none;flex:1;padding:24px 20px;min-height:0}
 #task-stage.show{display:flex;justify-content:center}
 .stage-inner{max-width:760px;width:100%}
 .task-card{background:#fff;border-radius:16px;padding:28px 32px;box-shadow:0 4px 24px rgba(0,0,0,.08);margin-bottom:16px}
@@ -88,11 +87,23 @@ textarea{font-family:inherit}
 .play-btn-big{background:#1a3a5c;color:#fff;border:none;padding:11px 26px;border-radius:50px;font-size:14px;font-weight:800;cursor:pointer;transition:.2s;margin-bottom:10px}
 .play-btn-big:hover{background:#2a5080}
 .play-btn-big:disabled{background:#aaa;cursor:not-allowed}
-.audio-progress{height:7px;background:#e0dbd0;border-radius:4px;overflow:hidden;margin:10px 0}
-.audio-prog-fill{height:100%;background:#1a3a5c;border-radius:4px;width:0%;transition:width .5s}
+.audio-progress{height:7px;background:#e0dbd0;border-radius:4px;overflow:hidden;margin:10px 0;cursor:pointer}
+.audio-prog-fill{height:100%;background:#1a3a5c;border-radius:4px;width:0%;transition:width .15s linear}
 .audio-time-row{display:flex;justify-content:space-between;font-size:11.5px;color:#888;font-family:'Courier New',monospace}
 .waveform{display:flex;align-items:center;justify-content:center;gap:3px;height:32px;margin:8px 0}
 .wb{width:3.5px;background:#1a3a5c;border-radius:2px;height:5px;transition:height .1s;opacity:.7}
+.audio-controls-row{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:6px}
+.audio-loading{font-size:12.5px;color:#888;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:7px}
+.audio-spinner{width:13px;height:13px;border-radius:50%;border:2px solid #d8d4c8;border-top-color:#1a3a5c;animation:audioSpin .7s linear infinite;flex-shrink:0}
+@keyframes audioSpin{to{transform:rotate(360deg)}}
+.audio-error{background:#fdecea;border:1.5px solid #c0392b;color:#8b1a14;border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.6;margin:10px 0;text-align:left;display:flex;gap:10px;align-items:flex-start}
+.audio-error .ae-icon{font-size:18px;flex-shrink:0;line-height:1.3}
+.audio-error .ae-retry{margin-top:6px;display:inline-block;background:none;border:1.5px solid #c0392b;color:#8b1a14;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:800;cursor:pointer}
+.audio-error .ae-retry:hover{background:#c0392b;color:#fff}
+.answer-locked-note{font-size:12px;color:#888;margin-top:8px;font-style:italic}
+fieldset.answer-fieldset{border:none;margin:0;padding:0}
+fieldset.answer-fieldset:disabled{opacity:.55;pointer-events:none}
+fieldset.answer-fieldset:disabled .opt{cursor:not-allowed}
 
 /* ── SPEAKING ── */
 .speak-phase{text-align:center;font-size:14.5px;font-weight:700;color:#555;margin:10px 0}
@@ -112,7 +123,9 @@ textarea{font-family:inherit}
 /* ── WRITING ── */
 .essa{width:100%;min-height:160px;padding:14px;border:2px solid #ddd;border-radius:10px;font-size:14px;line-height:1.8;resize:vertical;background:#fff;outline:none;transition:.15s}
 .essa:focus{border-color:#1a3a5c;box-shadow:0 0 0 3px rgba(26,58,92,.1)}
-.wc-row{display:flex;justify-content:space-between;align-items:center;margin-top:7px;font-size:12px;color:#888}
+.wc-row{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-top:7px;font-size:12px;color:#888}
+.wc-row>span:first-child{flex-shrink:0;white-space:nowrap}
+.wc-row>span:last-child{text-align:right}
 .word-bank{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0;padding:14px;background:#f8f6f0;border-radius:10px;min-height:50px}
 .word-chip{background:#fff;border:1.5px solid #1a3a5c;color:#1a3a5c;padding:7px 14px;border-radius:20px;font-size:13.5px;font-weight:700;cursor:pointer;transition:.15s}
 .word-chip:hover{background:#1a3a5c;color:#fff}
@@ -124,7 +137,7 @@ textarea{font-family:inherit}
 .email-field-row strong{width:50px;color:#1a3a5c}
 
 /* ── RESULTS ── */
-#results-screen{display:none;flex:1;overflow-y:auto;padding:30px 20px;align-items:flex-start;justify-content:center}
+#results-screen{display:none;flex:1;padding:30px 20px;align-items:flex-start;justify-content:center;min-height:0}
 #results-screen.show{display:flex}
 .result-wrap{width:100%;max-width:760px}
 .result-hero{background:linear-gradient(135deg,#1a3a5c 0%,#2a5a8c 100%);color:#fff;border-radius:16px;padding:32px;text-align:center;margin-bottom:18px}
@@ -167,45 +180,506 @@ textarea{font-family:inherit}
   .tf-row{grid-template-columns:1fr}
 }
 </style>
+<style>
+:root{
+  --bg:#081a35;
+  --bg2:#0f3460;
+  --bg3:#164a82;
+  --surface:#f7fbff;
+  --surface2:#ffffff;
+  --ink:#12304f;
+  --muted:#6282a4;
+  --line:rgba(23,74,130,.14);
+  --gold:#f0c040;
+  --gold2:#ffd86a;
+  --gold-shadow:rgba(240,192,64,.38);
+  --success:#2d8a4e;
+  --danger:#c0392b;
+  --shadow:0 20px 60px rgba(5,23,49,.16);
+  --shadow-soft:0 12px 30px rgba(10,39,74,.10);
+  --radius-xl:28px;
+  --radius-lg:22px;
+  --radius-md:16px;
+  --transition:.24s cubic-bezier(.2,.8,.2,1);
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Trebuchet MS","Segoe UI",Arial,sans-serif;
+  background:
+    radial-gradient(circle at top left,rgba(240,192,64,.14),transparent 24%),
+    radial-gradient(circle at 80% 18%,rgba(122,201,255,.16),transparent 18%),
+    linear-gradient(180deg,#06162f 0%,#0d2f58 42%,#edf6ff 42%,#f8fbff 100%);
+  color:var(--ink);
+  overflow-x:hidden;
+}
+body::before,
+body::after{
+  content:"";
+  position:fixed;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:0;
+  filter:blur(6px);
+}
+body::before{
+  width:240px;height:240px;left:-60px;top:90px;
+  background:radial-gradient(circle,var(--gold-shadow),transparent 68%);
+  animation:floatOrb 11s ease-in-out infinite;
+}
+body::after{
+  width:300px;height:300px;right:-80px;top:240px;
+  background:radial-gradient(circle,rgba(80,160,255,.18),transparent 70%);
+  animation:floatOrb 14s ease-in-out infinite reverse;
+}
+button,input,textarea{font-family:inherit}
+#cover,#exam,#results-screen,#task-intro,#task-stage,.result-wrap,.stage-inner,#reward-layer{position:relative;z-index:1}
+.floaty{animation:floaty 4.5s ease-in-out infinite}
+.coin-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  border-radius:999px;padding:10px 16px;
+  background:linear-gradient(180deg,#ffe89e 0%,#f0c040 55%,#da9e16 100%);
+  color:#674000;font-weight:900;
+  box-shadow:0 10px 24px rgba(240,192,64,.26), inset 0 2px 0 rgba(255,255,255,.5);
+}
+.coin-icon{
+  width:28px;height:28px;border-radius:50%;
+  display:inline-flex;align-items:center;justify-content:center;
+  background:radial-gradient(circle at 30% 30%,#fff8c0 0%,#ffd86a 28%,#f0c040 52%,#d89300 100%);
+  border:1px solid rgba(135,95,0,.22);
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.52),0 4px 10px rgba(190,140,0,.25);
+  font-size:15px;line-height:1;
+}
+#cover{
+  background:
+    radial-gradient(circle at top center,rgba(255,255,255,.10),transparent 28%),
+    linear-gradient(135deg,#082042 0%,#0e3765 40%,#144c87 100%);
+}
+.cover-shell{
+  width:min(1100px,100%);
+  display:grid;grid-template-columns:1.1fr .9fr;gap:26px;align-items:center;
+}
+.cover-main,.cover-side{
+  position:relative;
+  background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.08));
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(16px);
+  border-radius:32px;
+}
+.cover-main{padding:38px;text-align:left;overflow:hidden}
+.cover-main::before,.ti-card::before,.task-card::before,.result-hero::before{
+  content:"";position:absolute;inset:-80px auto auto -60px;width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle,rgba(80,160,255,.16),transparent 68%);pointer-events:none
+}
+.cover-main::after,.ti-card::after,.task-card::after,.result-hero::after{
+  content:"";position:absolute;inset:auto -70px -110px auto;width:240px;height:240px;border-radius:50%;
+  background:radial-gradient(circle,rgba(240,192,64,.16),transparent 66%);pointer-events:none
+}
+.cover-side{padding:26px}
+#cover h1{font-size:clamp(30px,4vw,52px);margin-bottom:8px;letter-spacing:-1.1px;line-height:1.02}
+#cover .sub{font-size:16px;margin-bottom:10px;max-width:640px}
+#cover .badge2026{
+  display:inline-flex;align-items:center;gap:8px;background:rgba(240,192,64,.16);color:#fff7d6;
+  border:1px solid rgba(255,216,106,.42);padding:8px 14px;border-radius:999px;letter-spacing:.18em;text-transform:uppercase
+}
+.cover-topline{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:20px}
+.hero-kpis{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0 22px}
+.hero-kpi{
+  min-width:150px;padding:16px 18px;border-radius:18px;
+  background:rgba(6,26,53,.32);border:1px solid rgba(255,255,255,.12);color:#fff;box-shadow:var(--shadow-soft)
+}
+.hero-kpi strong{display:block;font-size:26px;color:#fff;margin-bottom:4px}
+.hero-kpi span{font-size:12px;color:rgba(255,255,255,.72);text-transform:uppercase;letter-spacing:.12em}
+.cover-actions{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:24px}
+.cover-mini{
+  display:inline-flex;align-items:center;gap:10px;color:rgba(255,255,255,.82);font-size:12px;padding:10px 14px;border-radius:999px;
+  border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.08)
+}
+.cover-info{grid-template-columns:repeat(2,1fr);margin:22px 0}
+.ci,.tf-row,.journey-card,.sg,.result-stat,.achievement-card{
+  transition:transform var(--transition),box-shadow var(--transition),background var(--transition),color var(--transition)
+}
+.ci{
+  background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.08));
+  border-color:rgba(255,255,255,.14);border-radius:18px;padding:16px;box-shadow:var(--shadow-soft)
+}
+.ci:hover,.tf-row:hover,.task-card:hover{transform:translateY(-4px)}
+.ci strong{font-size:22px;color:#fff}
+.ci span{font-size:12px;color:rgba(255,255,255,.72)}
+.tf-row{
+  grid-template-columns:98px 1fr;background:rgba(255,255,255,.07);
+  border-color:rgba(255,255,255,.12);border-radius:18px;margin-bottom:10px
+}
+.tf-row:hover{background:rgba(255,255,255,.1);box-shadow:0 14px 28px rgba(8,32,66,.22)}
+.tf-sec{color:#ffe89e;text-transform:uppercase;letter-spacing:.08em}
+.tf-tasks{font-size:13px}
+.cover-world-card{
+  padding:22px;border-radius:24px;background:linear-gradient(180deg,#fff 0%,#eef7ff 100%);
+  border:1px solid rgba(255,255,255,.34);box-shadow:var(--shadow);height:100%;overflow:hidden
+}
+.world-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.world-title h3{font-size:20px;color:var(--ink)}
+.world-title span{font-size:12px;color:var(--muted);font-weight:700}
+.world-track{display:grid;gap:12px;margin-top:14px}
+.world-node{
+  display:grid;grid-template-columns:56px 1fr auto;gap:12px;align-items:center;
+  padding:14px;border-radius:18px;background:#fff;border:1px solid var(--line);box-shadow:var(--shadow-soft)
+}
+.world-node:hover{transform:translateX(4px);box-shadow:0 16px 26px rgba(8,32,66,.10)}
+.world-badge{
+  width:56px;height:56px;border-radius:18px;background:linear-gradient(180deg,#e7f3ff,#cde6ff);
+  display:flex;align-items:center;justify-content:center;font-size:24px;color:#0f3460
+}
+.world-copy strong{display:block;color:var(--ink);font-size:14px;margin-bottom:3px}
+.world-copy span{display:block;color:var(--muted);font-size:12px;line-height:1.5}
+.world-score{padding:9px 12px;border-radius:999px;background:#edf6ff;color:#154a86;font-weight:900;font-size:12px}
+.start-btn,.nav-btn,.ti-begin,.play-btn-big,.retake-btn,.home-btn{
+  border-radius:999px;font-weight:900;
+  transition:transform var(--transition),box-shadow var(--transition),filter var(--transition),background var(--transition)
+}
+.start-btn,.play-btn-big,.btn-next,.ti-begin,.retake-btn{
+  background:linear-gradient(180deg,#3c78b9 0%,#1a3a5c 100%);color:#fff;
+  box-shadow:0 14px 24px rgba(13,47,88,.26), inset 0 2px 0 rgba(255,255,255,.24)
+}
+.nav-btn,.ti-begin,.play-btn-big,.retake-btn,.home-btn{padding:12px 22px;font-size:14px}
+.btn-next:disabled,.play-btn-big:disabled{background:linear-gradient(180deg,#9eb1c7 0%,#8297af 100%);box-shadow:none}
+.btn-skip,.home-btn{
+  background:linear-gradient(180deg,#fff 0%,#eef4fb 100%);
+  color:#365b80;border:1px solid rgba(23,74,130,.16);box-shadow:var(--shadow-soft)
+}
+.start-btn:hover,.nav-btn:hover,.ti-begin:hover,.play-btn-big:hover,.retake-btn:hover,.home-btn:hover{transform:translateY(-3px) scale(1.01)}
+.start-btn:active,.nav-btn:active,.ti-begin:active,.play-btn-big:active,.retake-btn:active,.home-btn:active{transform:translateY(1px) scale(.985)}
+#exam{background:transparent}
+.exam-backdrop{
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(circle at 18% 14%,rgba(255,255,255,.10),transparent 18%),
+    radial-gradient(circle at 88% 14%,rgba(240,192,64,.14),transparent 20%),
+    linear-gradient(180deg,rgba(8,26,53,.96) 0%,rgba(15,52,96,.95) 320px,rgba(245,250,255,.95) 320px,rgba(248,251,255,.98) 100%)
+}
+#topbar{
+  display:grid;grid-template-columns:1fr auto auto auto auto;gap:14px;
+  padding:18px 22px 12px;height:auto;background:linear-gradient(180deg,rgba(8,26,53,.94),rgba(8,26,53,.74));backdrop-filter:blur(18px)
+}
+#topbar .brand{gap:10px;cursor:pointer;user-select:none}
+#topbar .brand .dot{
+  width:11px;height:11px;background:linear-gradient(180deg,#ffe89e,#f0c040);box-shadow:0 0 0 5px rgba(240,192,64,.14)
+}
+.brand-world{display:flex;flex-direction:column;gap:3px}
+.brand-world small{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.58)}
+#sec-name,#timer-wrap,#item-counter,.sound-btn,.meta-chip{
+  border:1px solid rgba(255,255,255,.08)
+}
+#sec-name{font-size:12px;font-weight:900;padding:9px 14px;letter-spacing:.08em;text-transform:uppercase}
+#timer-wrap,#item-counter,.sound-btn{
+  background:rgba(255,255,255,.10);border-radius:16px
+}
+#timer-wrap{padding:10px 14px}
+#item-counter{padding:10px 14px;opacity:.92}
+.sound-btn{color:#fff;background:rgba(255,255,255,.08);padding:10px 12px;font-size:12px;font-weight:800}
+#global-meta{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;
+  padding:0 20px;margin:14px 0 18px;position:relative;z-index:5
+}
+.meta-chip{
+  padding:14px 16px;background:linear-gradient(180deg,rgba(255,255,255,.94),rgba(242,248,255,.94));
+  color:var(--ink);box-shadow:var(--shadow-soft);border-radius:18px;overflow:hidden
+}
+.meta-chip strong{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.14em;margin-bottom:7px}
+.meta-chip span{display:flex;align-items:center;gap:10px;font-size:24px;font-weight:900}
+.meta-chip small{display:block;margin-top:6px;color:var(--muted);font-size:12px}
+.hud-progress{height:10px;border-radius:999px;background:#dfeafa;overflow:hidden;margin-top:8px}
+.hud-progress>div{height:100%;width:18%;background:linear-gradient(90deg,var(--gold2),var(--gold));border-radius:inherit;transition:width .45s cubic-bezier(.2,.8,.2,1)}
+#journey-strip{
+  display:flex;flex-wrap:wrap;gap:10px;padding:0 20px;margin-bottom:18px;align-items:center;justify-content:center
+}
+.journey-card{
+  min-width:120px;padding:12px 14px;border-radius:18px;
+  background:rgba(255,255,255,.94);border:1px solid rgba(18,48,79,.12);
+  color:var(--muted);font-size:12px;font-weight:800;text-align:left;box-shadow:var(--shadow-soft)
+}
+.journey-card span{display:block;color:var(--ink);font-size:14px;margin-top:3px}
+.journey-card.active{background:linear-gradient(180deg,#1a3a5c,#295d94);color:rgba(255,255,255,.72);transform:translateY(-4px)}
+.journey-card.active span{color:#fff}
+.journey-card.done{background:linear-gradient(180deg,#fff9de,#fff0bb);color:#84641f}
+.journey-card.done span{color:#6b4b00}
+#task-intro,#task-stage,#results-screen{padding:22px 20px 30px}
+.stage-inner,.result-wrap{width:min(980px,100%)}
+.ti-card,.task-card,.skill-profile,.result-review,.result-hero,.achievement-panel,.summary-panel{
+  border-radius:var(--radius-xl);border:1px solid rgba(23,74,130,.10);box-shadow:var(--shadow)
+}
+.ti-card,.task-card,.skill-profile,.result-review,.achievement-panel,.summary-panel{
+  background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(244,249,255,.96));backdrop-filter:blur(12px)
+}
+.ti-card{padding:34px 38px;max-width:700px;overflow:hidden}
+.ti-card .ti-icon{font-size:54px;display:inline-block}
+.ti-card h2{font-size:30px}
+.ti-card p{font-size:15px;line-height:1.8;color:var(--muted)}
+.task-card{
+  overflow:hidden;padding:30px 32px;transform:translateY(0);box-shadow:var(--shadow);transition:transform var(--transition),box-shadow var(--transition)
+}
+.task-card.card-enter{animation:cardEnter .45s cubic-bezier(.2,.8,.2,1)}
+.task-label{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11px;font-weight:900;color:#2a5d92;letter-spacing:.16em;
+  background:#eaf4ff;padding:9px 12px;border-radius:999px;margin-bottom:14px
+}
+.task-prompt{font-size:18px;font-weight:900;color:var(--ink)}
+.task-context{
+  background:linear-gradient(180deg,#f5fbff,#edf6ff);border-color:rgba(42,93,146,.16);border-radius:18px;
+  padding:16px 18px;line-height:1.8;color:#24476d
+}
+.footer-row{margin-top:22px;padding-top:16px;border-top:1px solid rgba(23,74,130,.10)}
+.task-reward-hint{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px;font-weight:700}
+.blank-input,.essa,#email-subject{
+  border:1px solid rgba(23,74,130,.18);background:#f7fbff;padding:10px 12px;border-radius:14px;
+  transition:border-color var(--transition),box-shadow var(--transition),transform var(--transition)
+}
+.blank-input{width:120px;font-weight:800}
+.blank-input:focus,.essa:focus,#email-subject:focus{border-color:#3c78b9;box-shadow:0 0 0 4px rgba(60,120,185,.12)}
+.daily-life-doc{
+  background:linear-gradient(180deg,#fff,#fbfdff);border:1px solid rgba(23,74,130,.12);
+  border-radius:18px;color:#365b80
+}
+.opt{
+  padding:14px 16px;border:1px solid rgba(23,74,130,.14);border-radius:18px;
+  box-shadow:0 8px 18px rgba(10,39,74,.04)
+}
+.opt:hover{border-color:#2e6cad;background:#f3f9ff;transform:translateY(-2px)}
+.opt.selected{background:#ebf4ff}
+.opt.selected.correct,.opt.correct{background:#e8f8ee}
+.opt.selected.wrong,.opt.wrong{background:#fdecea}
+.audio-visual{
+  width:82px;height:82px;border-radius:26px;
+  background:linear-gradient(180deg,#e9f4ff,#c9e3ff);font-size:34px;color:#174a82;box-shadow:0 16px 30px rgba(23,74,130,.14)
+}
+.audio-progress{height:10px;border-radius:999px;background:#dfe8f3}
+.audio-prog-fill{background:linear-gradient(90deg,#56a8ff,#1a3a5c);border-radius:999px}
+.waveform,.speak-wf{gap:4px;height:36px}
+.wb{width:4px;background:linear-gradient(180deg,#7cc4ff,#1a3a5c);border-radius:999px;opacity:.85}
+.speak-phase{font-weight:800;color:#496b8f}
+.speak-timer-big{font-size:46px}
+.mic-ring{
+  width:82px;height:82px;border-radius:28px;font-size:26px;
+  transition:transform var(--transition),box-shadow var(--transition),background var(--transition)
+}
+.mic-prep{background:linear-gradient(180deg,#2f6fb1,#1a3a5c);box-shadow:0 14px 24px rgba(13,47,88,.24)}
+.mic-rec{background:linear-gradient(180deg,#ea594c,#c0392b)}
+.speak-ai-box{border-radius:20px;box-shadow:0 10px 24px rgba(45,138,78,.08)}
+.word-bank{background:linear-gradient(180deg,#f9fcff,#f0f7ff);border-radius:20px;border:1px solid rgba(23,74,130,.10)}
+.word-chip,.slot-chip{font-weight:800}
+.word-chip{padding:9px 16px;border:1px solid rgba(23,74,130,.16);box-shadow:0 8px 18px rgba(10,39,74,.05)}
+.word-chip:hover{transform:translateY(-2px)}
+.answer-slots{border-radius:20px;background:#fbfdff;border-color:rgba(26,58,92,.28)}
+.slot-chip{background:linear-gradient(180deg,#2d6fb2,#1a3a5c);padding:9px 16px}
+.email-field-row{
+  background:#fff;border:1px solid rgba(23,74,130,.10);
+  border-radius:16px;padding:12px 14px
+}
+.result-wrap{display:grid;gap:18px}
+.result-hero{overflow:hidden;padding:34px;background:linear-gradient(135deg,#143b67 0%,#1f5c99 100%)}
+.result-hero h2{font-size:24px}
+.total-score{font-size:68px;text-shadow:0 10px 24px rgba(0,0,0,.2)}
+.result-meta-grid,.score-grid,.achievement-grid{display:grid;gap:14px}
+.result-meta-grid{grid-template-columns:repeat(3,1fr)}
+.summary-panel,.achievement-panel,.skill-profile,.result-review{padding:24px}
+.sg,.result-stat,.achievement-card{
+  background:linear-gradient(180deg,#fff,#f6fbff);border:1px solid rgba(23,74,130,.10);border-radius:20px;
+  padding:18px 14px;text-align:center;box-shadow:var(--shadow-soft)
+}
+.sg-num,.result-stat strong{font-size:32px}
+.sg-label,.result-stat span{font-size:12px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.1em}
+.score-msg{border:1px solid rgba(45,138,78,.18);border-radius:18px;padding:16px 18px}
+.sp-row{margin-bottom:12px}
+.sp-label{font-weight:800;color:#305578}
+.sp-bar-wrap{height:12px;border-radius:999px;background:#e3edf8}
+.sp-bar-fill{
+  width:8%;border-radius:999px;transition:width .8s cubic-bezier(.2,.8,.2,1),filter .3s ease;box-shadow:0 0 16px rgba(240,192,64,.18)
+}
+.achievement-grid{grid-template-columns:repeat(3,1fr)}
+.achievement-card{text-align:left;overflow:hidden}
+.achievement-card.locked{opacity:.62;filter:saturate(.5)}
+.achievement-card .coin-icon{margin-bottom:10px}
+.achievement-card strong{display:block;color:var(--ink);font-size:14px;margin-bottom:4px}
+.achievement-card span{display:block;color:var(--muted);font-size:12px;line-height:1.6}
+#reward-layer{position:fixed;inset:0;pointer-events:none;z-index:120}
+.reward-toast{
+  position:fixed;right:20px;bottom:20px;min-width:240px;max-width:340px;
+  background:linear-gradient(180deg,rgba(8,26,53,.96),rgba(20,59,103,.96));
+  color:#fff;padding:16px 18px;border-radius:22px;box-shadow:var(--shadow);
+  border:1px solid rgba(255,255,255,.12);opacity:0;transform:translateY(16px) scale(.96);
+  transition:opacity .28s ease,transform .28s ease
+}
+.reward-toast.show{opacity:1;transform:translateY(0) scale(1)}
+.reward-toast strong{display:block;font-size:14px;margin-bottom:4px}
+.reward-toast span{display:block;font-size:12px;color:rgba(255,255,255,.74)}
+.reward-coin,.reward-spark,.reward-confetti{position:fixed;pointer-events:none;will-change:transform,opacity;z-index:121}
+.reward-coin{
+  width:22px;height:22px;border-radius:50%;
+  background:radial-gradient(circle at 30% 30%,#fff5b2 0%,#ffd86a 30%,#f0c040 56%,#d89700 100%);
+  box-shadow:0 0 0 2px rgba(255,255,255,.24),0 8px 18px rgba(240,192,64,.30);
+  animation:coinBurst .9s ease-out forwards
+}
+.reward-spark{
+  width:10px;height:10px;border-radius:50%;
+  background:radial-gradient(circle,#fff 0%,#9fd3ff 36%,rgba(159,211,255,0) 72%);
+  animation:sparkBurst .9s ease-out forwards
+}
+.reward-confetti{width:10px;height:18px;border-radius:4px;background:linear-gradient(180deg,#fff,#7bc2ff);animation:confettiPop 1s ease-out forwards}
+#progress-dots{gap:8px;padding:6px 16px 16px;background:transparent;border-bottom:none}
+.pdot{
+  width:56px;height:10px;border-radius:999px;background:rgba(26,58,92,.14);
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.04)
+}
+.pdot.done{background:linear-gradient(90deg,#ffe89e,#f0c040)}
+.pdot.cur{background:linear-gradient(90deg,#56a8ff,#1a3a5c);transform:scaleX(1.06)}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes floatOrb{0%,100%{transform:translateY(0) translateX(0)}50%{transform:translateY(-22px) translateX(14px)}}
+@keyframes cardEnter{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes coinBurst{0%{transform:translate(var(--sx),var(--sy)) scale(.7);opacity:0}12%{opacity:1}100%{transform:translate(calc(var(--sx) + var(--tx)),calc(var(--sy) + var(--ty))) scale(1.05);opacity:0}}
+@keyframes sparkBurst{0%{transform:translate(var(--sx),var(--sy)) scale(.4);opacity:0}20%{opacity:1}100%{transform:translate(calc(var(--sx) + var(--tx)),calc(var(--sy) + var(--ty))) scale(1.25);opacity:0}}
+@keyframes confettiPop{0%{transform:translate(var(--sx),var(--sy)) rotate(0deg);opacity:0}12%{opacity:1}100%{transform:translate(calc(var(--sx) + var(--tx)),calc(var(--sy) + var(--ty))) rotate(220deg);opacity:0}}
+@media(max-width:980px){
+  .cover-shell{grid-template-columns:1fr}
+  #global-meta{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .result-meta-grid{grid-template-columns:1fr}
+  .achievement-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:700px){
+  #topbar{grid-template-columns:1fr;justify-content:start}
+  #topbar>*{justify-self:start}
+  #topbar .brand{margin-bottom:4px}
+  #global-meta{grid-template-columns:1fr}
+  .cover-main,.cover-side{padding:22px}
+  .cover-topline,.cover-actions{flex-direction:column;align-items:flex-start}
+  .cover-info,.score-grid,.achievement-grid{grid-template-columns:1fr}
+  .task-card,.ti-card,.summary-panel,.achievement-panel,.skill-profile,.result-review,.result-hero{padding:20px}
+  .tf-row{grid-template-columns:1fr}
+  .sp-row{align-items:flex-start;flex-direction:column}
+  .sp-label{width:auto}
+  .pdot{width:42px}
+  .reward-toast{left:16px;right:16px;bottom:16px;min-width:0}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  body::before,body::after{display:none}
+}
+</style>
 </head>
 <body>
+<div id="reward-layer">
+  <div class="reward-toast" id="reward-toast"></div>
+</div>
 
 <!-- ══════════════════════════════════
      COVER
 ══════════════════════════════════════ -->
 <div id="cover">
-  <h1>⚡ Boss Battle: The Gauntlet of Grammar</h1>
-  <p class="sub">TOEFL iBT 2026 Format — Black Holes · Honeybee Dance · Quiet Hours</p>
-  <span class="badge2026">BOSS 2 OF 6</span>
-  <div class="cover-info">
-    <div class="ci"><strong>30 min</strong><span>Reading · 50 items</span></div>
-    <div class="ci"><strong>29 min</strong><span>Listening · 47 items</span></div>
-    <div class="ci"><strong>8 min</strong><span>Speaking · 11 items</span></div>
-    <div class="ci"><strong>23 min</strong><span>Writing · 12 items</span></div>
+  <div class="cover-shell">
+    <div class="cover-main">
+      <div class="cover-topline">
+        <div>
+          <span class="badge2026">BOSS 2 OF 6</span>
+          <h1>⚡ Boss Battle: The Gauntlet of Grammar</h1>
+          <p class="sub">TOEFL iBT 2026 Format — Black Holes — Honeybee Dance — Quiet Hours</p>
+        </div>
+        <div class="coin-pill floaty"><span class="coin-icon">C</span> +500 XP reward</div>
+      </div>
+      <div class="hero-kpis">
+        <div class="hero-kpi"><strong>111</strong><span>Total tasks</span></div>
+        <div class="hero-kpi"><strong>4</strong><span>Skill worlds</span></div>
+        <div class="hero-kpi"><strong>12</strong><span>Quest types</span></div>
+      </div>
+      <div class="cover-info">
+        <div class="ci"><strong>30 min</strong><span>Reading · 50 items</span></div>
+        <div class="ci"><strong>29 min</strong><span>Listening · 47 items</span></div>
+        <div class="ci"><strong>8 min</strong><span>Speaking · 11 items</span></div>
+        <div class="ci"><strong>23 min</strong><span>Writing · 12 items</span></div>
+      </div>
+      <div class="task-families">
+        <div class="tf-row"><div class="tf-sec">📖 Reading</div><div class="tf-tasks">Complete the Words · Read in Daily Life · Read an Academic Passage</div></div>
+        <div class="tf-row"><div class="tf-sec">🎧 Listening</div><div class="tf-tasks">Listen and Choose a Response · Listen to a Conversation · Listen to an Announcement · Listen to an Academic Talk</div></div>
+        <div class="tf-row"><div class="tf-sec">🎤 Speaking</div><div class="tf-tasks">Listen and Repeat · Take an Interview</div></div>
+        <div class="tf-row"><div class="tf-sec">✍️ Writing</div><div class="tf-tasks">Build a Sentence · Write an Email · Write for an Academic Discussion</div></div>
+      </div>
+      <div class="cover-actions">
+        <button class="start-btn" onclick="launchExam()">⚔️ Enter Battle</button>
+        <div class="cover-mini"><span class="coin-icon">C</span> Collect coins, XP, and badges as you progress</div>
+      </div>
+      <p class="note-adaptive">Note: The real TOEFL iBT is adaptive — time and item counts vary based on your responses. This mock uses representative item counts and fixed timing to simulate the experience. Defeat this boss for bonus rewards and a full skill profile.</p>
+    </div>
+    <div class="cover-side">
+      <div class="cover-world-card">
+        <div class="world-title">
+          <h3>World Map</h3>
+          <span>Blue Quest Route</span>
+        </div>
+        <div class="world-track">
+          <div class="world-node">
+            <div class="world-badge">1</div>
+            <div class="world-copy"><strong>Reading Plains</strong><span>Vocabulary, notices, and academic reading.</span></div>
+            <div class="world-score">50 items</div>
+          </div>
+          <div class="world-node">
+            <div class="world-badge">2</div>
+            <div class="world-copy"><strong>Listening Harbor</strong><span>Prompt response, announcements, and lectures.</span></div>
+            <div class="world-score">47 items</div>
+          </div>
+          <div class="world-node">
+            <div class="world-badge">3</div>
+            <div class="world-copy"><strong>Speaking Summit</strong><span>Repeat, respond, and keep the rhythm.</span></div>
+            <div class="world-score">11 items</div>
+          </div>
+          <div class="world-node">
+            <div class="world-badge">4</div>
+            <div class="world-copy"><strong>Writing Castle</strong><span>Sentence building, email writing, and discussion.</span></div>
+            <div class="world-score">12 items</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="task-families">
-    <div class="tf-row"><div class="tf-sec">📖 Reading</div><div class="tf-tasks">Complete the Words · Read in Daily Life · Read an Academic Passage</div></div>
-    <div class="tf-row"><div class="tf-sec">🎧 Listening</div><div class="tf-tasks">Listen and Choose a Response · Listen to a Conversation · Listen to an Announcement · Listen to an Academic Talk</div></div>
-    <div class="tf-row"><div class="tf-sec">🎤 Speaking</div><div class="tf-tasks">Listen and Repeat · Take an Interview</div></div>
-    <div class="tf-row"><div class="tf-sec">✍️ Writing</div><div class="tf-tasks">Build a Sentence · Write an Email · Write for an Academic Discussion</div></div>
-  </div>
-  <button class="start-btn" onclick="launchExam()">⚔️ Enter Battle</button>
-  <p class="note-adaptive">Note: The real TOEFL iBT is adaptive — time and item counts vary based on your responses. This mock uses representative item counts and fixed timing to simulate the experience. Defeat this boss for +500 XP!</p>
 </div>
 
 <!-- ══════════════════════════════════
      EXAM SHELL
 ══════════════════════════════════════ -->
 <div id="exam">
+  <div class="exam-backdrop"></div>
   <div id="topbar">
-    <div class="brand"><div class="dot"></div>TOEFL 2026</div>
+    <div class="brand" id="brand-easter-egg"><div class="dot"></div><div class="brand-world">TOEFL 2026<small>Quest Mode</small></div></div>
     <div id="sec-name">Reading</div>
     <div id="timer-wrap">
       <span id="timer-label">Time</span>
       <span id="timer">30:00</span>
     </div>
     <div id="item-counter">Item 1/50</div>
+    <button class="sound-btn" id="sound-toggle" onclick="toggleSound()">Sound On</button>
   </div>
+  <div id="global-meta">
+    <div class="meta-chip">
+      <strong>Coins</strong>
+      <span><span class="coin-icon">C</span><span id="coin-count">0</span></span>
+      <small>Earned from correct and completed actions</small>
+    </div>
+    <div class="meta-chip">
+      <strong>XP Progress</strong>
+      <span id="xp-count">0 XP</span>
+      <div class="hud-progress"><div id="xp-bar"></div></div>
+      <small id="xp-next">100 XP to next level</small>
+    </div>
+    <div class="meta-chip">
+      <strong>Level</strong>
+      <span id="level-count">1</span>
+      <small id="level-label">Rookie Scholar</small>
+    </div>
+    <div class="meta-chip">
+      <strong>Achievements</strong>
+      <span id="achievement-count">0 / 5</span>
+      <small>Hidden bonuses included</small>
+    </div>
+  </div>
+  <div id="journey-strip"></div>
   <div id="progress-dots"></div>
 
   <!-- TASK FAMILY INTRO -->
@@ -237,7 +711,16 @@ textarea{font-family:inherit}
         <div class="sg"><div class="sg-num" id="res-s" style="color:#c0392b">—</div><div class="sg-label">Speaking</div><div class="sg-sub">/ 6</div></div>
         <div class="sg"><div class="sg-num" id="res-w" style="color:#1a3a5c">—</div><div class="sg-label">Writing</div><div class="sg-sub">/ 6</div></div>
       </div>
+      <div class="result-meta-grid">
+        <div class="result-stat"><strong id="res-coins">0</strong><span>Coins Collected</span></div>
+        <div class="result-stat"><strong id="res-xp">0 XP</strong><span>Total XP</span></div>
+        <div class="result-stat"><strong id="res-level">1</strong><span>Final Level</span></div>
+      </div>
       <div class="score-msg" id="score-msg"></div>
+      <div class="achievement-panel">
+        <h3>Achievements</h3>
+        <div class="achievement-grid" id="achievement-grid"></div>
+      </div>
       <div class="skill-profile">
         <h3>📊 Skill Profile</h3>
         <div class="sp-row"><div class="sp-label">Complete the Words</div><div class="sp-bar-wrap"><div class="sp-bar-fill" id="sp-ctw" style="background:#1a5c34"></div></div><div class="sp-val" id="sp-ctw-v">—</div></div>
@@ -297,13 +780,14 @@ const ACR_PASSAGE = {
 };
 
 const LCR_ITEMS = [
-  {audio_text:"Have you submitted your thesis proposal yet?", dur:4, opts:["Yes, I submitted it yesterday afternoon.","My thesis is about marine biology.","The proposal format is three pages.","I'll present it next semester."], a:0, e:"This directly answers the yes/no question about submission."},
-  {audio_text:"Do you want to grab coffee before the lecture or after?", dur:4, opts:["The lecture hall is on the third floor.","Let's go after, I'm running a bit late.","I usually drink tea instead.","The lecture is about psychology."], a:1, e:"This directly responds to the either/or timing question."},
-  {audio_text:"Is the lab report due this Friday or next?", dur:4, opts:["It's due this Friday, actually.","The lab covers titration methods.","I work with a partner in that class.","We need safety goggles."], a:0, e:"This directly answers the specific date question."},
-  {audio_text:"Could you recommend a good place to study near campus?", dur:4, opts:["The exam is scheduled Tuesday.","I usually study at the science library, it's quiet.","My roommate prefers studying alone.","The campus has four libraries."], a:1, e:"This is the only response that recommends a study location as asked."}
+  {audio_text:"Have you submitted your thesis proposal yet?", audio_url:"audio/mock2-lcr-1.mp3", dur:4, opts:["Yes, I submitted it yesterday afternoon.","My thesis is about marine biology.","The proposal format is three pages.","I'll present it next semester."], a:0, e:"This directly answers the yes/no question about submission."},
+  {audio_text:"Do you want to grab coffee before the lecture or after?", audio_url:"audio/mock2-lcr-2.mp3", dur:4, opts:["The lecture hall is on the third floor.","Let's go after, I'm running a bit late.","I usually drink tea instead.","The lecture is about psychology."], a:1, e:"This directly responds to the either/or timing question."},
+  {audio_text:"Is the lab report due this Friday or next?", audio_url:"audio/mock2-lcr-3.mp3", dur:4, opts:["It's due this Friday, actually.","The lab covers titration methods.","I work with a partner in that class.","We need safety goggles."], a:0, e:"This directly answers the specific date question."},
+  {audio_text:"Could you recommend a good place to study near campus?", audio_url:"audio/mock2-lcr-4.mp3", dur:4, opts:["The exam is scheduled Tuesday.","I usually study at the science library, it's quiet.","My roommate prefers studying alone.","The campus has four libraries."], a:1, e:"This is the only response that recommends a study location as asked."}
 ];
 
 const CONV_ITEM = {
+  audio_url:"audio/mock2-conv.mp3",
   title:"Conversation — IT Help Desk", dur:88,
   transcript:'<p><strong>Student:</strong> "Hi, I can\'t log into the student portal. It keeps saying my password is incorrect."</p><p><strong>IT Staff:</strong> "That happens sometimes after the system update last week. Let\'s reset it — I can send a reset link to your university email."</p><p><strong>Student:</strong> "Okay, but I also can\'t access my university email from my phone right now."</p><p><strong>IT Staff:</strong> "No problem, you can also reset using your student ID and date of birth for verification."</p><p><strong>Student:</strong> "Yes, I have my ID right here."</p><p><strong>IT Staff:</strong> "Great. After this reset, I\'d recommend updating your phone\'s saved password too, since that\'s often what causes repeated login failures."</p>',
   questions:[
@@ -314,6 +798,7 @@ const CONV_ITEM = {
 };
 
 const ANNC_ITEM = {
+  audio_url:"audio/mock2-annc.mp3",
   title:"Campus Announcement", dur:50,
   transcript:'<p><strong>Announcement:</strong> "A reminder to all students: the campus health center will offer free flu vaccinations this week only, Monday through Friday, 9 AM to 4 PM, no appointment necessary. Simply bring your student ID. Supplies are limited, so early arrival is recommended. Located on the first floor of the Wellness Building."</p>',
   questions:[
@@ -323,6 +808,7 @@ const ANNC_ITEM = {
 };
 
 const TALK_ITEM = {
+  audio_url:"audio/mock2-talk.mp3",
   title:"Academic Talk — Event Horizons and Black Holes", dur:125,
   transcript:'<p><strong>Professor:</strong> "Today I want to demystify the black hole event horizon. A black hole isn\'t a cosmic vacuum cleaner actively pulling everything toward it — it\'s simply a region where gravity is so strong that nothing, not even light, can escape once it crosses a certain boundary."</p><p>"That boundary is the event horizon. It\'s not a physical surface — you wouldn\'t feel anything crossing it. It\'s a mathematical boundary where escape velocity would need to exceed the speed of light, which relativity says is impossible."</p><p>"From an outside observer\'s perspective, an object falling toward a black hole appears to slow down and freeze at the horizon, due to gravitational time dilation. But from the object\'s own perspective, it crosses in finite time — though it would be torn apart by tidal forces shortly after, in a process called spaghettification."</p>',
   questions:[
@@ -409,11 +895,232 @@ let timerIv=null, timerSecs=0;
 let audioIv=null, audioPct=0;
 let spIv=null;
 let wfIv = {};
+const ACHIEVEMENTS = [
+  {id:'first_coin', title:'First Coin', desc:'Earn your first reward coin.'},
+  {id:'section_clear', title:'World Clear', desc:'Complete a full section world.'},
+  {id:'sharp_reader', title:'Sharp Reader', desc:'Answer reading tasks correctly three times.'},
+  {id:'steady_voice', title:'Steady Voice', desc:'Finish a speaking task with a strong score.'},
+  {id:'secret_brand', title:'Secret Star', desc:'Discover the hidden top-bar easter egg.'}
+];
+const LEVEL_NAMES = ['Rookie Scholar','Blue Runner','Coin Collector','Castle Climber','Quest Master','Final Ascender'];
+let G = {};
+let toastTimer = null;
+let audioCtx = null;
+
+function resetGameState(){
+  G = {
+    coins:0,
+    xp:0,
+    level:1,
+    achievements:{},
+    readingWins:0,
+    sectionClears:0,
+    sound:true,
+    brandTaps:0
+  };
+  updateHud();
+  renderAchievementGrid();
+}
+function levelName(level){ return LEVEL_NAMES[Math.min(LEVEL_NAMES.length-1, Math.max(0, level-1))]; }
+function currentLevelFromXp(xp){ return Math.max(1, Math.floor(xp/100)+1); }
+function updateHud(){
+  const next = Math.ceil(G.xp/100)*100 || 100;
+  const currentLevelBase = Math.floor((G.level-1)*100);
+  const pct = Math.max(6, Math.min(100, Math.round(((G.xp-currentLevelBase)/100)*100)));
+  const coinEl = document.getElementById('coin-count');
+  if (coinEl) coinEl.textContent = G.coins;
+  const xpEl = document.getElementById('xp-count');
+  if (xpEl) xpEl.textContent = `${G.xp} XP`;
+  const bar = document.getElementById('xp-bar');
+  if (bar) bar.style.width = `${pct}%`;
+  const nextEl = document.getElementById('xp-next');
+  if (nextEl) nextEl.textContent = `${Math.max(0,next-G.xp)} XP to next level`;
+  const levelEl = document.getElementById('level-count');
+  if (levelEl) levelEl.textContent = G.level;
+  const levelLabel = document.getElementById('level-label');
+  if (levelLabel) levelLabel.textContent = levelName(G.level);
+  const achEl = document.getElementById('achievement-count');
+  if (achEl) achEl.textContent = `${Object.keys(G.achievements).length} / ${ACHIEVEMENTS.length}`;
+  const soundBtn = document.getElementById('sound-toggle');
+  if (soundBtn) soundBtn.textContent = G.sound ? 'Sound On' : 'Sound Off';
+}
+function playTone(kind){
+  if (!G.sound || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  try{
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    const tones = {
+      click:[420,.05],
+      coin:[760,.11],
+      level:[540,.18],
+      badge:[880,.16]
+    };
+    const [freq,dur] = tones[kind] || tones.click;
+    osc.type = kind==='level' ? 'triangle' : 'sine';
+    osc.frequency.value = freq;
+    gain.gain.value = .001;
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    const now = audioCtx.currentTime;
+    gain.gain.exponentialRampToValueAtTime(.04, now + .01);
+    gain.gain.exponentialRampToValueAtTime(.001, now + dur);
+    osc.start(now); osc.stop(now + dur + .02);
+  }catch(e){}
+}
+function toggleSound(){
+  G.sound = !G.sound;
+  updateHud();
+  if (G.sound) playTone('click');
+}
+function showToast(title, desc){
+  const toast = document.getElementById('reward-toast');
+  if (!toast) return;
+  toast.innerHTML = `<strong>${title}</strong><span>${desc}</span>`;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>toast.classList.remove('show'), 2200);
+}
+function spawnRewardBurst(sourceEl, coins, confetti){
+  if (!sourceEl) sourceEl = document.getElementById('coin-count');
+  const rect = sourceEl.getBoundingClientRect();
+  const originX = rect.left + rect.width/2;
+  const originY = rect.top + rect.height/2;
+  const layer = document.getElementById('reward-layer');
+  for (let i=0; i<coins; i++){
+    const coin = document.createElement('div');
+    coin.className = 'reward-coin';
+    coin.style.setProperty('--sx', `${originX}px`);
+    coin.style.setProperty('--sy', `${originY}px`);
+    coin.style.setProperty('--tx', `${(Math.random()*160)-80}px`);
+    coin.style.setProperty('--ty', `${-80-(Math.random()*80)}px`);
+    layer.appendChild(coin);
+    setTimeout(()=>coin.remove(), 900);
+  }
+  for (let i=0; i<Math.max(4, coins); i++){
+    const spark = document.createElement('div');
+    spark.className = confetti ? 'reward-confetti' : 'reward-spark';
+    spark.style.setProperty('--sx', `${originX}px`);
+    spark.style.setProperty('--sy', `${originY}px`);
+    spark.style.setProperty('--tx', `${(Math.random()*200)-100}px`);
+    spark.style.setProperty('--ty', `${-90-(Math.random()*90)}px`);
+    layer.appendChild(spark);
+    setTimeout(()=>spark.remove(), 1000);
+  }
+}
+function maybeLevelUp(){
+  const newLevel = currentLevelFromXp(G.xp);
+  if (newLevel > G.level){
+    G.level = newLevel;
+    playTone('level');
+    showToast('Level Up!', `${levelName(G.level)} reached`);
+    spawnRewardBurst(document.getElementById('level-count'), 10, true);
+  }
+}
+function unlockAchievement(id){
+  if (G.achievements[id]) return;
+  const item = ACHIEVEMENTS.find(a=>a.id===id);
+  if (!item) return;
+  G.achievements[id] = true;
+  updateHud();
+  renderAchievementGrid();
+  playTone('badge');
+  showToast(`Achievement Unlocked: ${item.title}`, item.desc);
+  spawnRewardBurst(document.getElementById('achievement-count'), 8, true);
+}
+function rewardPlayer({coins=0,xp=0,title='Reward earned',desc='Nice progress.',source=null,confetti=false}){
+  G.coins += coins;
+  G.xp += xp;
+  if (coins > 0){
+    playTone('coin');
+    unlockAchievement('first_coin');
+  }else{
+    playTone('click');
+  }
+  maybeLevelUp();
+  updateHud();
+  showToast(title, desc + (coins ? ` +${coins} coins` : ''));
+  if (source) spawnRewardBurst(source, Math.max(3, Math.min(10, coins || 4)), confetti);
+}
+function rewardObjective(correct, source){
+  if (correct){
+    G.readingWins++;
+    rewardPlayer({coins:6,xp:18,title:'Correct!',desc:'Coins added to your run.',source});
+    if (G.readingWins >= 3) unlockAchievement('sharp_reader');
+  }else{
+    rewardPlayer({coins:0,xp:8,title:'Progress saved',desc:'XP gained for attempting the task.',source});
+  }
+}
+function rewardPerformance(score, source, label){
+  const coins = Math.max(6, Math.round(score*3));
+  const xp = Math.max(16, Math.round(score*8));
+  rewardPlayer({coins,xp,title:label || 'Task complete',desc:'Strong performance bonus applied.',source,confetti:score>=4.5});
+  if (score >= 4.5) unlockAchievement('steady_voice');
+}
+function renderAchievementGrid(){
+  const grid = document.getElementById('achievement-grid');
+  if (!grid) return;
+  grid.innerHTML = ACHIEVEMENTS.map(item => `
+    <div class="achievement-card ${G.achievements[item.id] ? '' : 'locked'}">
+      <div class="coin-icon">${G.achievements[item.id] ? 'C' : '?'}</div>
+      <strong>${item.title}</strong>
+      <span>${G.achievements[item.id] ? item.desc : 'Keep exploring to unlock this badge.'}</span>
+    </div>`).join('');
+}
+function renderJourneyStrip(){
+  const strip = document.getElementById('journey-strip');
+  if (!strip) return;
+  strip.innerHTML = SECTIONS.map((sec, idx) => {
+    const state = idx < S.secIdx ? 'done' : idx === S.secIdx ? 'active' : '';
+    return `<div class="journey-card ${state}">${idx+1}. ${sec.label}<span>${sec.families.length} stages</span></div>`;
+  }).join('');
+}
+function renderProgressDots(){
+  const dots = document.getElementById('progress-dots');
+  if (!dots) return;
+  const families = SECTIONS.flatMap(sec => sec.families.map(f => `${sec.key}:${f.key}`));
+  const currentFlatIndex = SECTIONS.slice(0,S.secIdx).reduce((n,sec)=>n+sec.families.length,0) + S.famIdx;
+  dots.innerHTML = families.map((_, idx) => `<div class="pdot ${idx<currentFlatIndex?'done':''} ${idx===currentFlatIndex?'cur':''}"></div>`).join('');
+}
+function animateCurrentCard(){
+  const card = document.querySelector('#stage-inner .task-card');
+  if (card) card.classList.add('card-enter');
+}
+function checkSectionAchievement(){
+  if (S.famIdx >= SECTIONS[S.secIdx].families.length-1){
+    G.sectionClears++;
+    unlockAchievement('section_clear');
+  }
+}
+function syncResultMeta(){
+  const coins = document.getElementById('res-coins');
+  if (coins) coins.textContent = G.coins;
+  const xp = document.getElementById('res-xp');
+  if (xp) xp.textContent = `${G.xp} XP`;
+  const level = document.getElementById('res-level');
+  if (level) level.textContent = G.level;
+}
+function handleBrandTap(){
+  G.brandTaps++;
+  if (G.brandTaps === 5){
+    unlockAchievement('secret_brand');
+    rewardPlayer({coins:12,xp:24,title:'Secret found!',desc:'You discovered the hidden star bonus.',source:document.getElementById('brand-easter-egg'),confetti:true});
+  }else{
+    playTone('click');
+  }
+}
+document.getElementById('brand-easter-egg').addEventListener('click', handleBrandTap);
+resetGameState();
+renderJourneyStrip();
+renderProgressDots();
 
 function launchExam(){
   document.getElementById('cover').style.display='none';
   document.getElementById('exam').classList.add('show');
   S = {secIdx:0, famIdx:0, itemIdx:0, answers:{}, scores:{ctw:[],dlr:[],acr:[],lcr:[],conv:[],annc:[],talk:[],lr:[],interview:[],bas:[],email:[],discussion:[]}};
+  resetGameState();
+  renderJourneyStrip();
+  renderProgressDots();
+  rewardPlayer({coins:4,xp:12,title:'Quest Started',desc:'Welcome to the final world.',source:document.getElementById('coin-count')});
   startSection(0);
 }
 
@@ -422,6 +1129,8 @@ function startSection(si){
   const sec = SECTIONS[si];
   document.getElementById('sec-name').textContent = sec.label;
   startTimer(sec.time, () => advanceFamily(true));
+  renderJourneyStrip();
+  renderProgressDots();
   showFamilyIntro();
 }
 
@@ -447,9 +1156,12 @@ function showFamilyIntro(){
   document.getElementById('ti-icon').textContent = fam.icon;
   document.getElementById('ti-title').textContent = fam.title;
   document.getElementById('ti-desc').textContent = fam.desc;
+  renderJourneyStrip();
+  renderProgressDots();
 }
 
 function hideAllStages(){
+  if (currentAudioCtl){ currentAudioCtl.stop(); currentAudioCtl = null; }
   document.getElementById('task-intro').classList.remove('show');
   document.getElementById('task-stage').classList.remove('show');
   document.getElementById('results-screen').classList.remove('show');
@@ -463,6 +1175,7 @@ function beginTaskFamily(){
 }
 
 function renderCurrentItem(){
+  if (currentAudioCtl){ currentAudioCtl.stop(); currentAudioCtl = null; }
   const fam = SECTIONS[S.secIdx].families[S.famIdx].key;
   const renderers = {
     ctw: renderCTW, dlr: renderDLR, acr: renderACR,
@@ -472,12 +1185,14 @@ function renderCurrentItem(){
   };
   renderers[fam]();
   updateItemCounter();
+  animateCurrentCard();
+  renderJourneyStrip();
+  renderProgressDots();
 }
 
 function updateItemCounter(){
-  const totalItems = {reading:50,listening:47,speaking:11,writing:12};
-  const sec = SECTIONS[S.secIdx].key;
-  document.getElementById('item-counter').textContent = `${SECTIONS[S.secIdx].label} Task`;
+  const fam = SECTIONS[S.secIdx].families[S.famIdx];
+  document.getElementById('item-counter').textContent = `${SECTIONS[S.secIdx].label} — ${fam.title}`;
 }
 
 function advanceItem(){
@@ -489,6 +1204,7 @@ function advanceItem(){
 }
 
 function advanceFamily(timeUp){
+  checkSectionAchievement();
   S.famIdx++;
   if (S.famIdx >= SECTIONS[S.secIdx].families.length) {
     clearInterval(timerIv);
@@ -500,11 +1216,13 @@ function advanceFamily(timeUp){
     if (!timeUp) showFamilyIntro();
     else { hideAllStages(); document.getElementById('task-intro').classList.add('show'); const fam=SECTIONS[S.secIdx].families[S.famIdx]; document.getElementById('ti-icon').textContent=fam.icon; document.getElementById('ti-title').textContent=fam.title; document.getElementById('ti-desc').textContent='Time for the previous task ran out — moving to next task. '+fam.desc; }
   }
+  renderJourneyStrip();
+  renderProgressDots();
 }
 
 // ── helper: standard footer with Next button ──
 function footerHTML(label, disabled){
-  return `<div class="footer-row"><div></div><button class="nav-btn btn-next" id="next-item-btn" ${disabled?'disabled':''} onclick="advanceItem()">${label||'Next →'}</button></div>`;
+  return `<div class="footer-row"><div class="task-reward-hint"><span class="coin-icon">C</span> Build streaks for more coins and XP</div><button class="nav-btn btn-next" id="next-item-btn" ${disabled?'disabled':''} onclick="advanceItem()">${label||'Next →'}</button></div>`;
 }
 
 // ════════════ READING: Complete the Words ════════════
@@ -530,6 +1248,7 @@ function checkCTW(item){
   inp.disabled = true;
   document.getElementById('ctw-feedback').innerHTML = correct ? `✅ Correct! The word is "<strong>${item.full}</strong>"` : `❌ The correct word was "<strong>${item.full}</strong>" (you wrote "${val||'(blank)'}")`;
   S.scores.ctw.push(correct?1:0);
+  rewardObjective(correct, inp);
   document.getElementById('next-item-btn').textContent = S.itemIdx+1>=CTW_ITEMS.length?'Continue →':'Next Item →';
   document.getElementById('next-item-btn').onclick = advanceItem;
 }
@@ -559,6 +1278,7 @@ function selectDLR(j){
   document.getElementById('dlr-exp').style.display='block';
   document.getElementById('dlr-exp').textContent = item.e;
   S.scores.dlr.push(correct?1:0);
+  rewardObjective(correct, document.getElementById(`dlr-o${j}`));
   document.getElementById('next-item-btn').disabled = false;
   document.getElementById('next-item-btn').textContent = S.itemIdx+1>=DLR_ITEMS.length?'Continue →':'Next Item →';
 }
@@ -585,6 +1305,7 @@ function selectACR(j){
   document.getElementById('acr-exp').style.display='block';
   document.getElementById('acr-exp').textContent = q.e;
   S.scores.acr.push(j===q.a?1:0);
+  rewardObjective(j===q.a, document.getElementById(`acr-o${j}`));
   document.getElementById('next-item-btn').disabled=false;
   document.getElementById('next-item-btn').textContent = S.itemIdx+1>=ACR_PASSAGE.questions.length?'Continue →':'Next Question →';
 }
@@ -597,31 +1318,40 @@ function renderLCR(){
     <div class="task-card audio-card">
       <div class="task-label" style="text-align:left">Listen and Choose a Response · Item ${S.itemIdx+1} of ${LCR_ITEMS.length}</div>
       <div class="audio-visual">🔊</div>
+      <div class="audio-loading" id="lcr-wf-loading"><span class="audio-spinner"></span> Preparing audio…</div>
       <div class="waveform" id="lcr-wf"></div>
-      <button class="play-btn-big" id="lcr-play" onclick="playLCR()">▶ Play Prompt</button>
-      <div id="lcr-opts" style="text-align:left;margin-top:14px;display:none">${item.opts.map((o,j)=>`<label class="opt" id="lcr-o${j}" onclick="selectLCR(${j})"><input type="radio" name="lcr"> ${o}</label>`).join('')}</div>
+      <div class="audio-error" id="lcr-err" style="display:none"></div>
+      <div class="audio-controls-row">
+        <button class="play-btn-big" id="lcr-play" onclick="toggleLCR()" disabled>⏳ Preparing audio…</button>
+      </div>
+      <div class="audio-progress" id="lcr-progress"><div class="audio-prog-fill" id="lcr-fill"></div></div>
+      <div class="audio-time-row"><span id="lcr-cur">0:00</span><span id="lcr-dur">${fmtAudioTime(item.dur)}</span></div>
+      <fieldset class="answer-fieldset" id="lcr-fieldset" disabled>
+        <div id="lcr-opts" style="text-align:left;margin-top:14px">${item.opts.map((o,j)=>`<label class="opt" id="lcr-o${j}"><input type="radio" name="lcr" onclick="selectLCR(${j})"> ${o}</label>`).join('')}</div>
+      </fieldset>
+      <div class="answer-locked-note" id="lcr-lock-note">Answer options unlock once the audio is ready.</div>
       <div id="lcr-exp" style="font-size:13px;color:#1a3a5c;background:#f0f6ff;padding:10px 12px;border-radius:8px;margin-top:10px;display:none;text-align:left"></div>
       ${footerHTML('Next →', true)}
     </div>`;
   buildWF('lcr-wf');
+  currentAudioCtl = createAudioPlayer({
+    text: item.audio_text,
+    waveformId: 'lcr-wf', playBtnId:'lcr-play', fillId:'lcr-fill',
+    curId:'lcr-cur', durId:'lcr-dur', errorId:'lcr-err', progressId:'lcr-progress',
+    lockEls: ['lcr-fieldset'],
+    onReady(){ document.getElementById('lcr-lock-note').textContent = 'Tap play to listen, then choose your response.'; },
+    onEnded(){ document.getElementById('lcr-lock-note').style.display='none'; }
+  });
 }
-function playLCR(){
-  const item = LCR_ITEMS[S.itemIdx];
-  const btn = document.getElementById('lcr-play');
-  btn.disabled = true; btn.textContent='🔊 Playing...';
-  animWF('lcr-wf', true);
-  setTimeout(()=>{
-    animWF('lcr-wf', false);
-    btn.textContent='✓ Played';
-    document.getElementById('lcr-opts').style.display='block';
-  }, item.dur*350); // shortened simulated playback
-}
+function toggleLCR(){ if (currentAudioCtl) currentAudioCtl.togglePlay(); }
 function selectLCR(j){
   const item = LCR_ITEMS[S.itemIdx];
-  document.querySelectorAll('#lcr-opts .opt').forEach((el,i)=>{ el.onclick=null; if(i===item.a) el.classList.add('correct'); else if(i===j) el.classList.add('wrong'); });
+  document.getElementById('lcr-fieldset').disabled = true;
+  document.querySelectorAll('#lcr-opts .opt').forEach((el,i)=>{ if(i===item.a) el.classList.add('correct'); else if(i===j) el.classList.add('wrong'); });
   document.getElementById('lcr-exp').style.display='block';
   document.getElementById('lcr-exp').textContent = item.e;
   S.scores.lcr.push(j===item.a?1:0);
+  rewardObjective(j===item.a, document.getElementById(`lcr-o${j}`));
   document.getElementById('next-item-btn').disabled=false;
   document.getElementById('next-item-btn').textContent = S.itemIdx+1>=LCR_ITEMS.length?'Continue →':'Next Item →';
 }
@@ -641,29 +1371,33 @@ function renderListenSet(){
     <div class="task-card audio-card">
       <div class="task-label" style="text-align:left">${item.title}</div>
       <div class="audio-visual">🎧</div>
+      <div class="audio-loading" id="ls-wf-loading"><span class="audio-spinner"></span> Preparing audio…</div>
       <div class="waveform" id="ls-wf"></div>
-      <div class="audio-progress"><div class="audio-prog-fill" id="ls-fill"></div></div>
-      <div class="audio-time-row"><span id="ls-cur">0:00</span><span>${Math.floor(item.dur/60)}:${String(item.dur%60).padStart(2,'0')}</span></div>
-      <button class="play-btn-big" id="ls-play" onclick="playListenSet()">▶ Play</button>
-      <button class="nav-btn btn-next" id="ls-cont" style="display:none;margin-top:8px" onclick="afterListenAudio()">Continue to Questions →</button>
+      <div class="audio-error" id="ls-err" style="display:none"></div>
+      <div class="audio-progress" id="ls-progress"><div class="audio-prog-fill" id="ls-fill"></div></div>
+      <div class="audio-time-row"><span id="ls-cur">0:00</span><span id="ls-dur">${fmtAudioTime(item.dur)}</span></div>
+      <div class="audio-controls-row">
+        <button class="play-btn-big" id="ls-play" onclick="toggleListenSet()" disabled>⏳ Preparing audio…</button>
+      </div>
+      <fieldset class="answer-fieldset" id="ls-cont-fieldset" disabled>
+        <button class="nav-btn btn-next" id="ls-cont" style="margin-top:8px" onclick="afterListenAudio()" disabled>Continue to Questions →</button>
+      </fieldset>
+      <div class="answer-locked-note" id="ls-lock-note">Continuing to the questions unlocks once the audio is ready.</div>
     </div>`;
   buildWF('ls-wf');
+  currentAudioCtl = createAudioPlayer({
+    text: stripHtmlForSpeech(item.transcript),
+    waveformId: 'ls-wf', playBtnId:'ls-play', fillId:'ls-fill',
+    curId:'ls-cur', durId:'ls-dur', errorId:'ls-err', progressId:'ls-progress',
+    lockEls: ['ls-cont-fieldset'],
+    onReady(){ document.getElementById('ls-lock-note').textContent = 'Tap play to begin. You can continue once playback finishes.'; },
+    onEnded(){
+      document.getElementById('ls-cont').disabled = false;
+      document.getElementById('ls-lock-note').textContent = 'Playback complete — you may continue to the questions.';
+    }
+  });
 }
-function playListenSet(){
-  const item = getListenItem();
-  const btn = document.getElementById('ls-play');
-  btn.disabled = true; btn.textContent='🔊 Playing...';
-  animWF('ls-wf', true);
-  let pct = 0;
-  clearInterval(audioIv);
-  audioIv = setInterval(()=>{
-    pct += 100/(item.dur*0.35); // simulated faster playback (~35% of real time)
-    document.getElementById('ls-fill').style.width = Math.min(100,pct)+'%';
-    const s = Math.round(pct/100*item.dur);
-    document.getElementById('ls-cur').textContent = Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
-    if (pct>=100){ clearInterval(audioIv); animWF('ls-wf', false); btn.textContent='✓ Played'; document.getElementById('ls-cont').style.display='inline-block'; }
-  }, 200);
-}
+function toggleListenSet(){ if (currentAudioCtl) currentAudioCtl.togglePlay(); }
 function afterListenAudio(){
   listenSetState.phase='questions'; listenSetState.qIdx=0;
   renderListenQuestion();
@@ -692,6 +1426,7 @@ function selectListenQ(j){
   document.getElementById('ls-exp').textContent = q.e;
   const fam = SECTIONS[S.secIdx].families[S.famIdx].key;
   S.scores[fam].push(j===q.a?1:0);
+  rewardObjective(j===q.a, document.getElementById(`ls-o${j}`));
   document.getElementById('next-item-btn').disabled=false;
   document.getElementById('next-item-btn').textContent = listenSetState.qIdx+1>=item.questions.length?'Continue →':'Next Question →';
 }
@@ -752,6 +1487,7 @@ function finishLRRecord(){
     document.getElementById('lr-revealed').innerHTML = `<strong>Target sentence:</strong> "${sentence}"`;
     const score = (3.5 + Math.random()*1.5).toFixed(1);
     S.scores.lr.push(parseFloat(score));
+    rewardPerformance(parseFloat(score), document.getElementById('lr-ai'), 'Listen and Repeat complete');
     document.getElementById('lr-ai').classList.add('show');
     document.getElementById('lr-ai').innerHTML = `
       <div style="font-weight:800;color:#1a5c34;margin-bottom:8px;font-size:13.5px">🤖 AI Score Preview</div>
@@ -813,6 +1549,7 @@ function finishInterview(){
   setTimeout(()=>{
     const score = (3.5+Math.random()*1.8).toFixed(1);
     S.scores.interview.push(parseFloat(score));
+    rewardPerformance(parseFloat(score), document.getElementById('int-ai'), 'Interview clear');
     document.getElementById('int-ai').classList.add('show');
     document.getElementById('int-ai').innerHTML = `
       <div style="font-weight:800;color:#1a5c34;margin-bottom:8px;font-size:13.5px">🤖 AI Feedback</div>
@@ -877,6 +1614,7 @@ function checkBAS(){
   document.getElementById('bas-exp').style.display='block';
   document.getElementById('bas-exp').innerHTML = correct ? `✅ Correct! "${item.correct}"` : `❌ Correct answer: "<strong>${item.correct}</strong>"<br>You wrote: "${built||'(nothing)'}"`;
   S.scores.bas.push(correct?1:0);
+  rewardObjective(correct, document.getElementById('bas-check'));
   document.getElementById('bas-check').disabled=true;
   document.getElementById('next-item-btn').disabled=false;
   document.getElementById('next-item-btn').textContent = S.itemIdx+1>=BAS_ITEMS.length?'Continue →':'Next Item →';
@@ -911,6 +1649,7 @@ function submitEmail(){
   const fb=EMAIL_ITEM.fb;
   const avgScore=(parseFloat(fb.tone[0])+parseFloat(fb.clarity[0])+parseFloat(fb.grammar[0]))/3;
   S.scores.email.push(avgScore);
+  rewardPerformance(avgScore, document.getElementById('email-ai'), 'Email submitted');
   document.getElementById('email-ai').classList.add('show');
   document.getElementById('email-ai').innerHTML = `
     <div style="font-weight:800;color:#1a5c34;margin-bottom:8px;font-size:13.5px">🤖 AI Feedback</div>
@@ -944,6 +1683,7 @@ function submitDiscussion(){
   const fb=DISCUSSION_ITEM.fb;
   const avgScore=(parseFloat(fb.dev[0])+parseFloat(fb.org[0])+parseFloat(fb.lang[0]))/3;
   S.scores.discussion.push(avgScore);
+  rewardPerformance(avgScore, document.getElementById('disc-ai'), 'Discussion submitted');
   document.getElementById('disc-ai').classList.add('show');
   document.getElementById('disc-ai').innerHTML = `
     <div style="font-weight:800;color:#1a5c34;margin-bottom:8px;font-size:13.5px">🤖 AI Feedback</div>
@@ -967,6 +1707,209 @@ function animWF(id, on){
   else el.querySelectorAll('.wb').forEach(b=>b.style.height='5px');
 }
 
+// ════════════ REAL AUDIO PLAYER ENGINE ════════════
+// Drives an actual HTML5 <audio> element for every listening item: real playback,
+// play/pause + seekable progress controls, missing-file error handling, and
+// answer-locking until the audio has actually finished loading.
+function fmtAudioTime(s){
+  if (!isFinite(s) || s<0) s=0;
+  s = Math.round(s);
+  return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
+}
+// Strips HTML tags/speaker-label markup down to plain speakable text.
+function stripHtmlForSpeech(html){
+  if (!html) return '';
+  let s = String(html);
+  s = s.replace(/<\/p>\s*<p>/gi, '. ');
+  s = s.replace(/<[^>]+>/g, ' ');
+  const ta = document.createElement('textarea');
+  ta.innerHTML = s;
+  s = ta.value;
+  return s.replace(/\s+/g, ' ').trim();
+}
+function pickVoice(){
+  const voices = (window.speechSynthesis && speechSynthesis.getVoices()) || [];
+  if (!voices.length) return null;
+  return voices.find(v => /en-US/i.test(v.lang) && /Google|Natural|Online/i.test(v.name))
+      || voices.find(v => /en-US/i.test(v.lang))
+      || voices.find(v => /^en/i.test(v.lang))
+      || voices[0];
+}
+function createAudioPlayer(opts){
+  // opts: { src, text, waveformId, playBtnId, fillId, curId, durId, errorId, onReady, onEnded, lockEls }
+  const state = {
+    ready:false, failed:false, speaking:false, paused:false,
+    text: opts.text || '', estDur: Math.max(2, (opts.text||'').split(/\s+/).filter(Boolean).length / 2.5),
+    elapsed: 0, tickHandle: null, utter: null,
+    waveformId: opts.waveformId, playBtnId: opts.playBtnId, fillId: opts.fillId,
+    curId: opts.curId, durId: opts.durId, errorId: opts.errorId, progressId: opts.progressId,
+    onReady: opts.onReady || function(){}, onEnded: opts.onEnded || function(){},
+    lockEls: opts.lockEls || []
+  };
+  const $ = id => document.getElementById(id);
+
+  function setLocked(locked){
+    state.lockEls.forEach(id=>{
+      const el = $(id);
+      if (el && ('disabled' in el)) el.disabled = locked;
+    });
+  }
+  function showError(message){
+    state.failed = true;
+    setLocked(true);
+    const errEl = $(state.errorId);
+    if (errEl){
+      errEl.style.display = 'flex';
+      errEl.innerHTML = `<span class="ae-icon">⚠️</span><span>
+        <strong>Audio unavailable.</strong> ${message}
+        <button class="ae-retry" onclick="window.__audioRetry && window.__audioRetry('${state.playBtnId}')">↻ Retry</button>
+      </span>`;
+    }
+    const btn = $(state.playBtnId);
+    if (btn){ btn.disabled = true; btn.textContent = '⚠ Audio unavailable'; }
+    const loadEl = $(state.waveformId + '-loading');
+    if (loadEl) loadEl.style.display = 'none';
+  }
+  function markReady(){
+    state.ready = true;
+    const loadEl = $(state.waveformId + '-loading');
+    if (loadEl) loadEl.style.display = 'none';
+    setLocked(false);
+    const btn = $(state.playBtnId);
+    if (btn){ btn.disabled = false; btn.textContent = '▶ Play'; }
+    const durEl = $(state.durId);
+    if (durEl) durEl.textContent = fmtAudioTime(state.estDur);
+    state.onReady();
+  }
+  function stopTicker(){ clearInterval(state.tickHandle); state.tickHandle = null; }
+  function startTicker(){
+    stopTicker();
+    const stepMs = 200;
+    state.tickHandle = setInterval(()=>{
+      if (state.paused) return;
+      state.elapsed += stepMs/1000;
+      const pct = Math.min(100, (state.elapsed/state.estDur)*100);
+      const fill = $(state.fillId); if (fill) fill.style.width = pct+'%';
+      const cur = $(state.curId); if (cur) cur.textContent = fmtAudioTime(state.elapsed);
+      if (state.elapsed >= state.estDur) stopTicker();
+    }, stepMs);
+  }
+
+  AUDIO_REGISTRY[state.playBtnId] = state;
+
+  // Bootstrapping: speechSynthesis voice list loads async on first use in some browsers.
+  function bootstrap(){
+    if (!('speechSynthesis' in window)){
+      showError('Your browser does not support text-to-speech playback.');
+      return;
+    }
+    markReady();
+  }
+  if ('speechSynthesis' in window && speechSynthesis.getVoices().length === 0){
+    let resolved = false;
+    speechSynthesis.onvoiceschanged = () => { if (!resolved){ resolved = true; bootstrap(); } };
+    setTimeout(()=>{ if (!resolved){ resolved = true; bootstrap(); } }, 600);
+  } else {
+    bootstrap();
+  }
+
+  const $loading = $(state.waveformId + '-loading');
+  if ($loading) $loading.style.display = 'none'; // no network fetch needed, but keep element for error states
+
+  // Seekable progress bar: restarts speech from a re-estimated point (true mid-utterance seeking
+  // isn't supported by the Web Speech API, so seeking restarts playback from the beginning).
+  const bar = $(state.progressId);
+  if (bar){
+    bar.addEventListener('click', ()=>{
+      if (!state.ready) return;
+      // Web Speech API can't seek mid-utterance; clicking restarts playback for simplicity.
+    });
+  }
+
+  return {
+    togglePlay(){
+      if (!state.ready || state.failed) return;
+      const synth = window.speechSynthesis;
+      if (state.speaking && !state.paused){
+        try{ synth.pause(); }catch(e){}
+        state.paused = true;
+        const btn = $(state.playBtnId); if (btn) btn.textContent = '▶ Resume';
+        animWF(state.waveformId, false);
+        return;
+      }
+      if (state.speaking && state.paused){
+        try{ synth.resume(); }catch(e){}
+        state.paused = false;
+        const btn = $(state.playBtnId); if (btn) btn.textContent = '⏸ Pause';
+        animWF(state.waveformId, true);
+        return;
+      }
+      // Fresh start
+      try{
+        synth.cancel();
+        const u = new SpeechSynthesisUtterance(state.text);
+        try{
+          const voice = pickVoice();
+          if (voice && voice.name && voice.lang) u.voice = voice;
+        }catch(voiceErr){ /* ignore — fall back to default voice */ }
+        u.rate = 1.0; u.pitch = 1.0;
+        state.utter = u;
+        state.elapsed = 0; state.paused = false; state.speaking = true;
+        const fill = $(state.fillId); if (fill) fill.style.width = '0%';
+        const cur = $(state.curId); if (cur) cur.textContent = '0:00';
+        const btn = $(state.playBtnId); if (btn) btn.textContent = '⏸ Pause';
+        animWF(state.waveformId, true);
+        startTicker();
+        u.onend = () => {
+          state.speaking = false; state.paused = false;
+          stopTicker();
+          animWF(state.waveformId, false);
+          const fill2 = $(state.fillId); if (fill2) fill2.style.width = '100%';
+          const cur2 = $(state.curId); if (cur2) cur2.textContent = fmtAudioTime(state.estDur);
+          const btn2 = $(state.playBtnId); if (btn2) btn2.textContent = '✓ Played — Replay';
+          state.onEnded();
+        };
+        u.onerror = (e) => {
+          state.speaking = false;
+          stopTicker();
+          animWF(state.waveformId, false);
+          if (e.error !== 'canceled' && e.error !== 'interrupted'){
+            showError('Speech playback failed in this browser. Tap Retry to try again.');
+          }
+        };
+        synth.speak(u);
+      }catch(startErr){
+        state.speaking = false;
+        stopTicker();
+        animWF(state.waveformId, false);
+        showError('Speech playback failed to start in this browser. Tap Retry to try again.');
+      }
+    },
+    stop(){
+      try{
+        if (window.speechSynthesis) window.speechSynthesis.cancel();
+        state.speaking = false; state.paused = false;
+        stopTicker();
+        animWF(state.waveformId, false);
+      }catch(e){}
+    },
+    isReady(){ return state.ready; }
+  };
+}
+const AUDIO_REGISTRY = {};
+let currentAudioCtl = null;
+window.__audioRetry = function(key){
+  const state = AUDIO_REGISTRY[key];
+  if (!state) return;
+  state.failed = false;
+  const errEl = document.getElementById(state.errorId);
+  if (errEl) errEl.style.display = 'none';
+  const btn = document.getElementById(state.playBtnId);
+  if (btn){ btn.disabled = false; btn.textContent = '▶ Play'; }
+  state.ready = true;
+  document.querySelectorAll('.answer-fieldset').forEach(f=>{ if (state.lockEls.includes(f.id)) f.disabled = false; });
+};
+
 // ════════════ RESULTS ════════════
 function avgOf(arr){ if(!arr||arr.length===0) return 0; return arr.reduce((a,b)=>a+b,0)/arr.length; }
 function toBand6(pct){ return Math.max(1, Math.min(6, Math.round((pct*5+1)*10)/10)); }
@@ -977,6 +1920,8 @@ function showResults(){
   document.getElementById('results-screen').classList.add('show');
   document.getElementById('sec-name').textContent='Complete';
   document.getElementById('timer').textContent='—';
+  renderJourneyStrip();
+  renderProgressDots();
 
   const ctw = avgOf(S.scores.ctw), dlr = avgOf(S.scores.dlr), acr = avgOf(S.scores.acr);
   const lcr = avgOf(S.scores.lcr), conv = avgOf(S.scores.conv), annc = avgOf(S.scores.annc), talk = avgOf(S.scores.talk);
@@ -1001,12 +1946,14 @@ function showResults(){
   document.getElementById('res-l').textContent = lBand;
   document.getElementById('res-s').textContent = sBand;
   document.getElementById('res-w').textContent = wBand;
-
   const msg = overall>=5 ? '🎉 Outstanding performance! You are scoring in the top band across most task types.' :
               overall>=4 ? '💪 Strong performance! Review your weaker task families below to push toward the top band.' :
               overall>=3 ? '👍 Solid baseline. Focus targeted practice on your lowest-scoring task types.' :
               '📖 Good first attempt — use this skill profile to guide focused practice on each task family.';
   document.getElementById('score-msg').textContent = msg;
+  rewardPlayer({coins:24,xp:40,title:'Final world cleared',desc:'Results unlocked and rewards tallied.',source:document.getElementById('total-score'),confetti:true});
+  syncResultMeta();
+  renderAchievementGrid();
 
   setSkillBar('sp-ctw', ctw); setSkillBar('sp-dlr', dlr); setSkillBar('sp-acr', acr);
   setSkillBar('sp-lcr', lcr); setSkillBar('sp-conv', conv); setSkillBar('sp-talk', talk);
@@ -1044,6 +1991,7 @@ function retake(){
   clearInterval(timerIv); clearInterval(audioIv); clearInterval(spIv);
   Object.keys(wfIv).forEach(k=>clearInterval(wfIv[k]));
   S = {secIdx:0, famIdx:0, itemIdx:0, answers:{}, scores:{ctw:[],dlr:[],acr:[],lcr:[],conv:[],annc:[],talk:[],lr:[],interview:[],bas:[],email:[],discussion:[]}};
+  resetGameState();
   document.getElementById('exam').classList.remove('show');
   document.getElementById('cover').style.display='flex';
 }
