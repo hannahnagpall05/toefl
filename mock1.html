@@ -748,20 +748,34 @@ button,input,textarea{font-family:inherit}
 </div>
 
 <script>
+// Warm up the speech synthesis voice list as early as possible; some browsers
+// populate it asynchronously, so calling getVoices() here reduces false
+// "no voices installed" errors on the very first audio task.
+if ('speechSynthesis' in window){
+  speechSynthesis.getVoices();
+  speechSynthesis.onvoiceschanged = () => { speechSynthesis.getVoices(); };
+}
 // ╔══════════════════════════════════════════════════════════╗
 // ║   TOEFL iBT 2026 — TASK DATA (12 task types, 1-6 scale)  ║
 // ╚══════════════════════════════════════════════════════════╝
 
-const CTW_ITEMS = [
-  {sentence:"The committee decided to postp___ the meeting until next week due to scheduling conflicts.", answer:"one", full:"postpone"},
-  {sentence:"Her argument was based on emp___al evidence gathered over several years of research.", answer:"iric", full:"empirical"},
-  {sentence:"The professor asked students to summ___ the article in no more than three sentences.", answer:"arize", full:"summarize"},
-  {sentence:"Despite the criticism, she remained conf___ in her conclusions.", answer:"ident", full:"confident"},
-  {sentence:"The new policy will grad___ replace the older system over the next two years.", answer:"ually", full:"gradually"},
-  {sentence:"Researchers were unable to verify the claim due to insuf___ data.", answer:"ficient", full:"insufficient"},
-  {sentence:"The lecture covered the hist___ origins of the printing press.", answer:"orical", full:"historical"},
-  {sentence:"Students must subm___ their assignments before the deadline.", answer:"it", full:"submit"}
-];
+const CTW_PASSAGE = {
+  title: "Bee Navigation",
+  text: "Honeybees rely on several senses to find their way back to the hive. A bee that disc___s a rich patch of flowers will perform a \"waggle dance,\" moving in a fig___-eight pattern that enc___s direction and distance for other bees to interp___. This is partic___ impressive given that bees must const___ adjust their calculations as the sun's position ch___s. In ad___ to the sun, bees use polarized light and the Earth's magnetic field to keep their se__ of direction, even when clouds obs___ the sky.",
+  blanks: [
+    {answer:"over", full:"discovers"},
+    {answer:"ure", full:"figure"},
+    {answer:"ode", full:"encodes"},
+    {answer:"ret", full:"interpret"},
+    {answer:"ularly", full:"particularly"},
+    {answer:"antly", full:"constantly"},
+    {answer:"anges", full:"changes"},
+    {answer:"dition", full:"addition"},
+    {answer:"nse", full:"sense"},
+    {answer:"cure", full:"obscure"}
+  ]
+};
+
 
 const DLR_ITEMS = [
   {
@@ -839,17 +853,23 @@ const TALK_ITEM = {
   ]
 };
 
+const LISTEN_REPEAT_SCENARIO = "You are being trained to guide visitors in an art museum. Listen to your trainer and repeat what they say. Repeat only once.";
 const LISTEN_REPEAT_ITEMS = [
-  "The library closes at midnight during final exam week.",
-  "She submitted her application before the deadline expired.",
-  "Could you please forward me the notes from yesterday's lecture?",
-  "The committee will announce their decision next Monday morning."
+  "Is this your first time at our museum?",
+  "For modern art, visit the Eastern Wing.",
+  "Classical paintings are located on the second floor.",
+  "The new exhibit of self-portraits is very popular.",
+  "We offer group tours of gallery highlights at no extra charge.",
+  "Unfortunately, the sculpture hall is currently under renovation.",
+  "Our gift shop is running a special promotion on a wide selection of books."
 ];
 
+const INTERVIEW_INTRO = "You have volunteered for a research study about study habits. You will have a short online interview with a researcher. The researcher will ask you some questions. Thank you for your participation.";
 const INTERVIEW_ITEMS = [
-  {q:"What do you usually do to relax after a long day of studying or working?", prepT:5, recT:30},
-  {q:"Describe a teacher or mentor who had a positive influence on you.", prepT:8, recT:45},
-  {q:"Do you think it's better to live in a big city or a small town? Why?", prepT:8, recT:45}
+  {q:"I have some questions about your study habits. First, where do you usually like to study — for example, at home, in a library, or somewhere else? Why do you prefer that place?", prepT:0, recT:45},
+  {q:"Thank you. When you're preparing for an exam, do you prefer to study alone or together with classmates or friends? Why?", prepT:0, recT:45},
+  {q:"Interesting. Next, I'd like to get your opinion. Where I live, more students are studying using online tools and apps instead of textbooks. Do you think this trend will continue to grow in the place you live? Why or why not?", prepT:0, recT:45},
+  {q:"Good points. I just have one more question. Some people believe that taking regular breaks while studying improves focus and memory. Do you agree with this idea, or do you think studying for long stretches without breaks is more effective? Explain why you think so.", prepT:0, recT:45}
 ];
 
 const BAS_ITEMS = [
@@ -884,7 +904,7 @@ const DISCUSSION_ITEM = {
 // Task family sequence
 const SECTIONS = [
   {key:'reading', label:'Reading', time:30*60, families:[
-    {key:'ctw', icon:'🔤', title:'Complete the Words', desc:'Fill in the missing letters to complete each word based on the sentence context. You will see 8 items.'},
+    {key:'ctw', icon:'🔤', title:'Complete the Words', desc:'Read a short academic paragraph and type the missing letters to complete 10 words based on context. Spelling must be exact.'},
     {key:'dlr', icon:'📄', title:'Read in Daily Life', desc:'Read short everyday documents — notices, emails, texts — and answer one question about each. You will see 3 items.'},
     {key:'acr', icon:'📖', title:'Read an Academic Passage', desc:'Read one academic passage and answer questions about it. You will see 3 items.'}
   ]},
@@ -895,8 +915,8 @@ const SECTIONS = [
     {key:'talk', icon:'🎓', title:'Listen to an Academic Talk', desc:'Listen to a short academic lecture excerpt, then answer questions about it.'}
   ]},
   {key:'speaking', label:'Speaking', time:8*60, families:[
-    {key:'lr', icon:'🔁', title:'Listen and Repeat', desc:'You will hear a sentence once. Repeat it back as accurately and clearly as possible. You will do this 4 times.'},
-    {key:'interview', icon:'🎤', title:'Take an Interview', desc:'Answer 3 short interview-style questions. You will have brief preparation time before each response.'}
+    {key:'lr', icon:'🔁', title:'Listen and Repeat', desc:'You will be given a real-world scenario, then hear 7 related sentences one at a time. Repeat each one exactly as you heard it — only once.'},
+    {key:'interview', icon:'🎤', title:'Take an Interview', desc:'An interviewer will ask you 4 connected questions on one topic. Answer each fully — no preparation time is given.'}
   ]},
   {key:'writing', label:'Writing', time:23*60, families:[
     {key:'bas', icon:'🧩', title:'Build a Sentence', desc:'Tap words in the correct order to build a grammatically correct sentence in response to a prompt. You will see 3 items.'},
@@ -1224,7 +1244,7 @@ function updateItemCounter(){
 function advanceItem(){
   S.itemIdx++;
   const fam = SECTIONS[S.secIdx].families[S.famIdx].key;
-  const lens = {ctw:CTW_ITEMS.length, dlr:DLR_ITEMS.length, acr:1, lcr:LCR_ITEMS.length, conv:1, annc:1, talk:1, lr:LISTEN_REPEAT_ITEMS.length, interview:INTERVIEW_ITEMS.length, bas:BAS_ITEMS.length, email:1, discussion:1};
+  const lens = {ctw:1, dlr:DLR_ITEMS.length, acr:1, lcr:LCR_ITEMS.length, conv:1, annc:1, talk:1, lr:LISTEN_REPEAT_ITEMS.length, interview:INTERVIEW_ITEMS.length, bas:BAS_ITEMS.length, email:1, discussion:1};
   if (S.itemIdx >= lens[fam]) { advanceFamily(false); }
   else { renderCurrentItem(); }
 }
@@ -1253,31 +1273,50 @@ function footerHTML(label, disabled){
 
 // ════════════ READING: Complete the Words ════════════
 function renderCTW(){
-  const item = CTW_ITEMS[S.itemIdx];
+  let blankIdx = 0;
+  const passageHTML = CTW_PASSAGE.text.replace(/_+/g, () => {
+    const i = blankIdx++;
+    return `<input type="text" class="blank-input" id="ctw-input-${i}" data-idx="${i}" maxlength="14" autocomplete="off" autocapitalize="off" spellcheck="false">`;
+  });
   const stage = document.getElementById('stage-inner');
   stage.innerHTML = `
     <div class="task-card">
-      <div class="task-label">Complete the Words · Item ${S.itemIdx+1} of ${CTW_ITEMS.length}</div>
-      <div class="word-blank-row">${item.sentence.replace('___','<input type="text" class="blank-input" id="ctw-input" maxlength="12" autocomplete="off">')}</div>
-      <div id="ctw-feedback" style="font-size:13px;color:#888;margin-top:8px"></div>
-      ${footerHTML('Check & Next →', false)}
+      <div class="task-label">Complete the Words</div>
+      <p style="font-size:13px;color:#888;margin-bottom:10px">Type the missing letters to complete each word. Spelling must be exact — no partial credit per word.</p>
+      <div class="word-blank-row" style="line-height:2.4">${passageHTML}</div>
+      <div id="ctw-feedback" style="font-size:13px;color:#888;margin-top:10px"></div>
+      <button class="nav-btn btn-next" id="ctw-submit" style="margin-top:10px" onclick="checkCTW()">Check Answers</button>
+      ${footerHTML('Continue →', true)}
     </div>`;
-  document.getElementById('next-item-btn').onclick = () => checkCTW(item);
-  document.getElementById('ctw-input').focus();
-  document.getElementById('ctw-input').addEventListener('keydown', e=>{ if(e.key==='Enter') checkCTW(item); });
+  document.getElementById('ctw-input-0').focus();
+  CTW_PASSAGE.blanks.forEach((b,i)=>{
+    const inp = document.getElementById('ctw-input-'+i);
+    inp.addEventListener('keydown', e=>{
+      if (e.key==='Enter'){
+        const next = document.getElementById('ctw-input-'+(i+1));
+        if (next) next.focus(); else checkCTW();
+      }
+    });
+  });
 }
-function checkCTW(item){
-  const inp = document.getElementById('ctw-input');
-  const val = inp.value.trim().toLowerCase();
-  const correct = val === item.answer.toLowerCase();
-  inp.classList.add(correct?'correct':'wrong');
-  inp.disabled = true;
-  document.getElementById('ctw-feedback').innerHTML = correct ? `✅ Correct! The word is "<strong>${item.full}</strong>"` : `❌ The correct word was "<strong>${item.full}</strong>" (you wrote "${val||'(blank)'}")`;
-  S.scores.ctw.push(correct?1:0);
-  rewardObjective(correct, inp);
-  document.getElementById('next-item-btn').textContent = S.itemIdx+1>=CTW_ITEMS.length?'Continue →':'Next Item →';
-  document.getElementById('next-item-btn').onclick = advanceItem;
+function checkCTW(){
+  let correctCount = 0;
+  CTW_PASSAGE.blanks.forEach((b,i)=>{
+    const inp = document.getElementById('ctw-input-'+i);
+    const val = inp.value.trim().toLowerCase();
+    const correct = val === b.answer.toLowerCase();
+    inp.classList.add(correct?'correct':'wrong');
+    inp.disabled = true;
+    inp.title = correct ? `Correct: ${b.full}` : `You wrote "${val||'(blank)'}" — correct answer: ${b.full}`;
+    S.scores.ctw.push(correct?1:0);
+    if (correct) correctCount++;
+  });
+  document.getElementById('ctw-submit').disabled = true;
+  document.getElementById('ctw-feedback').innerHTML = `<strong>${correctCount}/${CTW_PASSAGE.blanks.length} correct.</strong> Hover any blank to see the full word and correct spelling.`;
+  rewardObjective(correctCount >= Math.ceil(CTW_PASSAGE.blanks.length*0.6), document.getElementById('ctw-submit'));
+  document.getElementById('next-item-btn').disabled = false;
 }
+
 
 // ════════════ READING: Daily Life ════════════
 function renderDLR(){
@@ -1532,8 +1571,9 @@ function renderListenRepeat(){
   const stage = document.getElementById('stage-inner');
   stage.innerHTML = `
     <div class="task-card" style="text-align:center">
-      <div class="task-label">Listen and Repeat · Item ${S.itemIdx+1} of ${LISTEN_REPEAT_ITEMS.length}</div>
-      <p style="font-size:13px;color:#888;margin-bottom:14px">Listen once. The sentence will NOT be shown until after you respond.</p>
+      <div class="task-label">Listen and Repeat · Sentence ${S.itemIdx+1} of ${LISTEN_REPEAT_ITEMS.length}</div>
+      ${S.itemIdx===0 ? `<div class="task-context" style="text-align:left;margin-bottom:14px">${LISTEN_REPEAT_SCENARIO}</div>` : ''}
+      <p style="font-size:13px;color:#888;margin-bottom:14px">Listen carefully, then repeat exactly what you heard. Repeat only once.</p>
       <div class="waveform" id="lr-wf"></div>
       <button class="play-btn-big" id="lr-play" onclick="playLR()">▶ Play Sentence</button>
       <div class="speak-phase" id="lr-phase" style="display:none">Tap the mic, then repeat the sentence</div>
@@ -1549,6 +1589,15 @@ function playLR(){
   const item = LISTEN_REPEAT_ITEMS[S.itemIdx];
   const text = item;
   const btn = document.getElementById('lr-play');
+  const errEl = document.getElementById('lr-err');
+  if (errEl) errEl.style.display = 'none';
+  if (!('speechSynthesis' in window) || speechSynthesis.getVoices().length === 0){
+    if (errEl){
+      errEl.style.display = 'block';
+      errEl.textContent = '⚠ No text-to-speech voice is available on this device. Install a voice pack in your OS speech settings, then reload this page.';
+    }
+    return;
+  }
   btn.disabled=true; btn.textContent='🔊 Playing...';
   animWF('lr-wf', true);
   try{
@@ -1562,18 +1611,23 @@ function playLR(){
       document.getElementById('lr-phase').style.display='block';
       document.getElementById('lr-mic').style.display='flex';
     };
-    u.onerror = () => {
+    u.onerror = (e) => {
       animWF('lr-wf', false);
-      btn.style.display='none';
-      document.getElementById('lr-phase').style.display='block';
-      document.getElementById('lr-mic').style.display='flex';
+      if (e.error === 'canceled' || e.error === 'interrupted') return;
+      btn.disabled = false; btn.textContent = '↻ Retry Play Sentence';
+      if (errEl){
+        errEl.style.display = 'block';
+        errEl.textContent = '⚠ Speech playback failed in this browser (' + e.error + '). Tap Play Sentence to try again.';
+      }
     };
     speechSynthesis.speak(u);
   }catch(e){
     animWF('lr-wf', false);
-    btn.style.display='none';
-    document.getElementById('lr-phase').style.display='block';
-    document.getElementById('lr-mic').style.display='flex';
+    btn.disabled = false; btn.textContent = '↻ Retry Play Sentence';
+    if (errEl){
+      errEl.style.display = 'block';
+      errEl.textContent = '⚠ Speech playback failed to start in this browser. Tap Play Sentence to try again.';
+    }
   }
 }
 let lrRecording=false, lrRecognizer=null, lrStartTime=0;
@@ -1645,8 +1699,9 @@ function renderInterview(){
   stage.innerHTML = `
     <div class="task-card" style="text-align:center">
       <div class="task-label">Take an Interview · Question ${S.itemIdx+1} of ${INTERVIEW_ITEMS.length}</div>
+      ${S.itemIdx===0 ? `<div class="task-context" style="text-align:left;margin-bottom:14px">${INTERVIEW_INTRO}</div>` : ''}
       <p style="font-size:15px;font-weight:700;color:#111;margin:12px 0 16px">${item.q}</p>
-      <div class="speak-phase" id="int-phase">Press Begin to start preparation time (${item.prepT}s).</div>
+      <div class="speak-phase" id="int-phase">No preparation time is given. Press Begin to start recording your ${item.recT}-second response.</div>
       <div class="speak-timer-big" id="int-timer">—</div>
       <div class="speak-wf" id="int-wf"></div>
       <div class="mic-ring mic-prep" id="int-mic">🎤</div>
@@ -1658,15 +1713,9 @@ function renderInterview(){
 }
 function beginInterview(){
   const item = INTERVIEW_ITEMS[S.itemIdx];
-  let s = item.prepT;
   document.getElementById('int-begin').style.display='none';
-  document.getElementById('int-phase').textContent = `⏱ Preparing — ${s}s`;
-  document.getElementById('int-timer').textContent = fmtTime(s);
-  clearInterval(spIv);
-  spIv = setInterval(()=>{
-    s--; document.getElementById('int-timer').textContent = fmtTime(s);
-    if (s<=0){ clearInterval(spIv); beginInterviewRecord(item); }
-  }, 1000);
+  // The real exam gives no preparation time for Take an Interview — recording starts immediately.
+  beginInterviewRecord(item);
 }
 function beginInterviewRecord(item){
   let s = item.recT;
@@ -1990,7 +2039,12 @@ function createAudioPlayer(opts){
   // Bootstrapping: speechSynthesis voice list loads async on first use in some browsers.
   function bootstrap(){
     if (!('speechSynthesis' in window)){
-      showError('Your browser does not support text-to-speech playback.');
+      showError('Your browser does not support text-to-speech playback. Try Chrome, Edge, or Safari.');
+      return;
+    }
+    const voices = speechSynthesis.getVoices();
+    if (!voices || voices.length === 0){
+      showError('No voices are installed for text-to-speech on this device. On Windows, install a "Speech" language pack in Settings; on Android, install/update "Google Speech Services" and a US English voice; then reload this page.');
       return;
     }
     markReady();
@@ -1998,7 +2052,7 @@ function createAudioPlayer(opts){
   if ('speechSynthesis' in window && speechSynthesis.getVoices().length === 0){
     let resolved = false;
     speechSynthesis.onvoiceschanged = () => { if (!resolved){ resolved = true; bootstrap(); } };
-    setTimeout(()=>{ if (!resolved){ resolved = true; bootstrap(); } }, 600);
+    setTimeout(()=>{ if (!resolved){ resolved = true; bootstrap(); } }, 1200);
   } else {
     bootstrap();
   }
@@ -2152,7 +2206,7 @@ function showResults(){
 
   // Answer review (objective items only)
   let html = '';
-  html += reviewBlock('Complete the Words', CTW_ITEMS.map(i=>i.full), S.scores.ctw);
+  html += reviewBlock('Complete the Words', CTW_PASSAGE.blanks.map(b=>b.full), S.scores.ctw);
   html += reviewBlock('Read in Daily Life', DLR_ITEMS.map(i=>i.q), S.scores.dlr);
   html += reviewBlock('Academic Passage', ACR_PASSAGE.questions.map(q=>q.q), S.scores.acr);
   html += reviewBlock('Listen & Choose Response', LCR_ITEMS.map(i=>i.audio_text), S.scores.lcr);
