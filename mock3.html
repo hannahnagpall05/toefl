@@ -1051,9 +1051,14 @@ function rewardObjective(correct, source){
   }
 }
 function rewardPerformance(score, source, label){
-  const coins = Math.max(6, Math.round(score*3));
-  const xp = Math.max(16, Math.round(score*8));
-  rewardPlayer({coins,xp,title:label || 'Task complete',desc:'Strong performance bonus applied.',source,confetti:score>=4.5});
+  const coins = Math.max(1, Math.round(score*3));
+  const xp = Math.max(3, Math.round(score*8));
+  let desc;
+  if (score >= 4.5) desc = 'Strong performance bonus applied.';
+  else if (score >= 2.5) desc = 'Solid attempt — keep practicing for a higher score.';
+  else if (score > 0) desc = 'Low score this time — review the target and try again.';
+  else desc = 'No response was detected — give it another try.';
+  rewardPlayer({coins,xp,title:label || 'Task complete',desc,source,confetti:score>=4.5});
   if (score >= 4.5) unlockAchievement('steady_voice');
 }
 function renderAchievementGrid(){
@@ -1438,6 +1443,69 @@ function nextListenQ(){
 }
 
 // ════════════ SPEAKING: Listen and Repeat ════════════
+// ════════════ SPEECH RECOGNITION ENGINE (real mic capture) ════════════
+function getSpeechRecognitionCtor(){
+  return window.SpeechRecognition || window.webkitSpeechRecognition || null;
+}
+function normalizeWords(s){
+  return (s||'').toLowerCase().replace(/[^a-z0-9'\s]/g,' ').split(/\s+/).filter(Boolean);
+}
+// Word-level match: how many target words appear (in any order, allowing minor recognition slips)
+// in what was actually said. This rewards saying the right content; it does not check exact word order.
+function scoreContentMatch(targetText, saidText){
+  const target = normalizeWords(targetText);
+  const said = normalizeWords(saidText);
+  if (target.length === 0) return {pct: 0, matched: 0, total: 0};
+  const saidSet = {};
+  said.forEach(w => saidSet[w] = (saidSet[w]||0) + 1);
+  let matched = 0;
+  target.forEach(w => {
+    if (saidSet[w] > 0){ matched++; saidSet[w]--; }
+  });
+  return {pct: matched/target.length, matched, total: target.length};
+}
+function createRecognizer(opts){
+  // opts: { onResult(transcript), onError(message), onEnd(), maxMs }
+  const Ctor = getSpeechRecognitionCtor();
+  if (!Ctor){
+    opts.onError('Speech recognition is not supported in this browser. Try Chrome, Edge, or Safari.');
+    return null;
+  }
+  const rec = new Ctor();
+  rec.lang = 'en-US';
+  rec.continuous = true;
+  rec.interimResults = false;
+  rec.maxAlternatives = 1;
+  let finalTranscript = '';
+  let stopTimer = null;
+  rec.onresult = (e) => {
+    for (let i = e.resultIndex; i < e.results.length; i++){
+      if (e.results[i].isFinal) finalTranscript += ' ' + e.results[i][0].transcript;
+    }
+  };
+  rec.onerror = (e) => {
+    if (e.error === 'no-speech'){ /* let onend handle scoring with whatever was captured */ return; }
+    if (e.error === 'not-allowed' || e.error === 'service-not-allowed'){
+      opts.onError('Microphone access was blocked. Please allow microphone permission and try again.');
+    } else {
+      opts.onError('Speech recognition error (' + e.error + '). Tap the mic to try again.');
+    }
+  };
+  rec.onend = () => {
+    clearTimeout(stopTimer);
+    opts.onEnd(finalTranscript.trim());
+  };
+  try{
+    rec.start();
+    if (opts.maxMs) stopTimer = setTimeout(()=>{ try{ rec.stop(); }catch(e){} }, opts.maxMs);
+  }catch(startErr){
+    opts.onError('Could not start the microphone. Tap the mic to try again.');
+    return null;
+  }
+  return rec;
+}
+
+// ════════════ SPEAKING: Listen and Repeat ════════════
 function renderListenRepeat(){
   const sentence = LISTEN_REPEAT_ITEMS[S.itemIdx];
   const stage = document.getElementById('stage-inner');
@@ -1447,8 +1515,9 @@ function renderListenRepeat(){
       <p style="font-size:13px;color:#888;margin-bottom:14px">Listen once. The sentence will NOT be shown until after you respond.</p>
       <div class="waveform" id="lr-wf"></div>
       <button class="play-btn-big" id="lr-play" onclick="playLR()">▶ Play Sentence</button>
-      <div class="speak-phase" id="lr-phase" style="display:none">🔴 Now repeat the sentence</div>
+      <div class="speak-phase" id="lr-phase" style="display:none">Tap the mic, then repeat the sentence</div>
       <div class="mic-ring mic-prep" id="lr-mic" style="display:none" onclick="toggleLRRecord()">🎤</div>
+      <div id="lr-err" style="display:none;margin-top:10px;background:#fdecea;border:1.5px solid #c0392b;color:#8b1a14;border-radius:8px;padding:10px 12px;font-size:12.5px;text-align:left"></div>
       <div id="lr-revealed" style="display:none;margin-top:14px;padding:12px;background:#f0f6ff;border-radius:8px;font-size:14px;color:#1a3a5c"></div>
       <div class="speak-ai-box" id="lr-ai"></div>
       ${footerHTML('Next →', true)}
@@ -1456,48 +1525,96 @@ function renderListenRepeat(){
   buildWF('lr-wf');
 }
 function playLR(){
+  const item = LISTEN_REPEAT_ITEMS[S.itemIdx];
+  const text = item;
   const btn = document.getElementById('lr-play');
   btn.disabled=true; btn.textContent='🔊 Playing...';
   animWF('lr-wf', true);
-  setTimeout(()=>{
+  try{
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    try{ const v = pickVoice(); if (v && v.name && v.lang) u.voice = v; }catch(e){}
+    u.rate = 1.0; u.pitch = 1.0;
+    u.onend = () => {
+      animWF('lr-wf', false);
+      btn.style.display='none';
+      document.getElementById('lr-phase').style.display='block';
+      document.getElementById('lr-mic').style.display='flex';
+    };
+    u.onerror = () => {
+      animWF('lr-wf', false);
+      btn.style.display='none';
+      document.getElementById('lr-phase').style.display='block';
+      document.getElementById('lr-mic').style.display='flex';
+    };
+    speechSynthesis.speak(u);
+  }catch(e){
     animWF('lr-wf', false);
     btn.style.display='none';
     document.getElementById('lr-phase').style.display='block';
     document.getElementById('lr-mic').style.display='flex';
-  }, 1800);
-}
-let lrRecording=false;
-function toggleLRRecord(){
-  const mic = document.getElementById('lr-mic');
-  if (!lrRecording){
-    lrRecording=true;
-    mic.className='mic-ring mic-rec';
-    document.getElementById('lr-phase').innerHTML='🔴 Recording...';
-    setTimeout(()=>{ if(lrRecording) finishLRRecord(); }, 4000);
   }
 }
-function finishLRRecord(){
-  lrRecording=false;
+let lrRecording=false, lrRecognizer=null, lrStartTime=0;
+function toggleLRRecord(){
+  if (lrRecording) return;
+  const mic = document.getElementById('lr-mic');
+  const errEl = document.getElementById('lr-err');
+  errEl.style.display = 'none';
+  lrRecording = true;
+  lrStartTime = Date.now();
+  mic.className = 'mic-ring mic-rec';
+  document.getElementById('lr-phase').innerHTML = '🔴 Recording... speak now';
+  lrRecognizer = createRecognizer({
+    maxMs: 8000,
+    onError(msg){
+      lrRecording = false;
+      mic.className = 'mic-ring mic-prep';
+      document.getElementById('lr-phase').textContent = 'Tap the mic, then repeat the sentence';
+      errEl.style.display = 'block';
+      errEl.textContent = '⚠ ' + msg;
+    },
+    onEnd(transcript){
+      if (!lrRecording) return; // already handled by onError
+      lrRecording = false;
+      finishLRRecord(transcript, (Date.now()-lrStartTime)/1000);
+    }
+  });
+}
+function finishLRRecord(transcript, durationSec){
   const mic=document.getElementById('lr-mic');
   mic.className='mic-ring mic-prep'; mic.style.pointerEvents='none';
-  document.getElementById('lr-phase').textContent='✅ Response recorded — scoring...';
+  document.getElementById('lr-phase').textContent='✅ Response captured — scoring...';
   setTimeout(()=>{
     const sentence = LISTEN_REPEAT_ITEMS[S.itemIdx];
     document.getElementById('lr-revealed').style.display='block';
-    document.getElementById('lr-revealed').innerHTML = `<strong>Target sentence:</strong> "${sentence}"`;
-    const score = (3.5 + Math.random()*1.5).toFixed(1);
+    document.getElementById('lr-revealed').innerHTML = `<strong>Target sentence:</strong> "${sentence}"` +
+      (transcript ? `<br><strong>What we heard:</strong> "${transcript}"` : `<br><em>No speech was detected.</em>`);
+
+    const match = scoreContentMatch(sentence, transcript);
+    // Content Match: directly measured from real word overlap, 0-6 scale
+    const contentScore = Math.max(0, Math.min(6, match.pct * 6));
+    // Fluency proxy: said something close to the expected length without long silence/cutoff.
+    // This is a rough completeness signal, not a true fluency/pronunciation measurement.
+    const expectedWords = normalizeWords(sentence).length;
+    const saidWords = normalizeWords(transcript).length;
+    const lengthRatio = expectedWords > 0 ? Math.min(1, saidWords / expectedWords) : 0;
+    const fluencyScore = Math.max(0.5, Math.min(6, lengthRatio * 6));
+    const overall = (contentScore*0.65 + fluencyScore*0.35);
+    const score = overall.toFixed(1);
+
     S.scores.lr.push(parseFloat(score));
     rewardPerformance(parseFloat(score), document.getElementById('lr-ai'), 'Listen and Repeat complete');
     document.getElementById('lr-ai').classList.add('show');
     document.getElementById('lr-ai').innerHTML = `
-      <div style="font-weight:800;color:#1a5c34;margin-bottom:8px;font-size:13.5px">🤖 AI Score Preview</div>
-      <div class="rub-row"><div class="rub-name">Content Match</div><div class="rub-val">${(4+Math.random()).toFixed(1)}/6</div></div>
-      <div class="rub-row"><div class="rub-name">Pronunciation</div><div class="rub-val">${(3.5+Math.random()).toFixed(1)}/6</div></div>
-      <div class="rub-row"><div class="rub-name">Fluency</div><div class="rub-val">${(3.5+Math.random()).toFixed(1)}/6</div></div>
-      <div class="rub-row"><div class="rub-name">Completeness</div><div class="rub-val">${score}/6</div></div>`;
+      <div style="font-weight:800;color:#1a5c34;margin-bottom:8px;font-size:13.5px">🎤 Speech-to-Text Score (real transcription)</div>
+      <div class="rub-row"><div class="rub-name">Content Match</div><div class="rub-val">${contentScore.toFixed(1)}/6</div></div>
+      <div class="rub-row"><div class="rub-name">Completeness</div><div class="rub-val">${fluencyScore.toFixed(1)}/6</div></div>
+      <div class="rub-row"><div class="rub-name">Overall</div><div class="rub-val">${score}/6</div></div>
+      <p style="font-size:11.5px;color:#666;margin-top:8px;line-height:1.5">Based on ${match.matched}/${match.total} target words matched in your browser's speech-to-text transcription. This measures <strong>what words you said</strong>, not your pronunciation or accent — real pronunciation scoring requires specialized audio analysis beyond what a browser can do.</p>`;
     document.getElementById('next-item-btn').disabled=false;
     document.getElementById('next-item-btn').textContent = S.itemIdx+1>=LISTEN_REPEAT_ITEMS.length?'Continue →':'Next Item →';
-  }, 1400);
+  }, 600);
 }
 
 // ════════════ SPEAKING: Interview ════════════
@@ -1532,34 +1649,75 @@ function beginInterview(){
 }
 function beginInterviewRecord(item){
   let s = item.recT;
+  const totalRecT = item.recT;
   document.getElementById('int-mic').className='mic-ring mic-rec';
-  document.getElementById('int-phase').innerHTML='🔴 Recording...';
+  document.getElementById('int-phase').innerHTML='🔴 Recording... speak now';
   document.getElementById('int-timer').textContent = fmtTime(s);
   animWF('int-wf', true);
   clearInterval(spIv);
+  intRecognizer = createRecognizer({
+    maxMs: totalRecT*1000 + 1500,
+    onError(msg){
+      clearInterval(spIv);
+      animWF('int-wf', false);
+      document.getElementById('int-mic').className='mic-ring mic-prep';
+      document.getElementById('int-phase').innerHTML = '⚠ ' + msg;
+      document.getElementById('int-ai').classList.add('show');
+      document.getElementById('int-ai').innerHTML = `<p style="font-size:13px;color:#8b1a14">Couldn't score this response — microphone/speech recognition was unavailable. You can still move on.</p>`;
+      document.getElementById('next-item-btn').disabled=false;
+      document.getElementById('next-item-btn').textContent = S.itemIdx+1>=INTERVIEW_ITEMS.length?'Continue →':'Next Question →';
+    },
+    onEnd(transcript){
+      clearInterval(spIv);
+      finishInterview(item, transcript, totalRecT - s);
+    }
+  });
   spIv = setInterval(()=>{
     s--; document.getElementById('int-timer').textContent = fmtTime(s);
-    if (s<=0){ clearInterval(spIv); finishInterview(); }
+    if (s<=0){
+      clearInterval(spIv);
+      if (intRecognizer){ try{ intRecognizer.stop(); }catch(e){} }
+    }
   }, 1000);
 }
-function finishInterview(){
+let intRecognizer = null;
+function finishInterview(item, transcript, spokeForSec){
   animWF('int-wf', false);
   document.getElementById('int-mic').className='mic-ring mic-prep';
-  document.getElementById('int-phase').textContent='✅ Response recorded — scoring...';
+  document.getElementById('int-phase').textContent='✅ Response captured — scoring...';
   setTimeout(()=>{
-    const score = (3.5+Math.random()*1.8).toFixed(1);
+    const wordCount = normalizeWords(transcript).length;
+    // Length/Development: did the student speak for a reasonable share of the allotted time
+    // and produce a substantive amount of content? This is a completeness proxy, not a
+    // judgment of grammar or idea quality.
+    const expectedWords = Math.max(15, Math.round(item.recT * 2)); // ~2 words/sec is a natural pace
+    const lengthRatio = Math.min(1, wordCount / expectedWords);
+    const developmentScore = Math.max(0.5, Math.min(6, lengthRatio * 6));
+
+    // Relevance: rough keyword overlap between the question and the response, to catch
+    // answers that are completely off-topic or empty (not a measure of argument quality).
+    const qWords = new Set(normalizeWords(item.q).filter(w => w.length > 3));
+    const aWords = normalizeWords(transcript);
+    const overlap = aWords.filter(w => qWords.has(w)).length;
+    const hasSubstance = wordCount >= 8;
+    const relevanceScore = hasSubstance ? Math.max(2, Math.min(6, 3 + overlap*0.4)) : Math.max(0.5, wordCount*0.3);
+
+    const overall = wordCount === 0 ? 0.5 : (developmentScore*0.55 + relevanceScore*0.45);
+    const score = overall.toFixed(1);
+
     S.scores.interview.push(parseFloat(score));
-    rewardPerformance(parseFloat(score), document.getElementById('int-ai'), 'Interview clear');
+    rewardPerformance(parseFloat(score), document.getElementById('int-ai'), 'Interview response captured');
     document.getElementById('int-ai').classList.add('show');
     document.getElementById('int-ai').innerHTML = `
-      <div style="font-weight:800;color:#1a5c34;margin-bottom:8px;font-size:13.5px">🤖 AI Feedback</div>
-      <div class="rub-row"><div class="rub-name">Delivery</div><div class="rub-val">${(3.5+Math.random()).toFixed(1)}/6</div></div>
-      <div class="rub-row"><div class="rub-name">Language Use</div><div class="rub-val">${(3.5+Math.random()).toFixed(1)}/6</div></div>
-      <div class="rub-row"><div class="rub-name">Content Development</div><div class="rub-val">${score}/6</div></div>
-      <p style="font-size:12.5px;color:#555;margin-top:8px">Good natural pace with clear examples. Continue developing fuller responses with specific details for top scores.</p>`;
+      <div style="font-weight:800;color:#1a5c34;margin-bottom:8px;font-size:13.5px">🎤 Speech-to-Text Score (real transcription)</div>
+      <div class="rub-row"><div class="rub-name">Response Length</div><div class="rub-val">${developmentScore.toFixed(1)}/6</div></div>
+      <div class="rub-row"><div class="rub-name">On-Topic Signal</div><div class="rub-val">${relevanceScore.toFixed(1)}/6</div></div>
+      <div class="rub-row"><div class="rub-name">Overall</div><div class="rub-val">${score}/6</div></div>
+      <p style="font-size:11.5px;color:#666;margin-top:8px;line-height:1.5">${wordCount} word${wordCount===1?'':'s'} transcribed${transcript?`: "${transcript.length>140?transcript.slice(0,140)+'…':transcript}"`:' — no speech was detected.'}</p>
+      <p style="font-size:11.5px;color:#666;margin-top:6px;line-height:1.5">This scores how much you said and whether it relates to the question — not your grammar, pronunciation, or idea quality. Real TOEFL Speaking scoring evaluates those too, which a browser can't measure on its own.</p>`;
     document.getElementById('next-item-btn').disabled=false;
     document.getElementById('next-item-btn').textContent = S.itemIdx+1>=INTERVIEW_ITEMS.length?'Continue →':'Next Question →';
-  }, 1400);
+  }, 600);
 }
 
 // ════════════ WRITING: Build a Sentence ════════════
